@@ -26,6 +26,12 @@
           <span>Withdrawal Requests</span>
         </a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link {{ request()->route()->getName() === 'admin.user_withdrawal' ? 'active' : 'collapsed' }} " href="{{ route('admin.user_withdrawal') }}">
+          <i class="bi bi-person"></i>
+          <span>User Withdrawal</span>
+        </a>
+      </li>
     </ul>
   </aside>
 

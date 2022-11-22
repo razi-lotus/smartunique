@@ -368,11 +368,18 @@
         <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
-                {{-- <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Balance Transferred Successfully</h5>
-                </div> --}}
+                <div class="modal-header">
+                    <div class="row">
+                        <div class="col-12 text-center">
+                            <a href="javascript:void(0);" class="logo d-flex align-items-center text-center" style="padding-left: 115px;">
+                                <img src="{{ asset('img/logo.png') }}" alt="">
+                                <span class="d-lg-block">SmartUniqueInt</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
                 <div class="modal-body">
-                <strong class="amount-tag"></strong>$ transferred to <strong class="user-tag text-capitalize"></strong>.
+                <strong class="amount-tag"></strong>$ transferred to <strong class="user-tag text-capitalize"></strong> succssfully.
                 </div>
                 <div class="modal-footer">
                 <button type="button" class="btn btn-secondary closs-modal" data-dismiss="modal">Close</button>
@@ -435,6 +442,8 @@
 
             $('#balance-add').on('click',function(event){
                 event.preventDefault();
+                // $('#exampleModalCenter').modal('show');
+                // return;
                 let user_id     = $('#inputUserId').val();
                 var userName    = $('#inputUserId :selected').text();
                 var amount      = $('#inputAmount').val();

@@ -13,7 +13,7 @@
       <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-          <li class="breadcrumb-item active">Withdrawals</li>
+          <li class="breadcrumb-item active">User Withdrawals</li>
         </ol>
       </nav>
     </div><!-- End Page Title -->
@@ -27,11 +27,24 @@
             <div class="col-xxl-4 col-xl-12">
                 <div class="card">
                     <div class="card-body">
-                      <h5 class="card-title">Withdrawals Requests</h5>
+                      <h5 class="card-title">User Withdrawals</h5>
                       <!-- Recent Sales -->
+                      <div>
+
+                          <form action="" method="POST">
+                                <div class="row mb-3">
+                                    <label for="inputEmail3" class="col-form-label">Amount</label>
+                                    <div class="col-sm-4">
+                                      <input type="text" class="form-control" name="amount" id="inputAmount">
+                                    </div>
+                                    <div class="col-12 col-md-6 col-lg-4 col-xl-4">
+                                        <button type="submit" class="btn btn-primary" id="withdraw-amount">Withdraw</button>
+                                    </div>
+                                  </div>
+                            </form>
+                    </div>
                       <div class="col-12">
                         <div class="recent-sales overflow-auto">
-
                           <div class="filter">
                             <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
                             <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
@@ -44,18 +57,17 @@
                               <li><a class="dropdown-item" href="#">This Year</a></li>
                             </ul>
                           </div>
-                        <span class="float-end mb-2">
+                        {{-- <span class="float-end mb-2">
                             <input type="checkbox" id="checkAll" class="form-group">&nbsp;Check All&nbsp;&nbsp;
                             <button type="button" class="btn btn-sm btn-primary del-selected">Active selected</button>
-                        </span>
+                        </span> --}}
                         <div class="row" id="show-add-blnce-form">
                           </div>
                           <br/>
-                          <table class="table table-borderless" id="request-datatable">
+                          <table class="table table-borderless" id="userwithdraw-datatable">
                             <thead>
                               <tr>
                                 <th scope="col">#</th>
-                                <th scope="col">Name</th>
                                 <th scope="col">Amount</th>
                                 <th scope="col">Status</th>
                                 <th scope="col">Action</th>
@@ -89,7 +101,7 @@
 @push('scripts')
     <script>
         $(document).ready(function(){
-            var tableData =   $('#request-datatable').DataTable({
+            var tableData =   $('#userwithdraw-datatable').DataTable({
                 "order": [],
                 "ordering": 1,
                 "columnDefs": [
@@ -105,20 +117,38 @@
                 "serverSide": true,
                 "autoWidth": false,
                 "ajax": {
-                    "url": "{{ url('admin/withdrawal-listing') }}",
+                    "url": "{{ url('admin/user-withdrawal-listing') }}",
                     "dataType": "json",
                     "type": "GET",
                 },
                 "columns": [
                     { "data": "id" },
-                    { "data": "name" },
                     { "data": "amount" },
                     { "data": "status" },
                     { "data": "action" },
                 ],
             });
 
-
+            $('#withdraw-amount').on('click',function(e){
+                e.preventDefault();
+                let amount = $('#inputAmount').val();
+                if(amount !== ''){
+                    $.ajax({
+                        url:'{{ url("admin/withdraw-amount") }}',
+                        type:'post',
+                        data:{
+                            _token   : "{{ csrf_token() }}",
+                            amount  : amount
+                        },
+                        success:function(data){
+                            tableData.ajax.reload();
+                            // $('#checkAll').prop('checked',false);
+                            $('#inputAmount').val('');
+                            alert('Amount withdraw request send successfully');
+                        }
+                    });
+                }
+            });
             $("#checkAll").click(function () {
                 $('.select-user').not(this).prop('checked', this.checked);
             });

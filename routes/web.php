@@ -39,6 +39,11 @@ Route::group(['prefix' => 'admin','middleware' => 'auth'],function(){
 
     Route::get('withdrawal', [WithdrawalController::class, 'index'])->name('admin.withdrawal');
     Route::get('withdrawal-listing', [WithdrawalController::class, 'withdrawalList']);
+    Route::post('prove-withdrawal', [WithdrawalController::class, 'proveWithdrawal']);
+
+    Route::get('user-withdrawal', [WithdrawalController::class, 'user_withdrawal'])->name('admin.user_withdrawal');
+    Route::post('withdraw-amount', [WithdrawalController::class, 'withdrawAmount'])->name('admin.withdraw.amount');
+    Route::get('user-withdrawal-listing', [WithdrawalController::class, 'UserWithdrawalList']);
 });
 
 Auth::routes();
