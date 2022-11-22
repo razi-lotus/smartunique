@@ -1,22 +1,18 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers;
 
-use App\Models\User;
-use App\Models\Request as Requests;
+use App\Models\Withdrawal;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 
-class RequestController extends Controller
+class WithdrawalController extends Controller
 {
-
     public function index(){
-        // return Requests::with(['user'])->get();
-        return view('requests');
+        return view('withdrawal');
     }
 
-    public function RequestList(Request $request) {
-        $columns    = array(0 => 'id', 1 => 'name',2 => 'points',3 => 'status');
+    public function withdrawalList(Request $request) {
+        $columns    = array(0 => 'id', 1 => 'name',2 => 'amount',3 => 'status');
         $order      = 'id'; $dir = 'DESC';
 
         if ($request->input('order.0.column') != null) {
@@ -28,11 +24,11 @@ class RequestController extends Controller
 
         if (!empty($request->input('search.value'))) {
             $search         = $request->input('search.value');
-            $records        = Requests::with(['user'])->where('name', 'LIKE', "%{$search}%")->offset($pagination['page'])->limit($pagination['perpage'])->get();
+            $records        = Withdrawal::with(['user'])->where('name', 'LIKE', "%{$search}%")->offset($pagination['page'])->limit($pagination['perpage'])->get();
             $totalFiltered  = count($records);
         } else {
-            $records    = Requests::with(['user'])->orderBy($order, $dir)->offset($pagination['page'])->limit($pagination['perpage'])->get();
-            $totalData  = $totalFiltered = Requests::count();
+            $records    = Withdrawal::with(['user'])->orderBy($order, $dir)->offset($pagination['page'])->limit($pagination['perpage'])->get();
+            $totalData  = $totalFiltered = Withdrawal::count();
         }
 
         $data = array();
@@ -40,7 +36,7 @@ class RequestController extends Controller
             foreach ($records as $key=> $item) {
                     $itemData['id']         = $item->user->uuid;
                     $itemData['name']       = $item->user->name;
-                    $itemData['points']     = $item->points;
+                    $itemData['amount']     = $item->amount;
                     $itemData['status']     = '<span class="badge '.($item->status=="Active" ? "bg-success" : "bg-danger").'">'.$item->status.'</span>';
                     $itemData['action']     = '<div><input type="checkbox" name="user_id" value="'.$item->id.'" class="select-user" />&nbsp;<a class="" href="#">Del</a></div>';
                     $data[] = $itemData;

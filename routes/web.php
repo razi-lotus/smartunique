@@ -9,6 +9,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Admin\BalanceController;
 use App\Http\Controllers\Admin\RequestController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\WithdrawalController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,6 +36,9 @@ Route::group(['prefix' => 'admin','middleware' => 'auth'],function(){
 
     Route::get('requests', [RequestController::class, 'index'])->name('admin.requests');
     Route::get('request-listing', [RequestController::class, 'RequestList']);
+
+    Route::get('withdrawal', [WithdrawalController::class, 'index'])->name('admin.withdrawal');
+    Route::get('withdrawal-listing', [WithdrawalController::class, 'withdrawalList']);
 });
 
 Auth::routes();
