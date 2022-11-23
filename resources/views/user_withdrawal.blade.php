@@ -30,7 +30,6 @@
                       <h5 class="card-title">User Withdrawals</h5>
                       <!-- Recent Sales -->
                       <div>
-
                           <form action="" method="POST">
                                 <div class="row mb-3">
                                     <label for="inputEmail3" class="col-form-label">Amount</label>
@@ -45,18 +44,6 @@
                     </div>
                       <div class="col-12">
                         <div class="recent-sales overflow-auto">
-                          <div class="filter">
-                            <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                              <li class="dropdown-header text-start">
-                                <h6>Filter</h6>
-                              </li>
-
-                              <li><a class="dropdown-item" href="#">Today</a></li>
-                              <li><a class="dropdown-item" href="#">This Month</a></li>
-                              <li><a class="dropdown-item" href="#">This Year</a></li>
-                            </ul>
-                          </div>
                         {{-- <span class="float-end mb-2">
                             <input type="checkbox" id="checkAll" class="form-group">&nbsp;Check All&nbsp;&nbsp;
                             <button type="button" class="btn btn-sm btn-primary del-selected">Active selected</button>

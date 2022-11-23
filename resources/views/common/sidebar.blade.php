@@ -32,6 +32,18 @@
           <span>User Withdrawal</span>
         </a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link {{ request()->route()->getName() === 'admin.user_transactions' ? 'active' : 'collapsed' }} " href="{{ route('admin.user_transactions') }}">
+          <i class="bi bi-person"></i>
+          <span>Users Transactions</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link {{ request()->route()->getName() === 'admin.transactions' ? 'active' : 'collapsed' }} " href="{{ route('admin.transactions') }}">
+          <i class="bi bi-person"></i>
+          <span>Transactions</span>
+        </a>
+      </li>
     </ul>
   </aside>
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Transactions;
 use App\Models\UserWithdrawal;
 use App\Models\Withdrawal;
 use Illuminate\Http\Request;
@@ -39,7 +40,7 @@ class WithdrawalController extends Controller
                     $itemData['id']         = $item->user->uuid;
                     $itemData['name']       = $item->user->name;
                     $itemData['amount']     = $item->amount;
-                    $itemData['status']     = '<span class="badge '.($item->status=="Proved" ? "bg-success" : "bg-danger").'">'.$item->status.'</span>';
+                    $itemData['status']     = '<span class="badge '.($item->status=="Approved" ? "bg-success" : "bg-danger").'">'.$item->status.'</span>';
                     $itemData['action']     = '<div><input type="checkbox" name="user_id" value="'.$item->id.'" class="select-user" />&nbsp;<a class="" href="#">Del</a></div>';
                     $data[] = $itemData;
             }
@@ -56,14 +57,27 @@ class WithdrawalController extends Controller
 
     public function proveWithdrawal(Request $request){
         $users = UserWithdrawal::whereIn('id',$request->user_ids)->get();
+        $transactionData = [];
         if(count($users) > 0){
             foreach($users as $user){
-                if($user->status !== 'Proved'){
-                    $user->update(['status' => 'Proved']);
+                if($user->status !== 'Approved'){
+                    if(isset($transactionData[$user->user_id])){
+                        $transactionData[$user->user_id] += $user->amount;
+                    }else{
+                        $transactionData[$user->user_id] = $user->amount;
+                    }
+                    $user->update(['status' => 'Approved']);
                 }
             }
         }
-        return response()->json(['message' => 'success']);
+        foreach($transactionData as $key => $tr){
+            Transactions::create([
+                'user_id' => $key,
+                'amount' => $tr,
+                'status' => 'Approved'
+            ]);
+        }
+        return response()->json(['message' => $transactionData]);
     }
 
     public function user_withdrawal(){
@@ -93,11 +107,11 @@ class WithdrawalController extends Controller
 
         if (!empty($request->input('search.value'))) {
             $search         = $request->input('search.value');
-            $records        = UserWithdrawal::with(['user'])->where('amount', 'LIKE', "%{$search}%")->offset($pagination['page'])->limit($pagination['perpage'])->get();
+            $records        = UserWithdrawal::with(['user'])->where('user_id',Auth::user()->id)->where('amount', 'LIKE', "%{$search}%")->offset($pagination['page'])->limit($pagination['perpage'])->get();
             $totalFiltered  = count($records);
         } else {
-            $records    = UserWithdrawal::with(['user'])->orderBy($order, $dir)->offset($pagination['page'])->limit($pagination['perpage'])->get();
-            $totalData  = $totalFiltered = UserWithdrawal::count();
+            $records    = UserWithdrawal::with(['user'])->where('user_id',Auth::user()->id)->orderBy($order, $dir)->offset($pagination['page'])->limit($pagination['perpage'])->get();
+            $totalData  = $totalFiltered = UserWithdrawal::where('user_id',Auth::user()->id)->count();
         }
 
         $data = array();
@@ -105,7 +119,7 @@ class WithdrawalController extends Controller
             foreach ($records as $key=> $item) {
                     $itemData['id']         = $item->id;
                     $itemData['amount']     = $item->amount;
-                    $itemData['status']     = '<span class="badge '.($item->status=="Proved" ? "bg-success" : "bg-danger").'">'.$item->status.'</span>';
+                    $itemData['status']     = '<span class="badge '.($item->status=="Approved" ? "bg-success" : "bg-danger").'">'.$item->status.'</span>';
                     $itemData['action']     = '<div>&nbsp;<a class="" href="#">Del</a></div>';
                     $data[] = $itemData;
             }

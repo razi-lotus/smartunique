@@ -6,10 +6,11 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\Admin\BalanceController;
-use App\Http\Controllers\Admin\RequestController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\WithdrawalController;
+use App\Http\Controllers\TransactionsController;
+use App\Http\Controllers\Admin\BalanceController;
+use App\Http\Controllers\Admin\RequestController;
 
 /*
 |--------------------------------------------------------------------------
@@ -44,6 +45,13 @@ Route::group(['prefix' => 'admin','middleware' => 'auth'],function(){
     Route::get('user-withdrawal', [WithdrawalController::class, 'user_withdrawal'])->name('admin.user_withdrawal');
     Route::post('withdraw-amount', [WithdrawalController::class, 'withdrawAmount'])->name('admin.withdraw.amount');
     Route::get('user-withdrawal-listing', [WithdrawalController::class, 'UserWithdrawalList']);
+
+    Route::get('user_transactions', [TransactionsController::class, 'userTansaction'])->name('admin.user_transactions');
+    Route::get('user-transaction-listing', [TransactionsController::class, 'userTransactionListing']);
+    Route::get('transactions', [TransactionsController::class, 'transactions'])->name('admin.transactions');
+    Route::get('transaction-listing', [TransactionsController::class, 'transactionsListing']);
+
+
 });
 
 Auth::routes();
