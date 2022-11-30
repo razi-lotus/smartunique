@@ -1,11 +1,17 @@
 <aside id="sidebar" class="sidebar">
 
     <ul class="sidebar-nav" id="sidebar-nav">
-
+    @if (Auth::user() && Auth::user()->type == 'Admin')
       <li class="nav-item">
         <a class="nav-link {{ request()->route()->getName() === 'admin.dashboard' ? 'active' : 'collapsed' }}" href="{{ route('admin.dashboard') }}">
           <i class="bi bi-grid"></i>
           <span>Dashboard</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link {{ request()->route()->getName() === 'admin.userTree' ? 'active' : 'collapsed' }} " href="{{ route('admin.userTree') }}">
+          <i class="bi bi-person"></i>
+          <span>User Tree</span>
         </a>
       </li>
       <li class="nav-item">
@@ -24,6 +30,26 @@
         <a class="nav-link {{ request()->route()->getName() === 'admin.withdrawal' ? 'active' : 'collapsed' }} " href="{{ route('admin.withdrawal') }}">
           <i class="bi bi-person"></i>
           <span>Withdrawal Requests</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link {{ request()->route()->getName() === 'admin.adminWorkRequests' ? 'active' : 'collapsed' }} " href="{{ route('admin.adminWorkRequests') }}">
+          <i class="bi bi-person"></i>
+          <span>Work Requests</span>
+        </a>
+      </li>
+
+    @else
+    <li class="nav-item">
+        <a class="nav-link {{ request()->route()->getName() === 'admin.userDashboard' ? 'active' : 'collapsed' }}" href="{{ route('admin.userDashboard') }}">
+          <i class="bi bi-grid"></i>
+          <span>Dashboard</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link {{ request()->route()->getName() === 'admin.userTree' ? 'active' : 'collapsed' }} " href="{{ route('admin.userTree') }}">
+          <i class="bi bi-person"></i>
+          <span>User Tree</span>
         </a>
       </li>
       <li class="nav-item">
@@ -50,12 +76,7 @@
           <span>Send Work Request</span>
         </a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link {{ request()->route()->getName() === 'admin.adminWorkRequests' ? 'active' : 'collapsed' }} " href="{{ route('admin.adminWorkRequests') }}">
-          <i class="bi bi-person"></i>
-          <span>Work Requests</span>
-        </a>
-      </li>
+      @endif
     </ul>
   </aside>
 

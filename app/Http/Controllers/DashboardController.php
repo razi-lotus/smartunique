@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Balances;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
@@ -26,8 +27,20 @@ class DashboardController extends Controller
     public function index()
     {
         // return Balances::with(['user'])->get();
+        if(Auth::user() && Auth::user()->type == 'Admin'){
+            $users = User::all();
+            return view('dashboard',compact('users'));
+        }else{
+            // $users = User::all();
+            return redirect()->route('admin.userDashboard');
+        }
+    }
+
+    public function userDashboard()
+    {
+        // return Balances::with(['user'])->get();
         $users = User::all();
-        return view('dashboard',compact('users'));
+        return view('user_dashboard',compact('users'));
     }
 
     public function BalanceList(Request $request) {
@@ -72,5 +85,19 @@ class DashboardController extends Controller
             "data" => $data
         );
         echo json_encode($json_data);
+    }
+
+    public function userTree(Request $request){
+        $users = User::all();
+        if(Auth::user() && Auth::user()->type !== 'Admin'){
+            $users = User::where('sponsor_id',Auth::user()->uuid)->get();
+        }
+        return view('user_tree',compact('users'));
+    }
+
+    public function userRefTree(Request $request){
+        // return $request->all();
+        $users = User::where('sponsor_id',$request->user_id)->get();
+        return response()->json(['users' => $users]);
     }
 }

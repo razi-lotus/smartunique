@@ -28,6 +28,9 @@ use App\Http\Controllers\WorkController;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::group(['prefix' => 'admin','middleware' => 'auth'],function(){
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');//->middleware('auth');
+    Route::get('/userDashboard', [DashboardController::class, 'userDashboard'])->name('admin.userDashboard');//->middleware('auth');
+    Route::get('/userTree', [DashboardController::class, 'userTree'])->name('admin.userTree');//->middleware('auth');
+    Route::post('get-ref-users', [DashboardController::class, 'userRefTree']);
 
     Route::post('/add/balance',[BalanceController::class,'add'])->name('admin.add.balance');
     Route::get('balance-listing', [DashboardController::class, 'BalanceList']);
