@@ -27,7 +27,9 @@
                     <div class="col-12">
                         <label for="yourEmail" class="form-label">Your Email</label>
                         <input type="email" name="email" class="form-control" id="yourEmail" required>
-                        <div class="invalid-feedback">Please enter a valid Email adddress!</div>
+                        @if(Session::has('status'))
+                            <div class="text-danger">{{ Session::get('status') }}</div>
+                        @endif
                     </div>
 
                     <div class="col-12">

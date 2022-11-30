@@ -44,6 +44,18 @@
           <span>Transactions</span>
         </a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link {{ request()->route()->getName() === 'admin.sendWorkRequest' ? 'active' : 'collapsed' }} " href="{{ route('admin.sendWorkRequest') }}">
+          <i class="bi bi-person"></i>
+          <span>Send Work Request</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link {{ request()->route()->getName() === 'admin.adminWorkRequests' ? 'active' : 'collapsed' }} " href="{{ route('admin.adminWorkRequests') }}">
+          <i class="bi bi-person"></i>
+          <span>Work Requests</span>
+        </a>
+      </li>
     </ul>
   </aside>
 

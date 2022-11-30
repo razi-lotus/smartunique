@@ -11,6 +11,7 @@ use App\Http\Controllers\WithdrawalController;
 use App\Http\Controllers\TransactionsController;
 use App\Http\Controllers\Admin\BalanceController;
 use App\Http\Controllers\Admin\RequestController;
+use App\Http\Controllers\WorkController;
 
 /*
 |--------------------------------------------------------------------------
@@ -50,6 +51,19 @@ Route::group(['prefix' => 'admin','middleware' => 'auth'],function(){
     Route::get('user-transaction-listing', [TransactionsController::class, 'userTransactionListing']);
     Route::get('transactions', [TransactionsController::class, 'transactions'])->name('admin.transactions');
     Route::get('transaction-listing', [TransactionsController::class, 'transactionsListing']);
+
+    Route::get('sendWorkRequest', [WorkController::class, 'index'])->name('admin.sendWorkRequest');
+    Route::post('sendWorkRequest', [WorkController::class, 'saveWork']);
+    Route::get('user-work-listing', [WorkController::class, 'UserWorkListing']);
+    Route::get('editwork/{id}/edit', [WorkController::class, 'show']);
+    Route::post('editworkRequest', [WorkController::class, 'edit'])->name('admin.editWorkRequest');
+    Route::post('delete-link', [WorkController::class, 'delete']);
+
+    Route::get('WorkRequest', [WorkController::class, 'workRequests'])->name('admin.adminWorkRequests');
+    Route::get('work-request-listing', [WorkController::class, 'workRequestsListing']);
+    Route::get('show-request/{id}/show', [WorkController::class, 'showWhorkRequest'])->name('admin.showWhorkRequest');
+    Route::post('approve-link', [WorkController::class, 'approveLink']);
+    Route::post('approve-all-work-requests', [WorkController::class, 'ApproveAllRequests']);
 
 
 });
