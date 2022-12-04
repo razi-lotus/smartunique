@@ -2,14 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Transactions;
-use App\Models\UserWithdrawal;
+use App\Models\Balances;
+use App\Models\TotalBalances;
 use App\Models\Withdrawal;
+use App\Models\Transactions;
 use Illuminate\Http\Request;
+use App\Models\UserWithdrawal;
 use Illuminate\Support\Facades\Auth;
 
 class WithdrawalController extends Controller
 {
+    public function __construct()
+    {
+        // $this->middleware('auth');
+        $this->middleware('redirectWel');
+    }
+
     public function index(){
         return view('withdrawal_request');
     }
@@ -76,12 +84,18 @@ class WithdrawalController extends Controller
                 'amount' => $tr,
                 'status' => 'Approved'
             ]);
+            $baldeduction = TotalBalances::where('user_id',$key)->first();
+            if($baldeduction){
+                $amnt = ($baldeduction->total - $tr);
+                $baldeduction->update(['total' => $amnt]);
+            }
         }
         return response()->json(['message' => $transactionData]);
     }
 
     public function user_withdrawal(){
-        return view('user_withdrawal');
+        $balance = TotalBalances::where('user_id',Auth::user()->id)->first();
+        return view('user_withdrawal',compact('balance'));
     }
 
     public function withdrawAmount(Request $request){

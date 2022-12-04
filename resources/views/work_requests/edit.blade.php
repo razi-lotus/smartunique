@@ -43,6 +43,14 @@
                                             <label for="inputEmail3" class="col-form-label">Link</label>
                                             <input type="text" class="form-control" name="link1" value="{{ $work->link }}">
                                           </div>
+                                          <div class="col-sm-6">
+                                            <label for="inputEmail3" class="col-form-label">Title</label>
+                                            <input type="text" class="form-control" name="title" value="{{ $work->title }}">
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <label for="inputEmail3" class="col-form-label">Description</label>
+                                            <input type="text" class="form-control" name="description" value="{{ $work->description }}">
+                                          </div>
                                           <div class="col-12 col-md-6 col-lg-12 col-xl-12 mt-3">
                                               <button type="submit" class="btn btn-primary" id="withdraw-amount">send</button>
                                           </div>

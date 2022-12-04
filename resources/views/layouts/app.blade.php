@@ -40,15 +40,15 @@
     <script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     {{-- <script src="{{ asset('vendor/chart.js/chart.min.js') }}"></script>
     <script src="{{ asset('vendor/echarts/echarts.min.js') }}"></script> --}}
-    <script src="{{ asset('vendor/quill/quill.min.js') }}"></script>
+    {{-- <script src="{{ asset('vendor/quill/quill.min.js') }}"></script> --}}
     <script src="{{ asset('vendor/simple-datatables/simple-datatables.js') }}"></script>
     <script src="{{ asset('vendor/tinymce/tinymce.min.js') }}"></script>
-    <script src="{{ asset('vendor/php-email-form/validate.js') }}"></script>
-
-    <!-- Template Main JS File -->
+    {{-- <script src="{{ asset('vendor/php-email-form/validate.js') }}"></script> --}}
     <script src="{{ asset('js/main.js') }}"></script>
     <script src="{{ asset('dataTable/js/jquery.dataTables.min.js') }}"></script>
     <link href="{{ asset('dataTable/css/jquery.dataTables.min.css') }}" rel="stylesheet">
+
+    <!-- Template Main JS File -->
     <script>
         $(document).ready(function () {
         $("#myTable").dataTable();

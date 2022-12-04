@@ -8,6 +8,12 @@ use Illuminate\Support\Facades\Auth;
 
 class TransactionsController extends Controller
 {
+    public function __construct()
+    {
+        // $this->middleware('auth');
+        $this->middleware('redirectWel');
+    }
+
     public function userTansaction(){
         return view('user_transactions');
     }

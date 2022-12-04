@@ -4,10 +4,11 @@ namespace App\Http\Controllers\Auth;
 
 use App\Models\City;
 use App\Models\User;
+use App\Models\Country;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Models\Country;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Auth\Events\Registered;
@@ -91,11 +92,19 @@ class RegisterController extends Controller
             "sponsor_id"        => $data['sponsor_id'],
             "mother_name"       => $data['mother_name'],
             "pet_name"          => $data['pet_name'],
-            "status"            => 'InActive',
+            "status"            => 'Pending',
 
         ]);
 
         $user->uuid = 'SU-000'.$user->id;
+        // DB::table('user_level')->insert([
+        //     'user_id' => $user->id,
+        //     'level_from' => 1,
+        //     'level_to' => 1,
+        //     'date_from' => date('Y-m-d'),
+        //     'date_to' => date('Y-m-d')
+        // ]);
+        // balance...
         $user->save();
         return $user;
     }
@@ -128,7 +137,8 @@ class RegisterController extends Controller
         $this->guard()->login($user);
 
         if ($response = $this->registered($request, $user)) {
-            return redirect()->route('admin.dashboard');
+            return redirect()->route('admin.welcome.screen');
+            // return view('welcome');
         }
 
         return $request->wantsJson()

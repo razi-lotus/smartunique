@@ -5,13 +5,14 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\WorkController;
+use App\Http\Controllers\IndexController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\WithdrawalController;
 use App\Http\Controllers\TransactionsController;
 use App\Http\Controllers\Admin\BalanceController;
 use App\Http\Controllers\Admin\RequestController;
-use App\Http\Controllers\WorkController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,13 +27,22 @@ use App\Http\Controllers\WorkController;
 
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::group(['prefix' => 'admin','middleware' => 'auth'],function(){
+Route::group(['prefix' => 'admin','middleware' => ['auth']],function(){
+    Route::get('/welcome', [HomeController::class, 'welcome'])->name('admin.welcome.screen');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');//->middleware('auth');
     Route::get('/userDashboard', [DashboardController::class, 'userDashboard'])->name('admin.userDashboard');//->middleware('auth');
     Route::get('/userTree', [DashboardController::class, 'userTree'])->name('admin.userTree');//->middleware('auth');
     Route::post('get-ref-users', [DashboardController::class, 'userRefTree']);
+    Route::post('upgrade-account', [IndexController::class, 'upgradeAccount'])->name('admin.upgrade.account');
+    Route::get('upgrade-account', [IndexController::class, 'secondUpgradation'])->name('admin.secondUpgrade');
+    Route::post('second-upgradation', [IndexController::class, 'accountUpgradeRequest'])->name('admin.secondUpbradationRequest');
+
+    Route::get('get-users-status', [DashboardController::class, 'getUserStatus']);//->middleware('auth');
+
+    // Route::get('addBalance', [DashboardController::class, 'addBalance'])->name('admin.addBalance');//->middleware('auth');
 
     Route::post('/add/balance',[BalanceController::class,'add'])->name('admin.add.balance');
+    Route::get('balance-transfer',[BalanceController::class,'balance_show'])->name('admin.balanceTransfer');
     Route::get('balance-listing', [DashboardController::class, 'BalanceList']);
     Route::get('user', [UserController::class, 'index'])->name('admin.users');
 

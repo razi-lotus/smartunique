@@ -29,10 +29,11 @@
                     <div class="card-body">
                       <h5 class="card-title">User Withdrawals</h5>
                       <!-- Recent Sales -->
+                      <div class="alert alert-danger less-bal">You can not withdraw your balance is less than 5$</div>
                       <div>
                           <form action="" method="POST">
                                 <div class="row mb-3">
-                                    <label for="inputEmail3" class="col-form-label">Amount</label>
+                                    <label for="inputEmail3" class="col-form-label">Amount $</label>
                                     <div class="col-sm-4">
                                       <input type="text" class="form-control" name="amount" id="inputAmount">
                                     </div>
@@ -55,7 +56,7 @@
                             <thead>
                               <tr>
                                 <th scope="col">#</th>
-                                <th scope="col">Amount</th>
+                                <th scope="col">Amount $</th>
                                 <th scope="col">Status</th>
                                 <th scope="col">Action</th>
                               </tr>
@@ -115,11 +116,12 @@
                     { "data": "action" },
                 ],
             });
-
+            $('.less-bal').hide();
             $('#withdraw-amount').on('click',function(e){
                 e.preventDefault();
+                let balance = {!! $balance->total !!};
                 let amount = $('#inputAmount').val();
-                if(amount !== ''){
+                if(amount !== '' && balance > 5){
                     $.ajax({
                         url:'{{ url("admin/withdraw-amount") }}',
                         type:'post',
@@ -134,6 +136,8 @@
                             alert('Amount withdraw request send successfully');
                         }
                     });
+                }else{
+                    $('.less-bal').show();
                 }
             });
             $("#checkAll").click(function () {

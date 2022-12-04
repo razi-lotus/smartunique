@@ -8,6 +8,12 @@
           <span>Dashboard</span>
         </a>
       </li>
+      {{-- <li class="nav-item">
+        <a class="nav-link {{ request()->route()->getName() === 'admin.addBalance' ? 'active' : 'collapsed' }}" href="{{ route('admin.addBalance') }}">
+          <i class="bi bi-grid"></i>
+          <span>Add Balance</span>
+        </a>
+      </li> --}}
       <li class="nav-item">
         <a class="nav-link {{ request()->route()->getName() === 'admin.userTree' ? 'active' : 'collapsed' }} " href="{{ route('admin.userTree') }}">
           <i class="bi bi-person"></i>
@@ -20,10 +26,16 @@
           <span>Users</span>
         </a>
       </li>
-      <li class="nav-item">
+      {{-- <li class="nav-item">
         <a class="nav-link {{ request()->route()->getName() === 'admin.requests' ? 'active' : 'collapsed' }} " href="{{ route('admin.requests') }}">
           <i class="bi bi-person"></i>
           <span>Work Requests</span>
+        </a>
+      </li> --}}
+      <li class="nav-item">
+        <a class="nav-link {{ request()->route()->getName() === 'admin.balanceTransfer' ? 'active' : 'collapsed' }} " href="{{ route('admin.balanceTransfer') }}">
+          <i class="bi bi-person"></i>
+          <span>Balance Transfer</span>
         </a>
       </li>
       <li class="nav-item">
@@ -36,6 +48,12 @@
         <a class="nav-link {{ request()->route()->getName() === 'admin.adminWorkRequests' ? 'active' : 'collapsed' }} " href="{{ route('admin.adminWorkRequests') }}">
           <i class="bi bi-person"></i>
           <span>Work Requests</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link {{ request()->route()->getName() === 'admin.transactions' ? 'active' : 'collapsed' }} " href="{{ route('admin.transactions') }}">
+          <i class="bi bi-person"></i>
+          <span>Transactions</span>
         </a>
       </li>
 
@@ -55,17 +73,11 @@
       <li class="nav-item">
         <a class="nav-link {{ request()->route()->getName() === 'admin.user_withdrawal' ? 'active' : 'collapsed' }} " href="{{ route('admin.user_withdrawal') }}">
           <i class="bi bi-person"></i>
-          <span>User Withdrawal</span>
+          <span>Withdraw Amount</span>
         </a>
       </li>
       <li class="nav-item">
         <a class="nav-link {{ request()->route()->getName() === 'admin.user_transactions' ? 'active' : 'collapsed' }} " href="{{ route('admin.user_transactions') }}">
-          <i class="bi bi-person"></i>
-          <span>Users Transactions</span>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link {{ request()->route()->getName() === 'admin.transactions' ? 'active' : 'collapsed' }} " href="{{ route('admin.transactions') }}">
           <i class="bi bi-person"></i>
           <span>Transactions</span>
         </a>

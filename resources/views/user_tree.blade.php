@@ -31,6 +31,9 @@
                       <!-- Recent Sales -->
                       <div class="col-12">
                         <div class="row">
+                            @if (count($users) == 0)
+                                <p>Not registered any user with your reference.</p>
+                            @endif
                             @foreach ($users as $user)
                                 <div class="col-3 mt-3">
                                     <div class="flip-card" data-id="{{ $user->uuid }}" data-name="{{ $user->name }}">

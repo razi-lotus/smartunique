@@ -2,37 +2,66 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\AdminWorkRequest;
 use App\Models\WorkRequest;
 use Illuminate\Http\Request;
+use App\Models\TotalBalances;
+use App\Models\AdminWorkRequest;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class WorkController extends Controller
 {
+    public function __construct()
+    {
+        // $this->middleware('auth');
+        $this->middleware('redirectWel');
+    }
+
     public function index(){
         return view('work_requests.index');
     }
 
     public function saveWork(Request $request){
-        // return $request->get('link1');
-        // if($request->has('files')){
-            $work_ids = [];
-            for($i=1;$i<=5;$i++){
-                $work = WorkRequest::create([
-                    'user_id'   => Auth::user()->id,
-                    'file'      => $request->has('file'.$i) ? Storage::disk('public')->put('work_request',$request->file('file'.$i)) : null,
-                    'link'      => $request->get('link'.$i),
-                    'status'    => 'Pending'
-                ]);
-                $work_ids[] = $work->id;
+        // return $request->all();
+            $work_requests = WorkRequest::where('user_id',Auth::user()->id)->whereDate('date',date('Y-m-d'))->get();
+            // return (count($work_requests));
+            if(count($work_requests) == 5){
+                return redirect()->route('admin.sendWorkRequest')->with('message','Only 5 ads can be posted per day.');
             }
-            AdminWorkRequest::create([
-                'user_id'   => Auth::user()->id,
-                'link_ids'  => implode(',',$work_ids),
-                'status'    => 'Pending'
+            $work = WorkRequest::create([
+                'user_id'       => Auth::user()->id,
+                'file'          => $request->has('file') ? Storage::disk('public')->put('work_request',$request->file('file')) : null,
+                'link'          => $request->get('link'),
+                'title'         => $request->get('title'),
+                'description'   => $request->get('description'),
+                'status'        => 'Active',
+                'date'          => date('Y-m-d')
             ]);
+            // balance transfer
+            $balance = DB::table('balances')->insert([
+                'user_id'       => Auth::user()->id,
+                'amount'        => '0.33',
+                'income_type'   => 'Ad Posting',
+            ]);
+            $baldeduction = TotalBalances::where('user_id',Auth::user()->id)->first();
+            if($baldeduction){
+                $amnt = ($baldeduction->total + (0.33));
+                $baldeduction->update(['total' => $amnt]);
+            }else{
+                TotalBalances::create([
+                    'user_id'   => Auth::user()->id,
+                    'total'     => (0.33)
+                ]);
+            }
+
+            // }
+
+            // AdminWorkRequest::create([
+            //     'user_id'   => Auth::user()->id,
+            //     'link_ids'  => implode(',',$work_ids),
+            //     'status'    => 'Pending'
+            // ]);
 
         return redirect()->route('admin.sendWorkRequest');
     }
@@ -50,7 +79,7 @@ class WorkController extends Controller
 
         if (!empty($request->input('search.value'))) {
             $search         = $request->input('search.value');
-            $records        = WorkRequest::with(['user'])->where('user_id',Auth::user()->id)->offset($pagination['page'])->limit($pagination['perpage'])->get();
+            $records        = WorkRequest::with(['user'])->where('user_id',Auth::user()->id)->where('title','like','%'.$search.'%')->orWhere('description','like','%'.$search.'%')->offset($pagination['page'])->limit($pagination['perpage'])->get();
             $totalFiltered  = count($records);
         } else {
             $records    = WorkRequest::with(['user'])->where('user_id',Auth::user()->id)->orderBy($order, $dir)->offset($pagination['page'])->limit($pagination['perpage'])->get();
@@ -62,7 +91,9 @@ class WorkController extends Controller
             foreach ($records as $key=> $item) {
                     $itemData['image']      = '<img src="'.asset("storage/$item->file").'" width="50" height="50" alt="">';
                     $itemData['link']       = substr($item->link,0,30).'...';
-                    $itemData['status']     = '<span class="badge '.($item->status=="Approved" ? "bg-success" : "bg-danger").'">'.$item->status.'</span>';
+                    $itemData['title']       = $item->title;
+                    $itemData['description']       = $item->description;
+                    $itemData['status']     = '<span class="badge '.($item->status=="Active" ? "bg-success" : "bg-danger").'">'.$item->status.'</span>';
                     $itemData['action']     = '<div><a class="" href="'. url("admin/editwork", $item->id) .'/edit">Edit</a>&nbsp;<a class="del-link" href="javascript:void(0);" data-id="'.$item->id.'">Delete</a></div>';
                     $data[] = $itemData;
             }
@@ -89,7 +120,10 @@ class WorkController extends Controller
         if($work){
             $work->update([
                 'link' => $request->link1 ? $request->link1 : $work->link,
-                'file' => $request->has('file1') ?  Storage::disk('public')->put('work_request',$request->file('file1')) : $request->file
+                'title' => $request->title ? $request->title : $work->title,
+                'description' => $request->description ? $request->description : $work->description,
+                'file' => $request->has('file1') ?  Storage::disk('public')->put('work_request',$request->file('file1')) : $work->file,
+
             ]);
             return redirect()->route('admin.sendWorkRequest');
         }

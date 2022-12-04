@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AdminBalance;
 use App\Models\Balances;
+use App\Models\TotalBalances;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,6 +19,7 @@ class DashboardController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $this->middleware('redirectWel');
     }
 
     /**
@@ -36,11 +39,56 @@ class DashboardController extends Controller
         }
     }
 
+
+    public function getUserStatus(){
+        $users      = User::all();
+        $active     = 0;
+        $inActive   = 0;
+        $pending    = 0;
+        $level1     = 0;
+        $level2     = 0;
+        $level3     = 0;
+        $level4     = 0;
+        $today_reg  = 0;
+        foreach($users as $user){
+            if($user->status == 'Active' && $user->type !== 'Admin'){
+                $active++;
+            }elseif($user->status == 'InActive' && $user->type !== 'Admin'){
+                $inActive++;
+            }elseif($user->status == 'Penging' && $user->type !== 'Admin'){
+                $pending++;
+            }
+
+            if($user->level == 1 && $user->type !== 'Admin'){
+                $level1++;
+            }elseif($user->level == 2 && $user->type !== 'Admin'){
+                $level2++;
+            }elseif($user->level == 3 && $user->type !== 'Admin'){
+                $level3++;
+            }elseif($user->level == 4 && $user->type !== 'Admin'){
+                $level4++;
+            }
+            if(strtotime(date('Y-m-d',strtotime($user->created_at))) == strtotime(date('Y-m-d'))){
+                $today_reg++;
+            }
+        }
+        return response()->json([
+            'active'    => $active,
+            'inActive'  => $inActive,
+            'pending'   => $pending,
+            'level1'    => $level1,
+            'level2'    => $level2,
+            'level3'    => $level3,
+            'level4'    => $level4,
+            'today_reg' => $today_reg,
+        ]);
+    }
+
     public function userDashboard()
     {
-        // return Balances::with(['user'])->get();
-        $users = User::all();
-        return view('user_dashboard',compact('users'));
+        $balances = TotalBalances::where('user_id',Auth::user()->id)->first();
+        $points = User::where('sponsor_id',Auth::user()->uuid)->get();
+        return view('user_dashboard',compact('balances','points'));
     }
 
     public function BalanceList(Request $request) {
@@ -71,6 +119,7 @@ class DashboardController extends Controller
                     $itemData['id']     = $item->user ? $item->user->uuid : '';
                     $itemData['name']   = $item->user ? $item->user->name : '';
                     $itemData['amount'] = $item->amount;
+                    $itemData['income_type'] = $item->income_type;
                     $itemData['status'] = $item->status;
                     $itemData['action'] = "<div class='btn-group'><a href='". url('sdadsf', $item->id) ."/edit' class=''>Edit</a>&nbsp;&nbsp;
                     <a href='javascript:void(0);' data-item='" . $item->id . "' class='ml-2 sweetalertDelete'>Delete</a></div>";

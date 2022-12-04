@@ -27,53 +27,34 @@
             <div class="col-xxl-4 col-xl-12">
                 <div class="card">
                     <div class="card-body">
-                      <h5 class="card-title">Work Requests</h5>
+                      <h5 class="card-title">Send Work Request</h5>
                       <!-- Recent Sales -->
                       <div class="col-12">
+                        @if (session('message'))
+                            <div class="alert alert-danger" role="alert">
+                                {{ __('Limit exceeded! You can post 5 ads per day.') }}
+                            </div>
+                        @endif
                         <div class="recent-sales overflow-auto">
                             <div>
                                 <form action="" method="POST" enctype="multipart/form-data">
                                     @csrf
                                       <div class="row mb-3">
                                           <div class="col-sm-6">
-                                            <label for="inputEmail3" class="col-form-label">Poster One</label>
-                                            <input type="file" class="form-control" name="file1">
+                                            <label for="inputEmail3" class="col-form-label">Ad Image</label>
+                                            <input type="file" class="form-control" name="file">
                                           </div>
                                           <div class="col-sm-6">
                                             <label for="inputEmail3" class="col-form-label">Link</label>
-                                            <input type="text" class="form-control" name="link1" >
+                                            <input type="text" class="form-control" name="link" >
                                           </div>
                                           <div class="col-sm-6">
-                                            <label for="inputEmail3" class="col-form-label">Poster Two</label>
-                                            <input type="file" class="form-control" name="file2" >
-                                          </div>
-                                          <div class="col-sm-6">
-                                            <label for="inputEmail3" class="col-form-label">Link</label>
-                                            <input type="text" class="form-control" name="link2" >
-                                          </div>
-                                          <div class="col-sm-6">
-                                            <label for="inputEmail3" class="col-form-label">Poster Three</label>
-                                            <input type="file" class="form-control" name="file3" >
-                                          </div>
-                                          <div class="col-sm-6">
-                                            <label for="inputEmail3" class="col-form-label">Link</label>
-                                            <input type="text" class="form-control" name="link3" >
-                                          </div>
-                                          <div class="col-sm-6">
-                                            <label for="inputEmail3" class="col-form-label">Poster Four</label>
-                                            <input type="file" class="form-control" name="file4" >
-                                          </div>
-                                          <div class="col-sm-6">
-                                            <label for="inputEmail3" class="col-form-label">Link</label>
-                                            <input type="text" class="form-control" name="link4" >
-                                          </div>
-                                          <div class="col-sm-6">
-                                            <label for="inputEmail3" class="col-form-label">Poster Five</label>
-                                            <input type="file" class="form-control" name="file5" >
-                                          </div>
-                                          <div class="col-sm-6">
-                                            <label for="inputEmail3" class="col-form-label">Posters</label>
-                                            <input type="text" class="form-control" name="link5">
+                                            <label for="inputEmail3" class="col-form-label">Title</label>
+                                            <input type="text" class="form-control" name="title" >
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <label for="inputEmail3" class="col-form-label">Description</label>
+                                            <input type="text" class="form-control" name="description">
                                           </div>
 
                                           <div class="col-12 col-md-6 col-lg-12 col-xl-12 mt-3">
@@ -90,6 +71,8 @@
                               <tr>
                                 <th scope="col">Image</th>
                                 <th scope="col">Link</th>
+                                <th scope="col">Title</th>
+                                <th scope="col">Description</th>
                                 <th scope="col">Status</th>
                                 <th scope="col">Action</th>
                               </tr>
@@ -145,6 +128,8 @@
                 "columns": [
                     { "data": "image" },
                     { "data": "link" },
+                    { "data": "title" },
+                    { "data": "description" },
                     { "data": "status" },
                     { "data": "action" },
                 ],
