@@ -32,12 +32,14 @@
                   <hr class="dropdown-divider">
                 </li>
             @endif
-            <li>
-                <a class="dropdown-item d-flex align-items-center" href="{{ route('admin.secondUpgrade') }}">
-                  <i class="bi bi-person"></i>
-                  <span>Upgrade Account</span>
+            @if (Auth::user() && Auth::user()->type == 'Admin')
+            <li class="dropdown-header">
+                <a class="dropdown-item d-flex align-items-center" href="javascript:void(0);">
+                  {{-- <i class="bi bi-person"></i> --}}
+                  <span>Admin</span>
                 </a>
               </li>
+            @endif
             {{-- <li>
               <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
                 <i class="bi bi-person"></i>

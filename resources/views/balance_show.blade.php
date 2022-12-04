@@ -85,7 +85,7 @@
                                 <th scope="col">Amount</th>
                                 <th scope="col">Income Type</th>
                                 <th scope="col">Status</th>
-                                <th scope="col">Action</th>
+                                {{-- <th scope="col">Action</th> --}}
                               </tr>
                             </thead>
                             <tbody>
@@ -199,7 +199,7 @@
                     { "data": "amount" },
                     { "data": "income_type" },
                     { "data": "status" },
-                    { "data": "action" },
+                    // { "data": "action" },
                 ],
             });
 

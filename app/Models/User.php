@@ -42,7 +42,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function level(){
+    public function account(){
         return $this->hasOne(UserLevel::class,'user_id','id');
     }
 }

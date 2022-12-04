@@ -41,7 +41,8 @@ class DashboardController extends Controller
 
 
     public function getUserStatus(){
-        $users      = User::all();
+        $users      = User::with(['account'])->get();
+        // return $users;
         $active     = 0;
         $inActive   = 0;
         $pending    = 0;
@@ -50,6 +51,7 @@ class DashboardController extends Controller
         $level3     = 0;
         $level4     = 0;
         $today_reg  = 0;
+        $today_upgraded  = 0;
         foreach($users as $user){
             if($user->status == 'Active' && $user->type !== 'Admin'){
                 $active++;
@@ -59,17 +61,20 @@ class DashboardController extends Controller
                 $pending++;
             }
 
-            if($user->level == 1 && $user->type !== 'Admin'){
+            if($user->account !== null && $user->account->current_level_id == 1 && $user->type !== 'Admin'){
                 $level1++;
-            }elseif($user->level == 2 && $user->type !== 'Admin'){
+            }elseif($user->account !== null && $user->account->current_level_id == 2 && $user->type !== 'Admin'){
                 $level2++;
-            }elseif($user->level == 3 && $user->type !== 'Admin'){
+            }elseif($user->account !== null && $user->account->current_level_id == 3 && $user->type !== 'Admin'){
                 $level3++;
-            }elseif($user->level == 4 && $user->type !== 'Admin'){
+            }elseif($user->account !== null && $user->account->current_level_id == 4 && $user->type !== 'Admin'){
                 $level4++;
             }
             if(strtotime(date('Y-m-d',strtotime($user->created_at))) == strtotime(date('Y-m-d'))){
                 $today_reg++;
+            }
+            if($user->account !== null && strtotime(date('Y-m-d',strtotime($user->account->current_level_date))) == strtotime(date('Y-m-d'))){
+                $today_upgraded++;
             }
         }
         return response()->json([
@@ -81,13 +86,14 @@ class DashboardController extends Controller
             'level3'    => $level3,
             'level4'    => $level4,
             'today_reg' => $today_reg,
+            'today_upgraded' => $today_upgraded
         ]);
     }
 
     public function userDashboard()
     {
-        $balances = TotalBalances::where('user_id',Auth::user()->id)->first();
-        $points = User::where('sponsor_id',Auth::user()->uuid)->get();
+        $balances   = TotalBalances::where('user_id',Auth::user()->id)->first();
+        $points     = User::where('sponsor_id',Auth::user()->uuid)->get();
         return view('user_dashboard',compact('balances','points'));
     }
 
@@ -121,8 +127,8 @@ class DashboardController extends Controller
                     $itemData['amount'] = $item->amount;
                     $itemData['income_type'] = $item->income_type;
                     $itemData['status'] = $item->status;
-                    $itemData['action'] = "<div class='btn-group'><a href='". url('sdadsf', $item->id) ."/edit' class=''>Edit</a>&nbsp;&nbsp;
-                    <a href='javascript:void(0);' data-item='" . $item->id . "' class='ml-2 sweetalertDelete'>Delete</a></div>";
+                    // $itemData['action'] = "<div class='btn-group'><a href='". url('sdadsf', $item->id) ."/edit' class=''>Edit</a>&nbsp;&nbsp;
+                    // <a href='javascript:void(0);' data-item='" . $item->id . "' class='ml-2 sweetalertDelete'>Delete</a></div>";
                     $data[] = $itemData;
             }
         }

@@ -92,7 +92,7 @@ class RegisterController extends Controller
             "sponsor_id"        => $data['sponsor_id'],
             "mother_name"       => $data['mother_name'],
             "pet_name"          => $data['pet_name'],
-            "status"            => 'Pending',
+            "status"            => 'Active',
 
         ]);
 
