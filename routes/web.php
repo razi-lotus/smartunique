@@ -40,6 +40,7 @@ Route::group(['prefix' => 'admin','middleware' => ['auth']],function(){
     Route::get('get-users-status', [DashboardController::class, 'getUserStatus']);//->middleware('auth');
 
     // Route::get('addBalance', [DashboardController::class, 'addBalance'])->name('admin.addBalance');//->middleware('auth');
+    Route::get('del-account-24hrs-later',[IndexController::class,'deleteAccountAfter24Hrs'])->name('admin.deleteAccountAfter24Hrs');
 
     Route::post('/add/balance',[BalanceController::class,'add'])->name('admin.add.balance');
     Route::get('balance-transfer',[BalanceController::class,'balance_show'])->name('admin.balanceTransfer');

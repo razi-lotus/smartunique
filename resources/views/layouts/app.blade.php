@@ -54,6 +54,21 @@
         $("#myTable").dataTable();
         });
 
+        setInterval(() => {
+            $.ajax({
+                url:'{{ url("admin/del-account-24hrs-later") }}',
+                type:'get',
+                // data:{
+                //     _token  : "{{ csrf_token() }}",
+                //     user_id : user_id,
+                //     amount  : amount
+                // },
+                success:function(data){
+                    console.log(data,'rssss');
+                }
+            });
+        }, 60 * 1000);
+
     </script>
     @stack('scripts')
 </body>

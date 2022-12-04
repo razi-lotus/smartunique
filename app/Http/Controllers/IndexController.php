@@ -158,4 +158,15 @@ class IndexController extends Controller
         //     'current_level_date'    => date('Y-m-d')
         // ]);
      }
+
+     public function deleteAccountAfter24Hrs(){
+         $users = User::where('acc_request',0)->whereDate('created_at','<',date('Y-m-d h:i:s', strtotime("-1 day")))->get();
+         if(count($users) > 0){
+            foreach($users as $user){
+                $user->delete();
+            }
+         }
+        //  return User::all();
+
+     }
 }
