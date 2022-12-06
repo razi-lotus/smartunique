@@ -22,8 +22,22 @@ a:hover {
   background: linear-gradient(to right, #0ac6d4, #3326b1);
 }
 .purple {
+  background: #f2f8fe;
   /* background: #125eb1; */
-  background: url(/images/Divs-02.svg);
+  /* background: url(/images/Divs-02.svg); */
+  color: #f2f8fe;
+  /* height: auto; */
+  /* width: 100%; */
+  /* background-size: cover; */
+  /* background-color: white; */
+  /* background-position: center top; */
+  /* background-repeat: no-repeat; */
+  /* padding: 150px 0px !important; */
+  transform: rotate(90);
+}
+.purple-custom {
+  /* background: #125eb1; */
+  background: url(../images/Divs-02.svg);
   color: #f2f8fe;
   height: auto;
   width: 100%;

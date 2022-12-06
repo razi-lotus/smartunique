@@ -4,7 +4,7 @@ $(function(){
 
     /*----- Page Loader Start ----- */
     $(window).on("load", function() {
-        $('#preloader').delay(1000).fadeOut(100);
+        $('#preloader').delay(500).fadeOut(500);
     });
     /*----- Page Loader End ----- */
 

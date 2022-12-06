@@ -335,7 +335,7 @@
   .login-box .button {
     padding: 10px 0px;
     background: transparent;
-    font-weight: 500;
+    font-weight: 400;
   }
   .nav-menu > ul ul {
     display: none;
@@ -621,6 +621,16 @@
 }
 
 @media (max-width: 767px) {
+  /* .pay-img{
+    height: 80 !important;
+    width: 200 !important;
+  } */
+  .res-height{
+    height: 150px !important;
+  }
+  .res-mt-n15{
+    margin-top: -15rem !important;
+  }
   .res-how {
     height: 240px !important;
   }

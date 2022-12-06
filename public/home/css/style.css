@@ -480,13 +480,14 @@ _______________________________________________________*/
 }
 .nav-menu > ul > li > a {
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 400 !important;
   text-transform: uppercase;
   padding: 38px 0px;
   display: block;
   position: relative;
   overflow: hidden;
   line-height: 23px;
+  text-transform: capitalize !important;
 }
 .nav-menu > ul > li > a:before {
   content: "";
@@ -967,6 +968,29 @@ _______________________________________________________*/
   height: 24px;
   border-radius: 100%;
   background: url(../images/check-round.png) no-repeat center;
+  background-color: white;
+}
+.token-details-2 ul li:before{
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: 0px;
+  width: 24px;
+  height: 24px;
+  /* border-radius: 100%; */
+  background: url(../images/bullet.png) no-repeat center;
+  background-color: white;
+}
+.token-details .bg li:before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: 0px;
+  width: 24px;
+  height: 24px;
+  border-radius: 100%;
+  background: url(../images/check-round.png) no-repeat center;
+  /* background-color: white; */
 }
 .token-sale .patter {
   position: absolute;

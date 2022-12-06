@@ -119,7 +119,7 @@
             $('.less-bal').hide();
             $('#withdraw-amount').on('click',function(e){
                 e.preventDefault();
-                let balance = {!! $balance->total !!};
+                let balance = {!! $balance ? $balance->total : 0 !!};
                 let amount = $('#inputAmount').val();
                 if(amount !== '' && balance > 5){
                     $.ajax({

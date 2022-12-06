@@ -25,6 +25,16 @@ use App\Http\Controllers\Admin\RequestController;
 |
 */
 
+Route::get('services', function () {return view("services");});
+Route::get('our_assignment', function () {return view("our_assignment");});
+Route::get('job-task', function () {return view("job-task");});
+Route::get('working-bonus', function () {return view("working-bonus");});
+Route::get('rewards', function () {return view("rewards");});
+Route::get('withdraw-method', function () {return view("withdraw-method");});
+Route::get('career', function () {return view("career");});
+Route::get('about', function () {return view("about");});
+Route::get('contact', function () {return view("contact");});
+Route::get('team', function () {return view("team");});
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::group(['prefix' => 'admin','middleware' => ['auth']],function(){

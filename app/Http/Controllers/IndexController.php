@@ -18,19 +18,19 @@ class IndexController extends Controller
          if(!$balanceConfirm){
              return redirect()->route('admin.welcome.screen')->with('message','Balance not transferred yet, please contact to the company');
          }
-         $user = User::with(['level','level.levelName'])->where('id',Auth::user()->id)->first();
+         $user = User::with(['account','account.levelName'])->where('id',Auth::user()->id)->first();
          $user_level = UserLevel::where('user_id',$user->id)->first();
-        //  return $user_level;
+        //  return $user;
          if($user && $user->acc_request !== 1){
              $user->update(['acc_request' => 1]);
              AdminBalance::create([
                  'user_id'   => $user->id,
                  'amount'    => $balanceConfirm->amount
              ]);
-             $balanceConfirm->update(['amount' => 0]);
+            //  $balanceConfirm->update(['amount' => 0]);
 
              // referered person's commission
-             $referredPerson = User::with(['level.levelName'])->where('uuid',$user->sponsor_id)->first();
+             $referredPerson = User::with(['account.levelName'])->where('uuid',$user->sponsor_id)->first();
              $referred_level = UserLevel::where('user_id',$referredPerson->id)->first();
              $commission = 0;
              if($user_level->current_level_id == 1 || $user_level->current_level_id == 2)
