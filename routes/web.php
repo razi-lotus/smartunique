@@ -13,6 +13,7 @@ use App\Http\Controllers\WithdrawalController;
 use App\Http\Controllers\TransactionsController;
 use App\Http\Controllers\Admin\BalanceController;
 use App\Http\Controllers\Admin\RequestController;
+use App\Http\Controllers\BonusController;
 
 /*
 |--------------------------------------------------------------------------
@@ -56,6 +57,13 @@ Route::group(['prefix' => 'admin','middleware' => ['auth']],function(){
     Route::get('balance-transfer',[BalanceController::class,'balance_show'])->name('admin.balanceTransfer');
     Route::get('balance-listing', [DashboardController::class, 'BalanceList']);
     Route::get('user', [UserController::class, 'index'])->name('admin.users');
+
+    Route::get('add-bonus', [BonusController::class, 'showBonus'])->name('admin.addBonus');
+    Route::post('add-bonus', [BonusController::class, 'saveBonus']);
+    Route::get('bonus-listing', [BonusController::class, 'BonusListing']);
+    Route::get('bonuses', [BonusController::class, 'showUserBonus'])->name('admin.userBonus');
+    Route::get('user-bonus-listing', [BonusController::class, 'UserBonusListing']);
+
 
     Route::get('user-listing', [UserController::class, 'UserList']);
     Route::post('change-status', [UserController::class, 'changeStatus']);

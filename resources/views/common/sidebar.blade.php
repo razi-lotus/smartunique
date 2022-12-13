@@ -8,12 +8,12 @@
           <span>Dashboard</span>
         </a>
       </li>
-      {{-- <li class="nav-item">
-        <a class="nav-link {{ request()->route()->getName() === 'admin.addBalance' ? 'active' : 'collapsed' }}" href="{{ route('admin.addBalance') }}">
+      <li class="nav-item">
+        <a class="nav-link {{ request()->route()->getName() === 'admin.addBonus' ? 'active' : 'collapsed' }}" href="{{ route('admin.addBonus') }}">
           <i class="bi bi-grid"></i>
-          <span>Add Balance</span>
+          <span>Bonus</span>
         </a>
-      </li> --}}
+      </li>
       <li class="nav-item">
         <a class="nav-link {{ request()->route()->getName() === 'admin.userTree' ? 'active' : 'collapsed' }} " href="{{ route('admin.userTree') }}">
           <i class="bi bi-person"></i>
@@ -68,6 +68,12 @@
         <a class="nav-link {{ request()->route()->getName() === 'admin.userTree' ? 'active' : 'collapsed' }} " href="{{ route('admin.userTree') }}">
           <i class="bi bi-person"></i>
           <span>User Tree</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link {{ request()->route()->getName() === 'admin.userBonus' ? 'active' : 'collapsed' }} " href="{{ route('admin.userBonus') }}">
+          <i class="bi bi-person"></i>
+          <span>Bonus</span>
         </a>
       </li>
       <li class="nav-item">

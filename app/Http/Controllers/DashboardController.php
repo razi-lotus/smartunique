@@ -97,7 +97,8 @@ class DashboardController extends Controller
         return view('user_dashboard',compact('balances','points'));
     }
 
-    public function BalanceList(Request $request) {
+    public function BalanceList(Request $request)
+    {
         $columns    = array(0 => 'id', 1 => 'name',2 => 'amount',3 => 'status');
         $order      = 'id'; $dir = 'DESC';
 
