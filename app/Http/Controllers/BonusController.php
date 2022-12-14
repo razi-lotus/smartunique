@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Bonus;
+use App\Models\TotalBalances;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,10 +20,15 @@ class BonusController extends Controller
     }
 
     public function saveBonus(Request $request){
-        // return $request->all();
         $validate = $request->validate([
             'user_id' => 'required|exists:users,id'
         ]);
+        $totalBal = TotalBalances::where('user_id',$request->user_id)->first();
+        if($totalBal){
+            $totalBal->update(['total' => (float)$totalBal->total += $request->amount]);
+        }else{
+            TotalBalances::create(['user_id'=> $request->user_id,'total' => $request->amount]);
+        }
         $data = Bonus::create([
             'user_id'   => $request->user_id,
             'amount'    => $request->amount

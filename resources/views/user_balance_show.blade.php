@@ -12,8 +12,8 @@
       {{-- <h1>Dashboard</h1> --}}
       <nav>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-          <li class="breadcrumb-item active">Dashboard</li>
+          <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
+          <li class="breadcrumb-item active">Balance Transfer</li>
         </ol>
       </nav>
     </div><!-- End Page Title -->
@@ -29,13 +29,14 @@
             <div class="col-xxl-4 col-xl-12">
                 <div class="card">
                     <div class="card-body">
-                      <h5 class="card-title">All Balance</h5>
+                      <h5 class="card-title">Total Balance</h5>
+                      <span>{{ $balance !== null ? $balance->total : 0 }}</span>
                       <!-- Recent Sales -->
                       <div class="col-12">
                         <div class="recent-sales overflow-auto">
 
                           <h5 class="card-title">
-                            <button type="button" class="btn btn-sm btn-primary float-end" id="show-add-blnce">Add Balance</button>
+                            <button type="button" class="btn btn-sm btn-primary float-end" id="show-add-blnce">Balance Transfer</button>
                           </h5>
                           <div class="row" id="show-add-blnce-form">
                             {{-- {{ route('admin.add.balance') }} --}}
@@ -55,22 +56,6 @@
                                     <label for="inputNanme4" class="form-label">Amount</label>
                                     <input type="text" class="form-control" name="amount" id="inputAmount">
                                 </div>
-                                <div class="col-3">
-                                    <label for="inputNanme4" class="form-label">Acount Name</label>
-                                    <select class="form-control" name="acc_title" id="inputAccount">
-                                        <option value="1">Director</option>
-                                        <option value="2">Manager</option>
-                                        <option value="3">Supervisor</option>
-                                        <option value="4">Member</option>
-                                    </select>
-                                </div>
-                                <div class="col-3">
-                                    <label for="" class="form-label">Acount Type</label>
-                                    <select class="form-control" name="acc_type" id="inputAccounttype">
-                                        <option value="Account Purchase">Account Purchase</option>
-                                        <option value="Upgrade Account">Upgrade Account</option>
-                                    </select>
-                                </div>
                                 <div class="col-4 mt-3">
                                     <button type="submit" class="btn btn-sm btn-primary" id="balance-add">Submit</button>
                                 </div>
@@ -83,8 +68,6 @@
                                 <th scope="col">#</th>
                                 <th scope="col">User</th>
                                 <th scope="col">Amount</th>
-                                <th scope="col">Income Type</th>
-                                <th scope="col">Status</th>
                                 {{-- <th scope="col">Action</th> --}}
                               </tr>
                             </thead>
@@ -142,31 +125,6 @@
 
 @push('scripts')
     <script>
-        setTimeout(() => {
-            $.ajax({
-                url:'{{ url("admin/get-users-status") }}',
-                type:'get',
-                // data:{
-                //     _token  : "{{ csrf_token() }}",
-                //     user_id : user_id,
-                //     amount  : amount
-                // },
-                success:function(data){
-                    console.log(data,'rssss');
-                    $('.active-user').text(data.active);
-                    $('.inactive-user').text(data.inActive);
-                    $('.pending-user').text(data.pending);
-
-                    $('.level1-user').text(data.level1);
-                    $('.level2-user').text(data.level2);
-                    $('.level3-user').text(data.level3);
-                    $('.level4-user').text(data.level4);
-                    $('.today-reg-user').text(data.today_reg);
-                }
-            });
-
-        }, 2000);
-        $("#show-add-blnce-form").hide();
         $(document).ready(function(){
             $("#show-add-blnce").click(function(){
                 $("#show-add-blnce-form").slideToggle();
@@ -189,7 +147,7 @@
                 "serverSide": true,
                 "autoWidth": false,
                 "ajax": {
-                    "url": "{{ url('admin/balance-listing') }}",
+                    "url": "{{ url('admin/user-balance-listing') }}",
                     "dataType": "json",
                     "type": "GET",
                 },
@@ -197,8 +155,6 @@
                     { "data": "id" },
                     { "data": "name" },
                     { "data": "amount" },
-                    { "data": "income_type" },
-                    { "data": "status" },
                     // { "data": "action" },
                 ],
             });
@@ -208,27 +164,21 @@
                 // $('#exampleModalCenter').modal('show');
                 // return;
                 let user_id     = $('#inputUserId').val();
-                var userName    = $('#inputUserId :selected').text();
-                var accName    = $('#inputAccount :selected').val();
                 var amount      = $('#inputAmount').val();
-                var accType    = $('#inputAccounttype :selected').val();
                 if(user_id === 'not-selected'){
                     $('.id-error').text('Select user name');
                 }
                 $.ajax({
-                url:'{{ url("admin/add/balance") }}',
+                url:'{{ url("admin/add/user/balance") }}',
                 type:'post',
                 data:{
                     _token  : "{{ csrf_token() }}",
                     user_id : user_id,
                     amount  : amount,
-                    acc_id:accName,
-                    acc_type:accType
                 },
                 success:function(data){
                     console.log(data,'ddd');
                     $('.amount-tag').text(amount);
-                    $('.user-tag').text(userName);
                     $('#exampleModalCenter').modal('show');
                     $("#show-add-blnce-form").hide();
                     $('#inputAmount').val('');

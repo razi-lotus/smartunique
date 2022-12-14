@@ -77,6 +77,12 @@
         </a>
       </li>
       <li class="nav-item">
+        <a class="nav-link {{ request()->route()->getName() === 'admin.userBalanceTransfer' ? 'active' : 'collapsed' }} " href="{{ route('admin.userBalanceTransfer') }}">
+          <i class="bi bi-person"></i>
+          <span>Balance Transfer</span>
+        </a>
+      </li>
+      <li class="nav-item">
         <a class="nav-link {{ request()->route()->getName() === 'admin.user_withdrawal' ? 'active' : 'collapsed' }} " href="{{ route('admin.user_withdrawal') }}">
           <i class="bi bi-person"></i>
           <span>Withdraw Amount</span>

@@ -49,6 +49,9 @@ Route::group(['prefix' => 'admin','middleware' => ['auth']],function(){
     Route::post('second-upgradation', [IndexController::class, 'accountUpgradeRequest'])->name('admin.secondUpbradationRequest');
 
     Route::get('get-users-status', [DashboardController::class, 'getUserStatus']);//->middleware('auth');
+    Route::get('show-user-balance-transfer', [BalanceController::class, 'showBalTansfer'])->name('admin.userBalanceTransfer');//->middleware('auth');
+    Route::get('user-balance-listing', [BalanceController::class, 'userBalListing']);
+    Route::post('/add/user/balance',[BalanceController::class,'addUserBal']);
 
     // Route::get('addBalance', [DashboardController::class, 'addBalance'])->name('admin.addBalance');//->middleware('auth');
     Route::get('del-account-24hrs-later',[IndexController::class,'deleteAccountAfter24Hrs'])->name('admin.deleteAccountAfter24Hrs');
