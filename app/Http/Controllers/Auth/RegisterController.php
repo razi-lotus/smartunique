@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Auth\Events\Registered;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Validator;
@@ -105,6 +106,9 @@ class RegisterController extends Controller
         //     'date_to' => date('Y-m-d')
         // ]);
         // balance...
+        Mail::send('email.register', $data, function($message) use ($data){
+            $message->to($data['email'])->subject('Registered Successfully');
+        });
         $user->save();
         return $user;
     }
