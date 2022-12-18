@@ -144,7 +144,8 @@
                     </div>
                     <div class="col-12 col-md-6 col-lg-4 col-xl-4">
                         <label for="yourEmail" class="form-label">Phone Number</label>
-                        <input type="text" name="phone" class="form-control @error('phone') is-invalid @enderror" value="{{ old('phone') }}" id="yourphone" >
+                        <input type="text" name="phone" class="form-control @error('phone') is-invalid @enderror" value="{{ old('phone') }}" id="phone-number" >
+                        <div id="recaptcha-container"></div>
                         @error('phone')
                             <div class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -222,7 +223,7 @@
                     </div>
 
                     <div class="col-12">
-                        <button class="btn btn-primary w-100" type="submit">Create Account</button>
+                        <button class="btn btn-primary w-100" type="submit" onclick="otpSend()">Create Account</button>
                     </div>
                     <div class="col-12">
                         <p class="small mb-0">Already have an account? <a href="{{ route('login') }}">Log in</a></p>
@@ -239,3 +240,73 @@
         </section>
   </div>
 @endsection
+@push('scripts')
+    <script src="https://www.gstatic.com/firebasejs/8.9.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.9.1/firebase-auth.js"></script>
+    <script>
+
+
+        const config = {
+            apiKey: "AIzaSyCR7bPcGKj68esbWkq5-LsT8WBBjOofLgc",
+            authDomain: "matshadi-19bc4.firebaseapp.com",
+            projectId: "matshadi-19bc4",
+            storageBucket: "matshadi-19bc4.appspot.com",
+            messagingSenderId: "737286761014",
+            appId: "1:737286761014:web:56d92a1e776bf0bd660697",
+            measurementId: "G-FN8VTPGTBS"
+        };
+
+        firebase.initializeApp(config);
+
+        window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
+            'size': 'invisible',
+            'callback': (response) => {
+                // reCAPTCHA solved, allow signInWithPhoneNumber.
+                onSignInSubmit();
+            }
+        });
+
+
+        function otpSend() {
+            var phoneNumber = document.getElementById('phone-number').value;
+            const appVerifier = window.recaptchaVerifier;
+            firebase.auth().signInWithPhoneNumber(phoneNumber, appVerifier)
+                .then((confirmationResult) => {
+                    // SMS sent. Prompt user to type the code from the message, then sign the
+                    // user in with confirmationResult.confirm(code).
+                    window.confirmationResult = confirmationResult;
+
+                    document.getElementById("sent-message").innerHTML = "Message sent succesfully.";
+                    document.getElementById("sent-message").classList.add("block");
+                    document.getElementById("auth").classList.add("hidden");
+                    document.getElementById("otp").classList.remove("hidden");
+                }).catch((error) => {
+                    document.getElementById("error-message").innerHTML = error.message;
+                    document.getElementById("error-message").classList.add("block");
+                });
+        }
+
+        function otpVerify() {
+            var code = document.getElementById('otp-code').value;
+            confirmationResult.confirm(code).then(function(result) {
+                // User signed in successfully.
+                var user = result.user;
+                var phoneNumber = document.getElementById('phone-number').value;
+                document.getElementById('mobile_no').value = phoneNumber;
+
+                document.getElementById("sent-message").innerHTML = "You are succesfully verified.";
+                document.getElementById("sent-message").classList.add("block");
+                document.getElementById("otpCon").classList.add("hidden");
+                document.getElementById("register").classList.remove("hidden");
+                document.getElementById('email_verify').value = "today";
+
+            }).catch(function(error) {
+
+                document.getElementById("error-message").innerHTML = error.message;
+                document.getElementById("error-message").classList.add("block");
+                document.getElementById("sent-message").classList.add("hidden");
+
+            });
+        }
+    </script>
+@endpush

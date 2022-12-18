@@ -65,6 +65,8 @@ class UserController extends Controller
             foreach($users as $user){
                 if($user->status !== 'Active'){
                     $user->update(['status' => 'Active']);
+                }else{
+                    $user->update(['status' => 'InActive']);
                 }
             }
         }

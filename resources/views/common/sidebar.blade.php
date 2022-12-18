@@ -9,13 +9,7 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link {{ request()->route()->getName() === 'admin.addBonus' ? 'active' : 'collapsed' }}" href="{{ route('admin.addBonus') }}">
-          <i class="bi bi-grid"></i>
-          <span>Bonus</span>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link {{ request()->route()->getName() === 'admin.userTree' ? 'active' : 'collapsed' }} " href="{{ route('admin.userTree') }}">
+        <a class="nav-link {{ request()->route()->getName() === 'admin.userTreeAdmin' ? 'active' : 'collapsed' }} " href="{{ route('admin.userTreeAdmin') }}">
           <i class="bi bi-person"></i>
           <span>User Tree</span>
         </a>
@@ -23,7 +17,13 @@
       <li class="nav-item">
         <a class="nav-link {{ request()->route()->getName() === 'admin.users' ? 'active' : 'collapsed' }} " href="{{ route('admin.users') }}">
           <i class="bi bi-person"></i>
-          <span>Users</span>
+          <span>Users Listing</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link {{ request()->route()->getName() === 'admin.addBonus' ? 'active' : 'collapsed' }}" href="{{ route('admin.addBonus') }}">
+          <i class="bi bi-grid"></i>
+          <span>Bonus</span>
         </a>
       </li>
       {{-- <li class="nav-item">
@@ -71,6 +71,12 @@
         </a>
       </li>
       <li class="nav-item">
+        <a class="nav-link {{ request()->route()->getName() === 'admin.sendWorkRequest' ? 'active' : 'collapsed' }} " href="{{ route('admin.sendWorkRequest') }}">
+          <i class="bi bi-person"></i>
+          <span>My Asignments</span>
+        </a>
+      </li>
+      <li class="nav-item">
         <a class="nav-link {{ request()->route()->getName() === 'admin.userBonus' ? 'active' : 'collapsed' }} " href="{{ route('admin.userBonus') }}">
           <i class="bi bi-person"></i>
           <span>Bonus</span>
@@ -92,12 +98,6 @@
         <a class="nav-link {{ request()->route()->getName() === 'admin.user_transactions' ? 'active' : 'collapsed' }} " href="{{ route('admin.user_transactions') }}">
           <i class="bi bi-person"></i>
           <span>Transactions</span>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link {{ request()->route()->getName() === 'admin.sendWorkRequest' ? 'active' : 'collapsed' }} " href="{{ route('admin.sendWorkRequest') }}">
-          <i class="bi bi-person"></i>
-          <span>Send Work Request</span>
         </a>
       </li>
       @endif

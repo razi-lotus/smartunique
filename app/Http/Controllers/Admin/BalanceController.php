@@ -62,8 +62,18 @@ class BalanceController extends Controller
                 'transfer_to'   => $request->user_id,
                 'amount'        => $request->amount
             ]);
+            $transferToBal = TotalBalances::where('user_id',$request->user_id)->first();
+            if($transferToBal){
+                $transferToBal->update(['total' => (float)$transferToBal->total += $request->amount]);
+            }else{
+                TotalBalances::create([
+                    'user_id'   => $request->user_id,
+                    'total'     => $request->amount
+                ]);
+            }
             Balances::create(['user_id' => $request->user_id,'amount' => $request->amount]);
-            return response()->json(['success' => 'balance transfer']);
+            $totalBal->update(['total' => (float)$totalBal->total - $request->amount]);
+            return response()->json(['success' => 'Balance transfered successfully','balance' => $totalBal->refresh()]);
         }else{
             return response()->json(['error' => 'Not enougth balance']);
         }
@@ -97,20 +107,24 @@ class BalanceController extends Controller
                 $query->where('name','like','%'.$search.'%');
             })->with(['received_user' => function($q) use ($search){
                 $q->where('name','like','%'.$search.'%');
-            }])->orWhere('amount', 'LIKE', "%{$search}%")
+            }])->where('user_id',Auth::user()->id)->orWhere('transfer_to',Auth::user()->id)->orWhere('amount', 'LIKE', "%{$search}%")
             ->offset($pagination['page'])->limit($pagination['perpage'])->get();
             $totalFiltered = count($records);
         } else {
-            $records    = UserBalTransfer::orderBy($order, $dir)->with(['received_user'])->offset($pagination['page'])->limit($pagination['perpage'])->get();
-            $totalData  = $totalFiltered = UserBalTransfer::count();
+            $records    = UserBalTransfer::where('user_id',Auth::user()->id)->orWhere('transfer_to',Auth::user()->id)->orderBy($order, $dir)->with(['received_user'])->offset($pagination['page'])->limit($pagination['perpage'])->get();
+            $totalData  = $totalFiltered = UserBalTransfer::where('user_id',Auth::user()->id)->orWhere('transfer_to',Auth::user()->id)->count();
         }
 
+        // return $records;
         $data = array();
         if (!empty($records)) {
             foreach ($records as $key=> $item) {
-                    $itemData['id']     = $item->user ? $item->user->uuid : '';
-                    $itemData['name']   = $item->user ? ucfirst($item->user->name) : '';
+                    $itemData['id']     = $item->received_user ? $item->received_user->uuid : '';
+                    $itemData['name']   = $item->received_user ? ucfirst($item->received_user->name) : '';
                     $itemData['amount'] = $item->amount;
+                    $status = $item->user_id == Auth::user()->id ? 'Transferred' : 'Received';
+                    $cls = $status == "Transferred" ? "bg-danger" : "bg-success";
+                    $itemData['status'] = '<span class="badge '.$cls.'">'.$status.'</span>';
                     // $itemData['action'] = "<div class='btn-group'><a href='". url('sdadsf', $item->id) ."/edit' class=''>Edit</a>&nbsp;&nbsp;
                     // <a href='javascript:void(0);' data-item='" . $item->id . "' class='ml-2 sweetalertDelete'>Delete</a></div>";
                     $data[] = $itemData;

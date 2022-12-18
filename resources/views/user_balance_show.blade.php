@@ -30,8 +30,9 @@
                 <div class="card">
                     <div class="card-body">
                       <h5 class="card-title">Total Balance</h5>
-                      <span>{{ $balance !== null ? $balance->total : 0 }}</span>
+                      <span class="amount-tag">{{ $balance !== null ? $balance->total : 0 }}</span>
                       <!-- Recent Sales -->
+                      <div class="alert alert-msg"></div>
                       <div class="col-12">
                         <div class="recent-sales overflow-auto">
 
@@ -47,7 +48,9 @@
                                     <select id="inputUserId" name="user_id" class="form-select">
                                         <option value="not-selected">select user</option>
                                         @foreach ($users as $user)
-                                            <option value="{{ $user->id }}">{{ $user->uuid }}</option>
+                                        @if ($user->id !== Auth::user()->id)
+                                          <option value="{{ $user->id }}">{{ $user->uuid }}</option>
+                                        @endif
                                         @endforeach
                                     </select>
                                     <span class="id-error" style="color: red"></span>
@@ -68,7 +71,7 @@
                                 <th scope="col">#</th>
                                 <th scope="col">User</th>
                                 <th scope="col">Amount</th>
-                                {{-- <th scope="col">Action</th> --}}
+                                <th scope="col">Status</th>
                               </tr>
                             </thead>
                             <tbody>
@@ -155,7 +158,7 @@
                     { "data": "id" },
                     { "data": "name" },
                     { "data": "amount" },
-                    // { "data": "action" },
+                    { "data": "status" },
                 ],
             });
 
@@ -163,30 +166,38 @@
                 event.preventDefault();
                 // $('#exampleModalCenter').modal('show');
                 // return;
-                let user_id     = $('#inputUserId').val();
-                var amount      = $('#inputAmount').val();
-                if(user_id === 'not-selected'){
-                    $('.id-error').text('Select user name');
-                }
-                $.ajax({
-                url:'{{ url("admin/add/user/balance") }}',
-                type:'post',
-                data:{
-                    _token  : "{{ csrf_token() }}",
-                    user_id : user_id,
-                    amount  : amount,
-                },
-                success:function(data){
-                    console.log(data,'ddd');
-                    $('.amount-tag').text(amount);
-                    $('#exampleModalCenter').modal('show');
-                    $("#show-add-blnce-form").hide();
-                    $('#inputAmount').val('');
-                    $('#inputAmount').val('');
-                    tableData.ajax.reload();
-                }
-            });
-        });
+                if(confirm('Are you sure you want to transfer this amount?')){
+                    let user_id     = $('#inputUserId').val();
+                    var amount      = $('#inputAmount').val();
+                    if(user_id === 'not-selected'){
+                        $('.id-error').text('Select user name');
+                        return;
+                    }
+                    $.ajax({
+                    url:'{{ url("admin/add/user/balance") }}',
+                    type:'post',
+                    data:{
+                        _token  : "{{ csrf_token() }}",
+                        user_id : user_id,
+                        amount  : amount,
+                    },
+                    success:function(data){
+                        console.log(data,'ddd');
+                        if(data.success == 'Balance transfered successfully'){
+                            $('.amount-tag').text(data.balance.total);
+                            $("#show-add-blnce-form").hide();
+                            $('#inputAmount').val('');
+                            $('.alert-msg').addClass('alert-success');
+                            $('.alert-msg').text('Balance trasfered successfully.');
+                            tableData.ajax.reload();
+                          }else{
+                              $('.alert-msg').addClass('alert-danger');
+                              $('.alert-msg').text('Insufficient balance, you can not transfer amount.');
+                          }
+                        }
+                      });
+                  }
+                });
 
             $('.closs-modal').on('click',function(){
                 $('#exampleModalCenter').modal('hide');

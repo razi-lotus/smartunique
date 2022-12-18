@@ -43,6 +43,9 @@ Route::group(['prefix' => 'admin','middleware' => ['auth']],function(){
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');//->middleware('auth');
     Route::get('/userDashboard', [DashboardController::class, 'userDashboard'])->name('admin.userDashboard');//->middleware('auth');
     Route::get('/userTree', [DashboardController::class, 'userTree'])->name('admin.userTree');//->middleware('auth');
+    Route::post('/userTree', [DashboardController::class, 'userTree']);
+    Route::get('/userTreeAdmin', [DashboardController::class, 'userTreeAdmin'])->name('admin.userTreeAdmin');//->middleware('auth');
+    Route::post('/userTreeAdmin', [DashboardController::class, 'userTreeAdmin']);
     Route::post('get-ref-users', [DashboardController::class, 'userRefTree']);
     Route::post('upgrade-account', [IndexController::class, 'upgradeAccount'])->name('admin.upgrade.account');
     Route::get('upgrade-account', [IndexController::class, 'secondUpgradation'])->name('admin.secondUpgrade');

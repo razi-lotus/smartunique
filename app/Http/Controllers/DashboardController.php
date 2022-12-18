@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\AdminBalance;
 use App\Models\Balances;
+use App\Models\Bonus;
 use App\Models\TotalBalances;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -94,7 +95,9 @@ class DashboardController extends Controller
     {
         $balances   = TotalBalances::where('user_id',Auth::user()->id)->first();
         $points     = User::where('sponsor_id',Auth::user()->uuid)->get();
-        return view('user_dashboard',compact('balances','points'));
+        $bonus      = Bonus::where('user_id',Auth::user()->id)->sum('amount');
+        // return $bonus;
+        return view('user_dashboard',compact('balances','points','bonus'));
     }
 
     public function BalanceList(Request $request)
@@ -144,9 +147,27 @@ class DashboardController extends Controller
     }
 
     public function userTree(Request $request){
+        // return $request->all();
         $users = User::all();
-        if(Auth::user() && Auth::user()->type !== 'Admin'){
-            $users = User::where('sponsor_id',Auth::user()->uuid)->get();
+        if($request->search_query){
+            if(Auth::user() && Auth::user()->type !== 'Admin'){
+                $users = User::where('sponsor_id',Auth::user()->uuid)->where('name','like','%'.$request->search_query.'%')->orWhere('uuid',$request->search_query)->get();
+            }
+        }else{
+            if(Auth::user() && Auth::user()->type !== 'Admin'){
+                $users = User::where('sponsor_id',Auth::user()->uuid)->get();
+            }
+        }
+        return view('user_tree',compact('users'));
+    }
+
+    public function userTreeAdmin(Request $request){
+        // return $request->all();
+        $users = User::all();
+        if($request->search_query){
+            if(Auth::user()){
+                $users = User::where('name','like','%'.$request->search_query.'%')->orWhere('uuid',$request->search_query)->get();
+            }
         }
         return view('user_tree',compact('users'));
     }

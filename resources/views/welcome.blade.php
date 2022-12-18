@@ -33,6 +33,12 @@
                             <button type="submit" class="btn btn-sm btn-primary mx-auto" id="upgrade-acc">Upgrade</button>
                         </p>
                     </form>
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="">
+                        <p class="text-center">
+                            <button type="submit" class="btn btn-sm btn-outline-primary mx-auto" id="upgrade-acc">Go Back</button>
+                        </p>
+                        @csrf
+                    </form>
                     @endif
                 </div>
                     <div class=""></div>

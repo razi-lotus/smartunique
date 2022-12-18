@@ -68,6 +68,27 @@
 
               </div>
             </div>
+            <div class="col-xxl-4 col-md-4">
+              <div class="card info-card sales-card">
+
+                <div class="card-body">
+                  <h5 class="card-title">Bonuses</h5>
+
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                      <i class="bi bi-currency-dollar"></i>
+                    </div>
+                    <div class="ps-3">
+                      <h6>{{ $bonus | 0 }}</h6>
+                      {{-- <span class="text-success small pt-1 fw-bold">12%</span> --}}
+                      <span class="text-muted small pt-2 ps-1">Earned Bonus</span>
+
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
             <div class="col-xxl-4 col-xl-12">
                 <div class="card">
                     {{-- <div class="card-body">

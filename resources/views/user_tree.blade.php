@@ -13,7 +13,11 @@
       <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-          <li class="breadcrumb-item active">Users</li>
+          @if (Auth::user() && Auth::user()->type == 'Admin')
+            <li class="breadcrumb-item active"><a href="{{ route('admin.userTreeAdmin') }}">User Tree</a></li>
+          @else
+            <li class="breadcrumb-item active"><a href="{{ route('admin.userTree') }}">User Tree</a></li>
+          @endif
         </ol>
       </nav>
     </div><!-- End Page Title -->
@@ -27,7 +31,16 @@
             <div class="col-xxl-4 col-xl-12">
                 <div class="card">
                     <div class="card-body">
-                      <h5 class="card-title">Users Tree</h5>
+                      <h5 class="card-title">Users Tree
+
+                          <div class="search-bar float-end">
+                              <form class="search-form d-flex align-items-center" method="POST" action="">
+                                  @csrf
+                                  <input type="text" name="search_query" placeholder="Search by name and id" title="Enter search keyword">
+                                  <button type="submit" title="Search"><i class="bi bi-search"></i></button>
+                                </form>
+                              </div>
+                            </h5>
                       <!-- Recent Sales -->
                       <div class="col-12">
                         <div class="row">
