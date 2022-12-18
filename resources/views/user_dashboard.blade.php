@@ -22,9 +22,26 @@
       <div class="row">
 
         <!-- Left side columns -->
-        <div class="col-lg-12">
+        {{-- <div class="col-lg-12"> --}}
           <div class="row">
-
+            <div class="card info-card sales-card">
+              <div class="alert-msg alert alert-danger mt-2 d-none"></div>
+              <div class="row pt-3">
+            <div class="col-xxl-6 col-md-6 col-sm-12 mt-2 mb-4">
+              <select name="account-updrade" class="form-control">
+                <option>Select account to upgrade</option>
+                <option {{ $balances && $balances->total >= 50 ? '' : 'disabled' }}>Member Distributor Account</option>
+                <option {{ $balances && $balances->total >= 75 ? '' : 'disabled' }}>Supervisor Distributor Account</option>
+                <option {{ $balances && $balances->total >= 100 ? '' : 'disabled' }}>Manager Distributor Account</option>
+                <option {{ $balances && $balances->total >= 150 ? '' : 'disabled' }}>Director Distributor Account</option>
+              </select>
+            </div>
+            <div class="col-xxl-6 col-md-6 col-sm-12 mt-2 mb-4">
+              <span>Current Account: <strong>{{ $currentLevel && $currentLevel->levelName ? $currentLevel->levelName->name : '' }}</strong></span>
+              <button class="btn btn-sm btn-primary float-end" id="user-upgrade-account" {{ $currentLevel && $currentLevel->levelName->name == 'Director' ? 'disabled' : '' }}>Upgrade Account</button>
+            </div>
+          </div>
+          </div>
             <!-- Sales Card -->
             <div class="col-xxl-4 col-md-4">
               <div class="card info-card sales-card">
@@ -117,7 +134,25 @@
 
 @push('scripts')
     <script>
+      $(document).ready(function(){
+        $('#user-upgrade-account').on('click',function(e){
 
+            // alert($(this));
+            if(confirm('Are you sure you want to upgrade your account?')){
+              $.ajax({
+                  url:'{{ url("admin/user-upgrade-account") }}',
+                  type:'get',
+                  success:function(data){
+                    console.log(data,'data')
+                    if(data.error == 'Not eligible'){
+                      $('.alert-msg').removeClass('d-none');
+                      $('.alert-msg').text('You are not eligible to upgrade account.');
+                    }
+                  }
+              });
+            }
+        });
+        });
 
     </script>
 @endpush

@@ -20,33 +20,23 @@ class BalanceController extends Controller
     public function add(BalanceRequest $request){
         // return $request->all();
         $data       = Balances::create($request->prepaireRequest());
-        $userLevel  = UserLevel::where('user_id',$request->user_id)->first();
-        // ----- level updating ------
-        if($userLevel){
-            $userLevel->update([
-                'old_level_id'          => $userLevel->current_level_id,
-                'current_level_id'      => $request->acc_id,
-                'old_level_date'        => $userLevel->current_level_date,
-                'current_level_date'    => date('Y-m-d')
-            ]);
+        $balance    = TotalBalances::where('user_id',$request->user_id)->first();
+        if($balance){
+            $balance->update(['total' => (float)$balance->total + $data->amount]);
         }else{
-            UserLevel::create([
-                'user_id'               => $request->user_id,
-                'old_level_id'          => $request->acc_id,
-                'current_level_id'      => $request->acc_id,
-                'old_level_date'        => date('Y-m-d'),
-                'current_level_date'    => date('Y-m-d')
+            TotalBalances::create([
+                'user_id'   => $request->user_id,
+                'total'     => $data->amount
             ]);
         }
-
         if($request->acc_type == 'Upgrade Account'){
             // $upgradeAccRequest  = Balances::where('user_id',$request->user_id)->where('income_type','Upgrade Account')->orderBy('id', 'DESC')->first();
             // if($upgradeAccRequest){
-                AdminBalance::create([
-                    'user_id'   => $request->user_id,
-                    'amount'    => ($request->amount / 100)
-                ]);
-                $data->update(['amount' => 0]);
+                // AdminBalance::create([
+                //     'user_id'   => $request->user_id,
+                //     'amount'    => ($request->amount / 100)
+                // ]);
+                // $data->update(['amount' => 0]);
             // }
         }
 

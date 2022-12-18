@@ -55,7 +55,7 @@
                                     <label for="inputNanme4" class="form-label">Amount</label>
                                     <input type="text" class="form-control" name="amount" id="inputAmount">
                                 </div>
-                                <div class="col-3">
+                                {{-- <div class="col-3">
                                     <label for="inputNanme4" class="form-label">Acount Name</label>
                                     <select class="form-control" name="acc_title" id="inputAccount">
                                         <option value="1">Director</option>
@@ -70,7 +70,7 @@
                                         <option value="Account Purchase">Account Purchase</option>
                                         <option value="Upgrade Account">Upgrade Account</option>
                                     </select>
-                                </div>
+                                </div> --}}
                                 <div class="col-4 mt-3">
                                     <button type="submit" class="btn btn-sm btn-primary" id="balance-add">Submit</button>
                                 </div>
@@ -209,9 +209,7 @@
                 // return;
                 let user_id     = $('#inputUserId').val();
                 var userName    = $('#inputUserId :selected').text();
-                var accName    = $('#inputAccount :selected').val();
                 var amount      = $('#inputAmount').val();
-                var accType    = $('#inputAccounttype :selected').val();
                 if(user_id === 'not-selected'){
                     $('.id-error').text('Select user name');
                 }
@@ -222,8 +220,6 @@
                     _token  : "{{ csrf_token() }}",
                     user_id : user_id,
                     amount  : amount,
-                    acc_id:accName,
-                    acc_type:accType
                 },
                 success:function(data){
                     console.log(data,'ddd');

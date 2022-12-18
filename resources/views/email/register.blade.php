@@ -15,7 +15,7 @@
             <tr>
                 <td>
                     <h2>
-                        Dear {{ $name ? ucfirst($name) : 'no' }},
+                        Dear {{ $name ? ucfirst($name) : 'no' }}
                     </h2>
                     <p>
                         Congrats your account has been successfully registered.

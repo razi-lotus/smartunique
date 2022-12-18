@@ -40,6 +40,7 @@ Route::get('team', function () {return view("team");});
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::group(['prefix' => 'admin','middleware' => ['auth']],function(){
     Route::get('/welcome', [HomeController::class, 'welcome'])->name('admin.welcome.screen');
+
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');//->middleware('auth');
     Route::get('/userDashboard', [DashboardController::class, 'userDashboard'])->name('admin.userDashboard');//->middleware('auth');
     Route::get('/userTree', [DashboardController::class, 'userTree'])->name('admin.userTree');//->middleware('auth');
@@ -47,9 +48,11 @@ Route::group(['prefix' => 'admin','middleware' => ['auth']],function(){
     Route::get('/userTreeAdmin', [DashboardController::class, 'userTreeAdmin'])->name('admin.userTreeAdmin');//->middleware('auth');
     Route::post('/userTreeAdmin', [DashboardController::class, 'userTreeAdmin']);
     Route::post('get-ref-users', [DashboardController::class, 'userRefTree']);
+
     Route::post('upgrade-account', [IndexController::class, 'upgradeAccount'])->name('admin.upgrade.account');
     Route::get('upgrade-account', [IndexController::class, 'secondUpgradation'])->name('admin.secondUpgrade');
     Route::post('second-upgradation', [IndexController::class, 'accountUpgradeRequest'])->name('admin.secondUpbradationRequest');
+    Route::get('user-upgrade-account', [IndexController::class, 'userUpgradeAccount']);
 
     Route::get('get-users-status', [DashboardController::class, 'getUserStatus']);//->middleware('auth');
     Route::get('show-user-balance-transfer', [BalanceController::class, 'showBalTansfer'])->name('admin.userBalanceTransfer');//->middleware('auth');

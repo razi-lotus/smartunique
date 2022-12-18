@@ -7,6 +7,7 @@ use App\Models\Balances;
 use App\Models\Bonus;
 use App\Models\TotalBalances;
 use App\Models\User;
+use App\Models\UserLevel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -93,11 +94,12 @@ class DashboardController extends Controller
 
     public function userDashboard()
     {
-        $balances   = TotalBalances::where('user_id',Auth::user()->id)->first();
-        $points     = User::where('sponsor_id',Auth::user()->uuid)->get();
-        $bonus      = Bonus::where('user_id',Auth::user()->id)->sum('amount');
+        $balances       = TotalBalances::where('user_id',Auth::user()->id)->first();
+        $points         = User::where('sponsor_id',Auth::user()->uuid)->get();
+        $bonus          = Bonus::where('user_id',Auth::user()->id)->sum('amount');
+        $currentLevel   = UserLevel::with(['levelName'])->where('user_id',Auth::user()->id)->first();
         // return $bonus;
-        return view('user_dashboard',compact('balances','points','bonus'));
+        return view('user_dashboard',compact('balances','points','bonus','currentLevel'));
     }
 
     public function BalanceList(Request $request)

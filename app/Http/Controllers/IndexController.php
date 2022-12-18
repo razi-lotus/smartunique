@@ -13,16 +13,74 @@ use Illuminate\Support\Facades\Auth;
 
 class IndexController extends Controller
 {
+    public function userUpgradeAccount()
+    {
+        $balances       = TotalBalances::where('user_id',Auth::user()->id)->first();
+        $currentLevel   = UserLevel::with(['levelName'])->where('user_id',Auth::user()->id)->first();
+
+        if($balances && $balances->total < 50){
+            return response()->json(['error' => 'Not eligible']);
+        }
+
+        if($balances && $balances->total >= 50 && $balances->total < 75){
+            if($currentLevel && $currentLevel->levelName->name !== 'Director'){
+                $currentLevel->update([
+                    'old_level_id'          => $currentLevel->current_level_id,
+                    'current_level_id'      => 4,
+                    'old_level_date'        => $currentLevel->current_level_date,
+                    'current_level_date'    => date('Y-m-d')
+                ]);
+                $balances->update(['total' => (float)$balances->total - 50]);
+            }
+        }elseif($balances && $balances->total >= 75 && $balances->total < 100){
+            if($currentLevel && $currentLevel->levelName->name !== 'Director'){
+                $currentLevel->update([
+                    'old_level_id'          => $currentLevel->current_level_id,
+                    'current_level_id'      => 3,
+                    'old_level_date'        => $currentLevel->current_level_date,
+                    'current_level_date'    => date('Y-m-d')
+                ]);
+                $balances->update(['total' => (float)$balances->total - 75]);
+            }
+        }elseif($balances && $balances->total >= 100 && $balances->total < 150){
+            if($currentLevel && $currentLevel->levelName->name !== 'Director'){
+                $currentLevel->update([
+                    'old_level_id'          => $currentLevel->current_level_id,
+                    'current_level_id'      => 2,
+                    'old_level_date'        => $currentLevel->current_level_date,
+                    'current_level_date'    => date('Y-m-d')
+                ]);
+                $balances->update(['total' => (float)$balances->total - 100]);
+            }
+        }elseif($balances && $balances->total >= 150){
+            if($currentLevel && $currentLevel->levelName->name !== 'Director'){
+                $currentLevel->update([
+                    'old_level_id'          => $currentLevel->current_level_id,
+                    'current_level_id'      => 1,
+                    'old_level_date'        => $currentLevel->current_level_date,
+                    'current_level_date'    => date('Y-m-d')
+                ]);
+                $balances->update(['total' => (float)$balances->total - 150]);
+            }
+        }
+
+        return response()->json(['success' => 'Account upgraded successfully']);
+    }
+
     public function upgradeAccount(){
-        $balanceConfirm = Balances::where('user_id',Auth::user()->id)->where('income_type','Account Purchase')->first();
+        $balanceConfirm = Balances::where('user_id',Auth::user()->id)->first();
          if(!$balanceConfirm){
              return redirect()->route('admin.welcome.screen')->with('message','Balance not transferred yet, please contact to the company');
          }
-         $user = User::with(['account','account.levelName'])->where('id',Auth::user()->id)->first();
-         $user_level = UserLevel::where('user_id',$user->id)->first();
+         $user          = User::with(['account','account.levelName'])->where('id',Auth::user()->id)->first();
+         $user_level    = UserLevel::where('user_id',$user->id)->first();
+         if(!$user_level){
+            $user_level  = $this->userUpgradeAccount2();
+         }
         //  return $user;
          if($user && $user->acc_request !== 1){
              $user->update(['acc_request' => 1]);
+            //  $this->userUpgradeAccount();
              AdminBalance::create([
                  'user_id'   => $user->id,
                  'amount'    => $balanceConfirm->amount
@@ -142,6 +200,55 @@ class IndexController extends Controller
              return redirect()->route('admin.userDashboard');
          }
      }
+
+     public function userUpgradeAccount2()
+    {
+        $balances       = TotalBalances::where('user_id',Auth::user()->id)->first();
+
+        if($balances && $balances->total < 50){
+            return redirect()->route('admin.welcome.screen')->with('message','Balance not transferred yet, please contact to the company');
+        }
+
+        if($balances && $balances->total >= 50 && $balances->total < 75){
+            $level = UserLevel::create([
+                    'user_id'               => Auth::user()->id,
+                    'old_level_id'          => 4,
+                    'current_level_id'      => 4,
+                    'old_level_date'        => date('Y-m-d'),
+                    'current_level_date'    => date('Y-m-d')
+                ]);
+                $balances->update(['total' => (float)$balances->total - 50]);
+        }elseif($balances && $balances->total >= 75 && $balances->total < 100){
+            $level = UserLevel::create([
+                    'user_id'               => Auth::user()->id,
+                    'old_level_id'          => 3,
+                    'current_level_id'      => 3,
+                    'old_level_date'        => date('Y-m-d'),
+                    'current_level_date'    => date('Y-m-d')
+                ]);
+                $balances->update(['total' => (float)$balances->total - 75]);
+        }elseif($balances && $balances->total >= 100 && $balances->total < 150){
+            $level = UserLevel::create([
+                    'user_id'               => Auth::user()->id,
+                    'old_level_id'          => 2,
+                    'current_level_id'      => 2,
+                    'old_level_date'        => date('Y-m-d'),
+                    'current_level_date'    => date('Y-m-d')
+                ]);
+                $balances->update(['total' => (float)$balances->total - 100]);
+        }elseif($balances && $balances->total >= 150){
+            $level = UserLevel::create([
+                    'user_id'               => Auth::user()->id,
+                    'old_level_id'          => 1,
+                    'current_level_id'      => 1,
+                    'old_level_date'        => date('Y-m-d'),
+                    'current_level_date'    => date('Y-m-d')
+                ]);
+                $balances->update(['total' => (float)$balances->total - 150]);
+        }
+
+        return $level;
+    }
 
      public function secondUpgradation(){
         $upgradeAccRequest  = Balances::where('user_id',Auth::user()->id)->where('income_type','Upgrade Account')->orderBy('id', 'DESC')->first();

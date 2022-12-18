@@ -34,7 +34,6 @@ class BalanceRequest extends FormRequest
             'user_id'       => $request->user_id,
             'amount'        => ($request->amount / 100),
             'status'        => 'Transfered',
-            'income_type'   => $request->acc_type,
         ];
     }
 }
