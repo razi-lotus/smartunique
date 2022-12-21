@@ -13,55 +13,52 @@ use Illuminate\Support\Facades\Auth;
 
 class IndexController extends Controller
 {
-    public function userUpgradeAccount()
+    public function userUpgradeAccount(Request $request)
     {
+        // return $request->all();
         $balances       = TotalBalances::where('user_id',Auth::user()->id)->first();
         $currentLevel   = UserLevel::with(['levelName'])->where('user_id',Auth::user()->id)->first();
 
-        if($balances && $balances->total < 50){
-            return response()->json(['error' => 'Not eligible']);
-        }
+        // if($balances && $balances->total < 50){
+        //     return response()->json(['error' => 'Not eligible']);
+        // }
 
-        if($balances && $balances->total >= 50 && $balances->total < 75){
-            if($currentLevel && $currentLevel->levelName->name !== 'Director'){
-                $currentLevel->update([
-                    'old_level_id'          => $currentLevel->current_level_id,
+        if(!$currentLevel && $balances->total == 50 && $request->level == 'level-1'){
+            // if($currentLevel && $currentLevel->levelName->name !== 'Director'){
+                UserLevel::create([
+                    'user_id'               => Auth::user()->id,
+                    'old_level_id'          => 4,
                     'current_level_id'      => 4,
-                    'old_level_date'        => $currentLevel->current_level_date,
+                    'old_level_date'        => date('Y-m-d'),
                     'current_level_date'    => date('Y-m-d')
                 ]);
                 $balances->update(['total' => (float)$balances->total - 50]);
-            }
-        }elseif($balances && $balances->total >= 75 && $balances->total < 100){
-            if($currentLevel && $currentLevel->levelName->name !== 'Director'){
+            // }
+        }elseif($currentLevel && $currentLevel->levelName->name == 'Member' && $balances->total >= 25 && $request->level == 'level-2'){
                 $currentLevel->update([
                     'old_level_id'          => $currentLevel->current_level_id,
                     'current_level_id'      => 3,
                     'old_level_date'        => $currentLevel->current_level_date,
                     'current_level_date'    => date('Y-m-d')
                 ]);
-                $balances->update(['total' => (float)$balances->total - 75]);
-            }
-        }elseif($balances && $balances->total >= 100 && $balances->total < 150){
-            if($currentLevel && $currentLevel->levelName->name !== 'Director'){
-                $currentLevel->update([
-                    'old_level_id'          => $currentLevel->current_level_id,
-                    'current_level_id'      => 2,
-                    'old_level_date'        => $currentLevel->current_level_date,
-                    'current_level_date'    => date('Y-m-d')
-                ]);
-                $balances->update(['total' => (float)$balances->total - 100]);
-            }
-        }elseif($balances && $balances->total >= 150){
-            if($currentLevel && $currentLevel->levelName->name !== 'Director'){
-                $currentLevel->update([
-                    'old_level_id'          => $currentLevel->current_level_id,
-                    'current_level_id'      => 1,
-                    'old_level_date'        => $currentLevel->current_level_date,
-                    'current_level_date'    => date('Y-m-d')
-                ]);
-                $balances->update(['total' => (float)$balances->total - 150]);
-            }
+                $balances->update(['total' => (float)$balances->total - 25]);
+
+        }elseif($currentLevel && $currentLevel->levelName->name == 'Supervisor' && $balances->total >= 25 && $request->level == 'level-3'){
+            $currentLevel->update([
+                'old_level_id'          => $currentLevel->current_level_id,
+                'current_level_id'      => 2,
+                'old_level_date'        => $currentLevel->current_level_date,
+                'current_level_date'    => date('Y-m-d')
+            ]);
+            $balances->update(['total' => (float)$balances->total - 25]);
+        }elseif($currentLevel && $currentLevel->levelName->name == 'Manager' && $balances->total >= 50 && $request->level == 'level-4'){
+            $currentLevel->update([
+                'old_level_id'          => $currentLevel->current_level_id,
+                'current_level_id'      => 1,
+                'old_level_date'        => $currentLevel->current_level_date,
+                'current_level_date'    => date('Y-m-d')
+            ]);
+            $balances->update(['total' => (float)$balances->total - 50]);
         }
 
         return response()->json(['success' => 'Account upgraded successfully']);

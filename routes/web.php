@@ -52,7 +52,7 @@ Route::group(['prefix' => 'admin','middleware' => ['auth']],function(){
     Route::post('upgrade-account', [IndexController::class, 'upgradeAccount'])->name('admin.upgrade.account');
     Route::get('upgrade-account', [IndexController::class, 'secondUpgradation'])->name('admin.secondUpgrade');
     Route::post('second-upgradation', [IndexController::class, 'accountUpgradeRequest'])->name('admin.secondUpbradationRequest');
-    Route::get('user-upgrade-account', [IndexController::class, 'userUpgradeAccount']);
+    Route::post('user-upgrade-account', [IndexController::class, 'userUpgradeAccount']);
 
     Route::get('get-users-status', [DashboardController::class, 'getUserStatus']);//->middleware('auth');
     Route::get('show-user-balance-transfer', [BalanceController::class, 'showBalTansfer'])->name('admin.userBalanceTransfer');//->middleware('auth');

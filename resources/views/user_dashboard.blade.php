@@ -24,24 +24,6 @@
         <!-- Left side columns -->
         {{-- <div class="col-lg-12"> --}}
           <div class="row">
-            <div class="card info-card sales-card">
-              <div class="alert-msg alert alert-danger mt-2 d-none"></div>
-              <div class="row pt-3">
-            <div class="col-xxl-6 col-md-6 col-sm-12 mt-2 mb-4">
-              <select name="account-updrade" class="form-control">
-                <option>Select account to upgrade</option>
-                <option {{ $balances && $balances->total >= 50 ? '' : 'disabled' }}>Member Distributor Account</option>
-                <option {{ $balances && $balances->total >= 75 ? '' : 'disabled' }}>Supervisor Distributor Account</option>
-                <option {{ $balances && $balances->total >= 100 ? '' : 'disabled' }}>Manager Distributor Account</option>
-                <option {{ $balances && $balances->total >= 150 ? '' : 'disabled' }}>Director Distributor Account</option>
-              </select>
-            </div>
-            <div class="col-xxl-6 col-md-6 col-sm-12 mt-2 mb-4">
-              <span>Current Account: <strong>{{ $currentLevel && $currentLevel->levelName ? $currentLevel->levelName->name : '' }}</strong></span>
-              <button class="btn btn-sm btn-primary float-end" id="user-upgrade-account" {{ $currentLevel && $currentLevel->levelName->name == 'Director' ? 'disabled' : '' }}>Upgrade Account</button>
-            </div>
-          </div>
-          </div>
             <!-- Sales Card -->
             <div class="col-xxl-4 col-md-4">
               <div class="card info-card sales-card">
@@ -106,18 +88,57 @@
 
               </div>
             </div>
-            <div class="col-xxl-4 col-xl-12">
-                <div class="card">
-                    {{-- <div class="card-body">
-                      <h5 class="card-title">Balance Transfer</h5>
-                      <!-- Recent Sales -->
-                      <div class="col-12">
-                        <div class="recent-sales overflow-auto">
-                        </div>
-                      </div><!-- End Recent Sales -->
-                    </div> --}}
+            <div class="card info-card sales-card">
+              <div class="alert-msg alert alert-danger mt-2 d-none"></div>
+              <div class="row pt-3">
+              <div class="col-xxl-6 col-md-6 col-sm-12 mt-2 mb-4">
+                <select name="account-updrade" class="form-control level-select">
+                  <option>Select account to upgrade</option>
+                    @if (!$currentLevel && $balances->total == 50)
+                      <option value="level-1">Member Distributor Account 50$ level 1</option>
+                    @elseif ($currentLevel && $currentLevel->levelName->name == 'Member')
+                      <option value="level-1">Member Distributor Account 50$ level 1</option>
+                    @elseif (!$currentLevel && !$balances || $balances->total == 0)
+                      <option disabled>Member Distributor Account 50$ level 1</option>
+                    @endif
+
+                    @if ($currentLevel && $currentLevel->levelName->name == 'Member' && $balances->total >= 25)
+                      <option value="level-2">Supervisor Distributor Account 75$ level 2</option>
+                    @else
+                      <option disabled>Supervisor Distributor Account 75$ level 2</option>
+                    @endif
+
+                    @if ($currentLevel && $currentLevel->levelName->name == 'Supervisor' && $balances->total >= 25)
+                      <option value="level-3">Manager Distributor Account 100$ level 3</option>
+                    @else
+                      <option disabled>Manager Distributor Account 100$ level 3</option>
+                    @endif
+
+                    @if ($currentLevel && $currentLevel->levelName->name == 'Manager' && $balances->total >= 50)
+                      <option value="level-4">Director Distributor Account 150$ level 4</option>
+                    @else
+                      <option disabled>Director Distributor Account 150$ level 4</option>
+                    @endif
+                </select>
+              </div>
+              {{ $currentLevel->levelName->name }}
+              {{-- <div class="col-xxl-6 col-md-6 col-sm-12 mt-2 mb-4"> --}}
+                <div class="col-xxl-6 col-md-6 col-sm-12 col-12 mt-2 mb-4">Current Account: <strong>{{ $currentLevel && $currentLevel->levelName ? $currentLevel->levelName->name : '' }}</strong></div>
+                <div class="col-xxl-6 col-md-6 col-sm-12 col-12">
+                    @if (!$currentLevel && $balances->total > 50)
+                        <button class="btn btn-sm btn-primary" id="user-upgrade-account">Upgrade Account</button>
+                    @elseif ($currentLevel && $balances->total > 25)
+                        <button class="btn btn-sm btn-primary" id="user-upgrade-account">Upgrade Account</button>
+                    @endif
                   </div>
-            </div><!-- End Customers Card -->
+              {{-- </div> --}}
+            </div>
+          </div>
+            @if (!$currentLevel)
+              <div class="col-xxl-6 col-md-6 col-sm-12 mt-2 mb-4">
+                <p class="alert alert-danger"><strong>Warning!</strong> Please upgrade your account to continue work</p>
+              </div>
+            @endif
 
       </div>
     </section>
@@ -136,12 +157,18 @@
     <script>
       $(document).ready(function(){
         $('#user-upgrade-account').on('click',function(e){
-
+            // alert($('.level-select :selected').val())
+            var level = $('.level-select :selected').val();
+            // return;
             // alert($(this));
             if(confirm('Are you sure you want to upgrade your account?')){
               $.ajax({
                   url:'{{ url("admin/user-upgrade-account") }}',
-                  type:'get',
+                  type:'post',
+                  data : {
+                    _token  : "{{ csrf_token() }}",
+                    'level' : level
+                  },
                   success:function(data){
                     console.log(data,'data')
                     if(data.error == 'Not eligible'){

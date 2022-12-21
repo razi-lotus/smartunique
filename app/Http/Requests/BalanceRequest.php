@@ -32,7 +32,7 @@ class BalanceRequest extends FormRequest
         $request = $this;
         return [
             'user_id'       => $request->user_id,
-            'amount'        => ($request->amount / 100),
+            'amount'        => $request->amount,
             'status'        => 'Transfered',
         ];
     }

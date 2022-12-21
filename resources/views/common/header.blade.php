@@ -31,6 +31,13 @@
                 <li>
                   <hr class="dropdown-divider">
                 </li>
+            @else
+            <li class="dropdown-header">
+              <h6 class="text-capitalize">{{ Auth::user()->name }}</h6>
+              </li>
+              <li>
+                <hr class="dropdown-divider">
+              </li>
             @endif
             @if (Auth::user() && Auth::user()->type == 'Admin')
             <li class="dropdown-header">

@@ -141,7 +141,7 @@ class RegisterController extends Controller
         $this->guard()->login($user);
 
         if ($response = $this->registered($request, $user)) {
-            return redirect()->route('admin.welcome.screen');
+            return redirect()->route('admin.dashboard');
             // return view('welcome');
         }
 
