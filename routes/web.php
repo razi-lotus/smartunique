@@ -58,6 +58,7 @@ Route::group(['prefix' => 'admin','middleware' => ['auth']],function(){
     Route::get('show-user-balance-transfer', [BalanceController::class, 'showBalTansfer'])->name('admin.userBalanceTransfer');//->middleware('auth');
     Route::get('user-balance-listing', [BalanceController::class, 'userBalListing']);
     Route::post('/add/user/balance',[BalanceController::class,'addUserBal']);
+    Route::get('show-user-balance-transfer-history', [BalanceController::class, 'showBalTansferHistory'])->name('admin.userBalanceTransferHistory');//->middleware('auth');
 
     // Route::get('addBalance', [DashboardController::class, 'addBalance'])->name('admin.addBalance');//->middleware('auth');
     Route::get('del-account-24hrs-later',[IndexController::class,'deleteAccountAfter24Hrs'])->name('admin.deleteAccountAfter24Hrs');
@@ -95,6 +96,7 @@ Route::group(['prefix' => 'admin','middleware' => ['auth']],function(){
 
     Route::get('sendWorkRequest', [WorkController::class, 'index'])->name('admin.sendWorkRequest');
     Route::post('sendWorkRequest', [WorkController::class, 'saveWork']);
+    Route::get('my-assignment-history', [WorkController::class, 'history'])->name('admin.sendWorkRequestHistory');
     Route::get('user-work-listing', [WorkController::class, 'UserWorkListing']);
     Route::get('editwork/{id}/edit', [WorkController::class, 'show']);
     Route::post('editworkRequest', [WorkController::class, 'edit'])->name('admin.editWorkRequest');
@@ -106,8 +108,11 @@ Route::group(['prefix' => 'admin','middleware' => ['auth']],function(){
     Route::post('approve-link', [WorkController::class, 'approveLink']);
     Route::post('approve-all-work-requests', [WorkController::class, 'ApproveAllRequests']);
 
+    Route::get('profile', [HomeController::class, 'showprofile'])->name('admin.user_profile');
+    Route::post('profile', [HomeController::class, 'saveProfile']);
 
 });
 
+Route::post('select-city', [HomeController::class, 'selectCity']);
 Auth::routes();
 

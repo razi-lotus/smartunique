@@ -30,54 +30,39 @@
                 <div class="card">
                     <div class="card-body">
                       <h5 class="card-title">Total Balance</h5>
-                      <span class="amount-tag">{{ $balance !== null ? $balance->total : 0 }}</span>
+                      <span class="amount-tag">{{ $balance !== null ? $balance->total : 0 }}$</span>
                       <!-- Recent Sales -->
                       <div class="alert alert-msg"></div>
                       <div class="col-12">
-                        <div class="recent-sales overflow-auto">
-
-                          <h5 class="card-title">
-                            <button type="button" class="btn btn-sm btn-primary float-end" id="show-add-blnce">Balance Transfer</button>
-                          </h5>
-                          <div class="row" id="show-add-blnce-form">
+                        {{-- <div class="recent-sales overflow-auto">
+                          <div class="row" id="show-add-blnce-form"> --}}
                             {{-- {{ route('admin.add.balance') }} --}}
-                            <form method="POST" action="" class="row">
-                                @csrf
-                                <div class="col-3">
-                                    <label for="user" class="form-label">User</label>
-                                    <select id="inputUserId" name="user_id" class="form-select">
-                                        <option value="not-selected">select user</option>
-                                        @foreach ($users as $user)
-                                        @if ($user->id !== Auth::user()->id)
-                                          <option value="{{ $user->id }}">{{ $user->uuid }}</option>
-                                        @endif
-                                        @endforeach
-                                    </select>
-                                    <span class="id-error" style="color: red"></span>
-                                </div>
-                                <div class="col-3">
-                                    <label for="inputNanme4" class="form-label">Amount</label>
-                                    <input type="text" class="form-control" name="amount" id="inputAmount">
-                                </div>
-                                <div class="col-4 mt-3">
-                                    <button type="submit" class="btn btn-sm btn-primary" id="balance-add">Submit</button>
+                            <form method="POST" action="">
+                                <div class="row">
+                                    @csrf
+                                    <div class="col-xl-3 col-lg-3 col-sm-6 col-12">
+                                        <label for="user" class="form-label">User</label>
+                                        <select id="inputUserId" name="user_id" class="form-select">
+                                            <option value="not-selected">select user id</option>
+                                            @foreach ($users as $user)
+                                            @if ($user->id !== Auth::user()->id)
+                                            <option value="{{ $user->id }}">{{ $user->uuid }}</option>
+                                            @endif
+                                            @endforeach
+                                        </select>
+                                        <span class="id-error" style="color: red"></span>
+                                    </div>
+                                    <div class="col-xl-3 col-lg-3 col-sm-6 col-12 mt-1">
+                                        <label for="inputNanme4" class="form-label">Amount$</label>
+                                        <input type="text" class="form-control" name="amount" id="inputAmount">
+                                    </div>
+                                    <div class="col-xl-3 col-lg-3 col-sm-6 col-12">
+                                        <button type="submit" class="btn btn-sm btn-primary mt-3" id="balance-add">Submit</button>
+                                    </div>
                                 </div>
                             </form>
-                          </div>
-                          <br/><br/>
-                          <table class="table table-borderless" id="balance-datatable">
-                            <thead>
-                              <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">User</th>
-                                <th scope="col">Amount</th>
-                                <th scope="col">Status</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                          </table>
-                        </div>
+                          {{-- </div>
+                        </div> --}}
                       </div><!-- End Recent Sales -->
                     </div>
                   </div>
@@ -134,33 +119,6 @@
             });
         });
         $(document).ready(function(){
-            var tableData =   $('#balance-datatable').DataTable({
-                "order": [],
-                "ordering": 1,
-                "columnDefs": [
-                    { orderable: false, targets: [-1] },
-                ],
-                "oLanguage": {
-                    "sZeroRecords": "No records found"
-                },
-                "pagination":[
-                    { "pageLength": 10  },
-                    { "total": 50,  }
-                ],
-                "serverSide": true,
-                "autoWidth": false,
-                "ajax": {
-                    "url": "{{ url('admin/user-balance-listing') }}",
-                    "dataType": "json",
-                    "type": "GET",
-                },
-                "columns": [
-                    { "data": "id" },
-                    { "data": "name" },
-                    { "data": "amount" },
-                    { "data": "status" },
-                ],
-            });
 
             $('#balance-add').on('click',function(event){
                 event.preventDefault();

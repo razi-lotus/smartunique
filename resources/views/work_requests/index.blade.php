@@ -35,18 +35,25 @@
                                 {{ __('Limit exceeded! You can post 5 ads per day.') }}
                             </div>
                         @endif
+                        @if (session('link'))
+                            <div class="alert alert-success" role="alert">
+                                <span class="link-text">
+                                    {{ session('link') }}
+                                </span>
+                                <span class="float-end copy-link"><a href="javascript:void(0);" onclick="copyToClipboard(event)">Copy Link</a></span>
+                            </div>
+                        @endif
                         <div class="recent-sales overflow-auto">
                             <div>
                                 <form action="" method="POST" enctype="multipart/form-data">
                                     @csrf
-                                      <div class="row mb-3">
-                                          <div class="col-sm-6">
+                                    <div class="row mb-3">
+                                        <div class="col-sm-6">
                                             <label for="inputEmail3" class="col-form-label">Ad Image</label>
-                                            <input type="file" class="form-control" name="file">
-                                          </div>
-                                          <div class="col-sm-6">
-                                            <label for="inputEmail3" class="col-form-label">Link</label>
-                                            <input type="text" class="form-control" name="link" >
+                                            <input type="file" class="form-control" name="file" onchange="loadFile(event)">
+                                        </div>
+                                        <div class="col-sm-6">
+                                              <img src="" id="outPutFile">
                                           </div>
                                           <div class="col-sm-6">
                                             <label for="inputEmail3" class="col-form-label">Title</label>
@@ -56,30 +63,17 @@
                                             <label for="inputEmail3" class="col-form-label">Description</label>
                                             <input type="text" class="form-control" name="description">
                                           </div>
-
-                                          <div class="col-12 col-md-6 col-lg-12 col-xl-12 mt-3">
+                                          @if ($currentLevel)
+                                            <div class="col-12 col-md-6 col-lg-12 col-xl-12 mt-3">
                                               <button type="submit" class="btn btn-primary" id="withdraw-amount">send</button>
-                                          </div>
+                                            </div>
+                                            @endif
                                         </div>
                                   </form>
                           </div>
                         <div class="row" id="show-add-blnce-form">
                           </div>
                           <br/>
-                          <table class="table table-borderless" id="request-datatable">
-                            <thead>
-                              <tr>
-                                <th scope="col">Image</th>
-                                <th scope="col">Link</th>
-                                <th scope="col">Title</th>
-                                <th scope="col">Description</th>
-                                <th scope="col">Status</th>
-                                <th scope="col">Action</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                          </table>
                         </div>
                       </div><!-- End Recent Sales -->
                     </div>
@@ -104,37 +98,24 @@
 
 @push('scripts')
     <script>
+        function copyToClipboard() {
+            var $temp = $("<input>");
+            $("body").append($temp);
+            $temp.val($('.link-text').text()).select();
+            document.execCommand("copy");
+            $temp.remove();
+            alert('Link copied successfully,');
+        }
+        var loadFile = function(event) {
+            var output    = document.getElementById('outPutFile');
+            output.width  = '80';
+            output.height = '80';
+            output.src    = URL.createObjectURL(event.target.files[0]);
+            output.onload = function() {
+                URL.revokeObjectURL(output.src) // free memory
+            }
+        };
         $(document).ready(function(){
-            var tableData =   $('#request-datatable').DataTable({
-                "order": [],
-                "ordering": 1,
-                "columnDefs": [
-                    { orderable: false, targets: [-1] },
-                ],
-                "oLanguage": {
-                    "sZeroRecords": "No records found"
-                },
-                "pagination":[
-                    { "pageLength": 10  },
-                    { "total": 50,  }
-                ],
-                "serverSide": true,
-                "autoWidth": false,
-                "ajax": {
-                    "url": "{{ url('admin/user-work-listing') }}",
-                    "dataType": "json",
-                    "type": "GET",
-                },
-                "columns": [
-                    { "data": "image" },
-                    { "data": "link" },
-                    { "data": "title" },
-                    { "data": "description" },
-                    { "data": "status" },
-                    { "data": "action" },
-                ],
-            });
-
             $(document).on('click','.del-link',function(){
                 if(confirm('Are you sure you want to delete link?')){
                     $.ajax({

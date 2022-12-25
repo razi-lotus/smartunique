@@ -22,8 +22,7 @@ class IndexController extends Controller
         // if($balances && $balances->total < 50){
         //     return response()->json(['error' => 'Not eligible']);
         // }
-
-        if(!$currentLevel && $balances->total == 50 && $request->level == 'level-1'){
+        if($request->level == 'level-1' && !$currentLevel){
             // if($currentLevel && $currentLevel->levelName->name !== 'Director'){
                 UserLevel::create([
                     'user_id'               => Auth::user()->id,
@@ -34,7 +33,7 @@ class IndexController extends Controller
                 ]);
                 $balances->update(['total' => (float)$balances->total - 50]);
             // }
-        }elseif($currentLevel && $currentLevel->levelName->name == 'Member' && $balances->total >= 25 && $request->level == 'level-2'){
+        }elseif($request->level == 'level-2' && $currentLevel && $currentLevel->levelName->id == 4){
                 $currentLevel->update([
                     'old_level_id'          => $currentLevel->current_level_id,
                     'current_level_id'      => 3,
@@ -43,7 +42,7 @@ class IndexController extends Controller
                 ]);
                 $balances->update(['total' => (float)$balances->total - 25]);
 
-        }elseif($currentLevel && $currentLevel->levelName->name == 'Supervisor' && $balances->total >= 25 && $request->level == 'level-3'){
+        }elseif($request->level == 'level-3' && $currentLevel && $currentLevel->levelName->id == 3){
             $currentLevel->update([
                 'old_level_id'          => $currentLevel->current_level_id,
                 'current_level_id'      => 2,
@@ -51,7 +50,7 @@ class IndexController extends Controller
                 'current_level_date'    => date('Y-m-d')
             ]);
             $balances->update(['total' => (float)$balances->total - 25]);
-        }elseif($currentLevel && $currentLevel->levelName->name == 'Manager' && $balances->total >= 50 && $request->level == 'level-4'){
+        }elseif('level-4' && $currentLevel && $currentLevel->levelName->id == 2){
             $currentLevel->update([
                 'old_level_id'          => $currentLevel->current_level_id,
                 'current_level_id'      => 1,

@@ -106,3 +106,17 @@
 
     </script>
 @endpush
+<style>
+    #balance-datatable_filter{
+        display: none !important;
+    }
+    #balance-datatable_length{
+        display: none !important;
+    }
+    #balance-datatable_info{
+        display: none !important;
+    }
+    #balance-datatable_paginate{
+        display: none !important;
+    }
+</style>

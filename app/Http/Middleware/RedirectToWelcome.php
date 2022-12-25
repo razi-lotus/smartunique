@@ -20,6 +20,7 @@ class RedirectToWelcome
         if(Auth::user() && Auth::user()->acc_request !== 0){
             return $next($request);
         }
-        return redirect()->route('admin.welcome.screen')->send();
+        return $next($request);
+        // return redirect()->route('admin.welcome.screen')->send();
     }
 }

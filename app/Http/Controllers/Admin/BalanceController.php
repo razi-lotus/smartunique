@@ -79,6 +79,11 @@ class BalanceController extends Controller
         $balance = TotalBalances::where('user_id',Auth::user()->id)->first();
         return view('user_balance_show',compact('users','balance'));
     }
+    public function showBalTansferHistory(){
+        $users = User::all();
+        $balance = TotalBalances::where('user_id',Auth::user()->id)->first();
+        return view('user_balance_show_history',compact('users','balance'));
+    }
 
     public function userBalListing(Request $request){
         $columns    = array(0 => 'id', 1 => 'name',2 => 'amount',3 => 'status');

@@ -48,11 +48,15 @@
                                 <p>Not registered any user with your reference.</p>
                             @endif
                             @foreach ($users as $user)
-                                <div class="col-3 mt-3">
+                                <div class="col-xl-3 col-lg-3 col-sm-6 col-12 mt-3">
                                     <div class="flip-card" data-id="{{ $user->uuid }}" data-name="{{ $user->name }}">
                                         <div class="flip-card-inner">
                                             <div class="flip-card-front">
-                                            <img src="{{ asset('storage/userAvatar.jpg') }}" alt="Avatar" style="width:200px;height:200px;">
+                                                @if ($user->file !== '')
+                                                    <img src="{{ asset('storage/'.$user->file) }}" alt="Avatar" style="width:200px;height:200px;">
+                                                @else
+                                                    <img src="{{ asset('storage/userAvatar.jpg') }}" alt="Avatar" style="width:200px;height:200px;">
+                                                @endif
                                         </div>
                                         <div class="flip-card-back">
                                             <h1 class="text-capitalize">{{ $user->name }}</h1>
@@ -130,10 +134,11 @@
                         $('#exampleModal').modal('show');
                         if(data.users.length !== 0){
                             data.users.forEach(element => {
+                                var pic = element.file !== '' ? element.file : 'userSmall.png';
                                 $('.map-users').append(`
                                 <div class="col-3">
                                     <div class="chip text-capitalize">
-                                        <img src="{{ asset('storage/userSmall.png') }}" alt="Person" width="96" height="96">
+                                        <img src="{{ asset('storage/') }}/${pic}" alt="Person" width="96" height="96">
                                         ${element.name}
                                         </div>
                                         </div>`

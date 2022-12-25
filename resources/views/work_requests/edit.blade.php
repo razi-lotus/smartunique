@@ -13,7 +13,7 @@
       <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-          <li class="breadcrumb-item active">Work Requests</li>
+          <li class="breadcrumb-item active">My Assignment</li>
         </ol>
       </nav>
     </div><!-- End Page Title -->
@@ -27,39 +27,24 @@
             <div class="col-xxl-4 col-xl-12">
                 <div class="card">
                     <div class="card-body">
-                      <h5 class="card-title">Work Requests</h5>
+                      <h5 class="card-title">Poster</h5>
                       <!-- Recent Sales -->
-                      <div class="col-12">
-                        <div class="recent-sales overflow-auto">
-                            <div>
-                                <form action="{{ route('admin.editWorkRequest',['id'=>$work->id]) }}" method="POST" enctype="multipart/form-data">
-                                    @csrf
-                                      <div class="row mb-3">
-                                          <div class="col-sm-6">
-                                            <label for="inputEmail3" class="col-form-label">Poster One</label>
-                                            <input type="file" class="form-control" name="file1">
-                                          </div>
-                                          <div class="col-sm-6">
-                                            <label for="inputEmail3" class="col-form-label">Link</label>
-                                            <input type="text" class="form-control" name="link1" value="{{ $work->link }}">
-                                          </div>
-                                          <div class="col-sm-6">
-                                            <label for="inputEmail3" class="col-form-label">Title</label>
-                                            <input type="text" class="form-control" name="title" value="{{ $work->title }}">
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <label for="inputEmail3" class="col-form-label">Description</label>
-                                            <input type="text" class="form-control" name="description" value="{{ $work->description }}">
-                                          </div>
-                                          <div class="col-12 col-md-6 col-lg-12 col-xl-12 mt-3">
-                                              <button type="submit" class="btn btn-primary" id="withdraw-amount">send</button>
-                                          </div>
-                                        </div>
-                                  </form>
-                          </div>
+                      <div class="row">
+                        {{-- <div class="">
+                            <div> --}}
+                                <div class="col-xl-6 col-lg-6 col-sm-12">
+                                    <img src="{{ asset('storage/'.$work->file) }}" width="300" height="200">
+                                </div>
+                                <div class="col-xl-6 col-lg-6 col-sm-12">
+                                    <label for="inputEmail3" class="col-form-label"><strong>Title:</strong></label>
+                                    <div>{{ $work->title }}</div>
+                                    <label for="inputEmail3" class="col-form-label"><strong>Description:</strong></label>
+                                    <div>{{ $work->description }}</div>
+                                </div>
+                          {{-- </div>
                           <br/>
-                        </div>
-                      </div><!-- End Recent Sales -->
+                        </div> --}}
+                      </div>
                     </div>
                   </div>
             </div><!-- End Customers Card -->

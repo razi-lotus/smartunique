@@ -77,9 +77,15 @@
         </a>
       </li>
       <li class="nav-item">
+        <a class="nav-link {{ request()->route()->getName() === 'admin.sendWorkRequestHistory' ? 'active' : 'collapsed' }} " href="{{ route('admin.sendWorkRequestHistory') }}">
+          <i class="bi bi-person"></i>
+          <span>My Asignments History</span>
+        </a>
+      </li>
+      <li class="nav-item">
         <a class="nav-link {{ request()->route()->getName() === 'admin.userBonus' ? 'active' : 'collapsed' }} " href="{{ route('admin.userBonus') }}">
           <i class="bi bi-person"></i>
-          <span>Bonus</span>
+          <span>Bonus History</span>
         </a>
       </li>
       <li class="nav-item">
@@ -89,15 +95,27 @@
         </a>
       </li>
       <li class="nav-item">
+        <a class="nav-link {{ request()->route()->getName() === 'admin.userBalanceTransferHistory' ? 'active' : 'collapsed' }} " href="{{ route('admin.userBalanceTransferHistory') }}">
+          <i class="bi bi-person"></i>
+          <span>Balance Transfer History</span>
+        </a>
+      </li>
+      {{-- <li class="nav-item">
         <a class="nav-link {{ request()->route()->getName() === 'admin.user_withdrawal' ? 'active' : 'collapsed' }} " href="{{ route('admin.user_withdrawal') }}">
           <i class="bi bi-person"></i>
           <span>Withdraw Amount</span>
         </a>
-      </li>
+      </li> --}}
       <li class="nav-item">
         <a class="nav-link {{ request()->route()->getName() === 'admin.user_transactions' ? 'active' : 'collapsed' }} " href="{{ route('admin.user_transactions') }}">
           <i class="bi bi-person"></i>
-          <span>Transactions</span>
+          <span>Transactions History</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link {{ request()->route()->getName() === 'admin.user_profile' ? 'active' : 'collapsed' }} " href="{{ route('admin.user_profile') }}">
+          <i class="bi bi-person"></i>
+          <span>Profile</span>
         </a>
       </li>
       @endif

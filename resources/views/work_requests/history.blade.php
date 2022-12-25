@@ -13,7 +13,7 @@
       <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-          <li class="breadcrumb-item active">Dashboard</li>
+          <li class="breadcrumb-item active">Work Requests</li>
         </ol>
       </nav>
     </div><!-- End Page Title -->
@@ -24,23 +24,22 @@
         <!-- Left side columns -->
         <div class="col-lg-12">
           <div class="row">
-
-            <!-- Customers Card -->
             <div class="col-xxl-4 col-xl-12">
                 <div class="card">
                     <div class="card-body">
-                      <h5 class="card-title">All Balance</h5>
+                      <h5 class="card-title">My Assignment History</h5>
                       <!-- Recent Sales -->
                       <div class="col-12">
                         <div class="recent-sales overflow-auto">
-                          <br/><br/>
-                          <table class="table table-borderless" id="balance-datatable">
+                          <br/>
+                          <table class="table table-borderless" id="request-datatable">
                             <thead>
                               <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">User</th>
-                                <th scope="col">Amount</th>
-                                {{-- <th scope="col">Action</th> --}}
+                                <th scope="col">Image</th>
+                                <th scope="col">Title</th>
+                                <th scope="col">Description</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Action</th>
                               </tr>
                             </thead>
                             <tbody>
@@ -70,15 +69,8 @@
 
 @push('scripts')
     <script>
-
-        $("#show-add-blnce-form").hide();
         $(document).ready(function(){
-            $("#show-add-blnce").click(function(){
-                $("#show-add-blnce-form").slideToggle();
-            });
-        });
-        $(document).ready(function(){
-            var tableData =   $('#balance-datatable').DataTable({
+            var tableData =   $('#request-datatable').DataTable({
                 "order": [],
                 "ordering": 1,
                 "columnDefs": [
@@ -94,58 +86,35 @@
                 "serverSide": true,
                 "autoWidth": false,
                 "ajax": {
-                    "url": "{{ url('admin/user-bonus-listing') }}",
+                    "url": "{{ url('admin/user-work-listing') }}",
                     "dataType": "json",
                     "type": "GET",
                 },
                 "columns": [
-                    { "data": "id" },
-                    { "data": "name" },
-                    { "data": "amount" },
-                    // { "data": "action" },
+                    { "data": "image" },
+                    { "data": "title" },
+                    { "data": "description" },
+                    { "data": "status" },
+                    { "data": "action" },
                 ],
             });
 
-            $('#balance-add').on('click',function(event){
-                event.preventDefault();
-                // $('#exampleModalCenter').modal('show');
-                // return;
-                let user_id     = $('#inputUserId').val();
-                var userName    = $('#inputUserId :selected').text();
-                var accName    = $('#inputAccount :selected').val();
-                var amount      = $('#inputAmount').val();
-                var accType    = $('#inputAccounttype :selected').val();
-                if(user_id === 'not-selected'){
-                    $('.id-error').text('Select user name');
-                }
-                $.ajax({
-                url:'{{ url("admin/add/balance") }}',
-                type:'post',
-                data:{
-                    _token  : "{{ csrf_token() }}",
-                    user_id : user_id,
-                    amount  : amount,
-                    acc_id:accName,
-                    acc_type:accType
-                },
-                success:function(data){
-                    console.log(data,'ddd');
-                    $('.amount-tag').text(amount);
-                    $('.user-tag').text(userName);
-                    $('#exampleModalCenter').modal('show');
-                    $("#show-add-blnce-form").hide();
-                    $('#inputAmount').val('');
-                    $('#inputAmount').val('');
-                    tableData.ajax.reload();
+            $(document).on('click','.del-link',function(){
+                if(confirm('Are you sure you want to delete link?')){
+                    $.ajax({
+                        url:'{{ url("admin/delete-link") }}',
+                        type:'post',
+                        data:{
+                        _token  : "{{ csrf_token() }}",
+                        link_id : $(this).attr('data-id'),
+                        },
+                        success:function(data){
+                            tableData.ajax.reload();
+                        }
+                    });
                 }
             });
         });
-
-            $('.closs-modal').on('click',function(){
-                $('#exampleModalCenter').modal('hide');
-            });
-        });
-
     </script>
 @endpush
 <style>

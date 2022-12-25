@@ -12,8 +12,8 @@
       {{-- <h1>Dashboard</h1> --}}
       <nav>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-          <li class="breadcrumb-item active">Dashboard</li>
+          <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
+          <li class="breadcrumb-item active">Balance Transfer History</li>
         </ol>
       </nav>
     </div><!-- End Page Title -->
@@ -29,18 +29,18 @@
             <div class="col-xxl-4 col-xl-12">
                 <div class="card">
                     <div class="card-body">
-                      <h5 class="card-title">All Balance</h5>
+                      <h5 class="card-title">Balance History</h5>
                       <!-- Recent Sales -->
+                      <div class="alert alert-msg"></div>
                       <div class="col-12">
                         <div class="recent-sales overflow-auto">
-                          <br/><br/>
                           <table class="table table-borderless" id="balance-datatable">
                             <thead>
                               <tr>
                                 <th scope="col">#</th>
                                 <th scope="col">User</th>
                                 <th scope="col">Amount</th>
-                                {{-- <th scope="col">Action</th> --}}
+                                <th scope="col">Status</th>
                               </tr>
                             </thead>
                             <tbody>
@@ -54,6 +54,33 @@
 
           </div>
         </div><!-- End Left side columns -->
+
+
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="row">
+                        <div class="col-12 text-center">
+                            <a href="javascript:void(0);" class="logo d-flex align-items-center text-center" style="padding-left: 115px;">
+                                <img src="{{ asset('img/logo.png') }}" alt="">
+                                <span class="d-lg-block">SmartUniqueInt</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-body">
+                <strong class="amount-tag"></strong>$ transferred to <strong class="user-tag text-capitalize"></strong> succssfully.
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-secondary closs-modal" data-dismiss="modal">Close</button>
+                {{-- <button type="button" class="btn btn-primary">Save changes</button> --}}
+                </div>
+            </div>
+            </div>
+        </div>
 
       </div>
     </section>
@@ -70,8 +97,6 @@
 
 @push('scripts')
     <script>
-
-        $("#show-add-blnce-form").hide();
         $(document).ready(function(){
             $("#show-add-blnce").click(function(){
                 $("#show-add-blnce-form").slideToggle();
@@ -94,7 +119,7 @@
                 "serverSide": true,
                 "autoWidth": false,
                 "ajax": {
-                    "url": "{{ url('admin/user-bonus-listing') }}",
+                    "url": "{{ url('admin/user-balance-listing') }}",
                     "dataType": "json",
                     "type": "GET",
                 },
@@ -102,44 +127,47 @@
                     { "data": "id" },
                     { "data": "name" },
                     { "data": "amount" },
-                    // { "data": "action" },
+                    { "data": "status" },
                 ],
             });
+
 
             $('#balance-add').on('click',function(event){
                 event.preventDefault();
                 // $('#exampleModalCenter').modal('show');
                 // return;
-                let user_id     = $('#inputUserId').val();
-                var userName    = $('#inputUserId :selected').text();
-                var accName    = $('#inputAccount :selected').val();
-                var amount      = $('#inputAmount').val();
-                var accType    = $('#inputAccounttype :selected').val();
-                if(user_id === 'not-selected'){
-                    $('.id-error').text('Select user name');
-                }
-                $.ajax({
-                url:'{{ url("admin/add/balance") }}',
-                type:'post',
-                data:{
-                    _token  : "{{ csrf_token() }}",
-                    user_id : user_id,
-                    amount  : amount,
-                    acc_id:accName,
-                    acc_type:accType
-                },
-                success:function(data){
-                    console.log(data,'ddd');
-                    $('.amount-tag').text(amount);
-                    $('.user-tag').text(userName);
-                    $('#exampleModalCenter').modal('show');
-                    $("#show-add-blnce-form").hide();
-                    $('#inputAmount').val('');
-                    $('#inputAmount').val('');
-                    tableData.ajax.reload();
-                }
-            });
-        });
+                if(confirm('Are you sure you want to transfer this amount?')){
+                    let user_id     = $('#inputUserId').val();
+                    var amount      = $('#inputAmount').val();
+                    if(user_id === 'not-selected'){
+                        $('.id-error').text('Select user name');
+                        return;
+                    }
+                    $.ajax({
+                    url:'{{ url("admin/add/user/balance") }}',
+                    type:'post',
+                    data:{
+                        _token  : "{{ csrf_token() }}",
+                        user_id : user_id,
+                        amount  : amount,
+                    },
+                    success:function(data){
+                        console.log(data,'ddd');
+                        if(data.success == 'Balance transfered successfully'){
+                            $('.amount-tag').text(data.balance.total);
+                            $("#show-add-blnce-form").hide();
+                            $('#inputAmount').val('');
+                            $('.alert-msg').addClass('alert-success');
+                            $('.alert-msg').text('Balance trasfered successfully.');
+                            tableData.ajax.reload();
+                          }else{
+                              $('.alert-msg').addClass('alert-danger');
+                              $('.alert-msg').text('Insufficient balance, you can not transfer amount.');
+                          }
+                        }
+                      });
+                  }
+                });
 
             $('.closs-modal').on('click',function(){
                 $('#exampleModalCenter').modal('hide');
@@ -162,4 +190,3 @@
         display: none !important;
     }
 </style>
-
