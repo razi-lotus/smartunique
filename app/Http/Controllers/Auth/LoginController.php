@@ -44,8 +44,11 @@ class LoginController extends Controller
 
     public function login(Request $request)
     {
-        $this->validateLogin($request);
-        $user = User::where('email',$request->email)->first();
+        $request->validate([
+            'uuid' => 'required',
+            'password' => 'required'
+        ]);
+        $user = User::where('uuid',$request->uuid)->first();
         if($user && $user->status == 'Active'){
             if(Hash::check($request->password,$user->password)){
                 auth()->login($user);

@@ -24,9 +24,9 @@
             </tr>
             <tr>
                 <td>
-                    <p>Your Account Details:</p>
+                    <strong>Your Account Details:</strong>
                     <p>
-                        User Name: {{ $username ? $username : '' }}
+                        User Id: {{ $uuid ? $uuid : '' }}
                     </p>
                     <p>
                         Password: {{ $password ? $password : '' }}
@@ -59,7 +59,7 @@
                         Career development is the support that our organization provides to employee professional growth
                     </p>
                     <p>
-                        Regards: Admin ( SmartUnique international )
+                        Regards: Admin ( Smart U International )
                     </p>
                 </td>
             </tr>

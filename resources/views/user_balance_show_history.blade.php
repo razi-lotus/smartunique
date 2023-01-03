@@ -39,7 +39,7 @@
                               <tr>
                                 <th scope="col">#</th>
                                 <th scope="col">User</th>
-                                <th scope="col">Amount</th>
+                                <th scope="col">Amount$</th>
                                 <th scope="col">Status</th>
                               </tr>
                             </thead>
@@ -187,6 +187,6 @@
         display: none !important;
     }
     #balance-datatable_paginate{
-        display: none !important;
+
     }
 </style>

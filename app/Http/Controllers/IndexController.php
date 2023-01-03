@@ -24,7 +24,7 @@ class IndexController extends Controller
         // }
         if($request->level == 'level-1' && !$currentLevel){
             // if($currentLevel && $currentLevel->levelName->name !== 'Director'){
-                UserLevel::create([
+                $level = UserLevel::create([
                     'user_id'               => Auth::user()->id,
                     'old_level_id'          => 4,
                     'current_level_id'      => 4,
@@ -32,6 +32,7 @@ class IndexController extends Controller
                     'current_level_date'    => date('Y-m-d')
                 ]);
                 $balances->update(['total' => (float)$balances->total - 50]);
+                $this->upgradeAccount($level);
             // }
         }elseif($request->level == 'level-2' && $currentLevel && $currentLevel->levelName->id == 4){
                 $currentLevel->update([
@@ -41,7 +42,7 @@ class IndexController extends Controller
                     'current_level_date'    => date('Y-m-d')
                 ]);
                 $balances->update(['total' => (float)$balances->total - 25]);
-
+                $this->upgradeAccount($currentLevel->refresh());
         }elseif($request->level == 'level-3' && $currentLevel && $currentLevel->levelName->id == 3){
             $currentLevel->update([
                 'old_level_id'          => $currentLevel->current_level_id,
@@ -50,6 +51,7 @@ class IndexController extends Controller
                 'current_level_date'    => date('Y-m-d')
             ]);
             $balances->update(['total' => (float)$balances->total - 25]);
+            $this->upgradeAccount($currentLevel->refresh());
         }elseif('level-4' && $currentLevel && $currentLevel->levelName->id == 2){
             $currentLevel->update([
                 'old_level_id'          => $currentLevel->current_level_id,
@@ -58,36 +60,23 @@ class IndexController extends Controller
                 'current_level_date'    => date('Y-m-d')
             ]);
             $balances->update(['total' => (float)$balances->total - 50]);
+            $this->upgradeAccount($currentLevel->refresh());
         }
 
         return response()->json(['success' => 'Account upgraded successfully']);
     }
 
-    public function upgradeAccount(){
-        $balanceConfirm = Balances::where('user_id',Auth::user()->id)->first();
-         if(!$balanceConfirm){
-             return redirect()->route('admin.welcome.screen')->with('message','Balance not transferred yet, please contact to the company');
-         }
-         $user          = User::with(['account','account.levelName'])->where('id',Auth::user()->id)->first();
-         $user_level    = UserLevel::where('user_id',$user->id)->first();
-         if(!$user_level){
-            $user_level  = $this->userUpgradeAccount2();
-         }
+    public function upgradeAccount($level){
+
+         $user  = User::with(['account','account.levelName'])->where('id',Auth::user()->id)->first();
+
         //  return $user;
          if($user && $user->acc_request !== 1){
              $user->update(['acc_request' => 1]);
-            //  $this->userUpgradeAccount();
-             AdminBalance::create([
-                 'user_id'   => $user->id,
-                 'amount'    => $balanceConfirm->amount
-             ]);
-            //  $balanceConfirm->update(['amount' => 0]);
-
-             // referered person's commission
              $referredPerson = User::with(['account.levelName'])->where('uuid',$user->sponsor_id)->first();
              $referred_level = UserLevel::where('user_id',$referredPerson->id)->first();
              $commission = 0;
-             if($user_level->current_level_id == 1 || $user_level->current_level_id == 2)
+             if($level->current_level_id == 1 || $level->current_level_id == 2)
              {
                 if($referred_level->current_level_id == 1){
                     Balances::create([
@@ -119,7 +108,7 @@ class IndexController extends Controller
                     $commission = 7;
                 }
              }
-             elseif($user_level->current_level_id == 3)
+             elseif($level->current_level_id == 3)
              {
                 if($referred_level->current_level_id == 1){
                     Balances::create([
@@ -150,7 +139,7 @@ class IndexController extends Controller
                     ]);
                     $commission = 5;
                 }
-             }elseif($user_level->current_level_id == 4)
+             }elseif($level->current_level_id == 4)
              {
                 if($referred_level->current_level_id == 1){
                     Balances::create([
@@ -186,16 +175,15 @@ class IndexController extends Controller
             if($commissionTransfer){
                 $amnt = ($commissionTransfer->total + $commission);
                 $commissionTransfer->update(['total' => $amnt]);
+            }else{
+                TotalBalances::create([
+                    'user_id' => $referredPerson->id,
+                    'total' => $commission
+                ]);
             }
-            // else{
-            //     TotalBalances::create([
-            //         'user_id' => Auth::user()->id,
-            //         'total' => $commission
-            //     ]);
-            // }
              return redirect()->route('admin.userDashboard');
          }
-     }
+    }
 
      public function userUpgradeAccount2()
     {

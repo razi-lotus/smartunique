@@ -13,7 +13,7 @@
       <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-          <li class="breadcrumb-item active">Work Requests</li>
+          <li class="breadcrumb-item active">My Assignments</li>
         </ol>
       </nav>
     </div><!-- End Page Title -->
@@ -128,6 +128,9 @@
         display: none !important;
     }
     #balance-datatable_paginate{
+        display: none !important;
+    }
+    #request-datatable_length{
         display: none !important;
     }
 </style>

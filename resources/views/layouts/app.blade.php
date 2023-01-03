@@ -7,7 +7,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>Smart Unique Int</title>
 
     <link href="{{ asset('img/favicon.png') }}" rel="icon">
     <link href="{{ asset('img/apple-touch-icon.png') }}" rel="apple-touch-icon">
@@ -133,20 +133,6 @@
   width: 50px;
   border-radius: 50%;
 }
-    </style>
-    <style>
-        #balance-datatable_filter{
-            display: none !important;
-        }
-        #balance-datatable_length{
-            display: none !important;
-        }
-        #balance-datatable_info{
-            display: none !important;
-        }
-        #balance-datatable_paginate{
-            display: none !important;
-        }
     </style>
 
 </html>

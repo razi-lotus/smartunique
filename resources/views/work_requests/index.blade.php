@@ -13,7 +13,7 @@
       <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-          <li class="breadcrumb-item active">Work Requests</li>
+          <li class="breadcrumb-item active">My Assignments</li>
         </ol>
       </nav>
     </div><!-- End Page Title -->
@@ -27,7 +27,7 @@
             <div class="col-xxl-4 col-xl-12">
                 <div class="card">
                     <div class="card-body">
-                      <h5 class="card-title">Send Work Request</h5>
+                      <h5 class="card-title">Data Entery/Post</h5>
                       <!-- Recent Sales -->
                       <div class="col-12">
                         @if (session('message'))
@@ -61,11 +61,12 @@
                                         </div>
                                         <div class="col-sm-6">
                                             <label for="inputEmail3" class="col-form-label">Description</label>
-                                            <input type="text" class="form-control" name="description">
+                                            <textarea class="form-control" name="description"></textarea>
+                                            {{-- <input type="text" class="form-control" name="description"> --}}
                                           </div>
                                           @if ($currentLevel)
                                             <div class="col-12 col-md-6 col-lg-12 col-xl-12 mt-3">
-                                              <button type="submit" class="btn btn-primary" id="withdraw-amount">send</button>
+                                              <button type="submit" class="btn btn-primary" id="withdraw-amount">submit</button>
                                             </div>
                                             @endif
                                         </div>
@@ -85,6 +86,12 @@
 
       </div>
     </section>
+
+    <style>
+        .dataTables_length{
+            display: none !important;
+        }
+    </style>
 
   </main><!-- End #main -->
 

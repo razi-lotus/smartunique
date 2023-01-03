@@ -69,7 +69,7 @@ class WorkController extends Controller
             $baldeduction->update(['total' => $amnt]);
         }
 
-        return redirect()->route('admin.sendWorkRequest')->with('link',public_path().'/editwork/'.$work->id.'/edit');
+        return redirect()->route('admin.sendWorkRequest')->with('link',url('/admin/editwork',$work->id).'/edit');
     }
 
     public function UserWorkListing(Request $request) {
@@ -97,7 +97,7 @@ class WorkController extends Controller
             foreach ($records as $key=> $item) {
                     $itemData['image']      = '<img src="'.asset("storage/$item->file").'" width="50" height="50" alt="">';
                     $itemData['title']       = $item->title;
-                    $itemData['description']       = $item->description;
+                    $itemData['description']       = substr($item->description,0,10).'...';
                     $itemData['status']     = '<span class="badge '.($item->status=="Active" ? "bg-success" : "bg-danger").'">'.$item->status.'</span>';
                     $itemData['action']     = '<div><a class="" href="'. url("admin/editwork", $item->id) .'/edit">View</a>&nbsp;<a class="del-link" href="javascript:void(0);" data-id="'.$item->id.'">Delete</a></div>';
                     $data[] = $itemData;

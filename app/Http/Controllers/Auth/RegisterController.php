@@ -97,15 +97,8 @@ class RegisterController extends Controller
 
         ]);
 
-        $user->uuid = 'SU-000'.$user->id;
-        // DB::table('user_level')->insert([
-        //     'user_id' => $user->id,
-        //     'level_from' => 1,
-        //     'level_to' => 1,
-        //     'date_from' => date('Y-m-d'),
-        //     'date_to' => date('Y-m-d')
-        // ]);
-        // balance...
+        $user->uuid     = 'SU-000'.$user->id;
+        $data['uuid']   = $user->uuid;
         Mail::send('email.register', $data, function($message) use ($data){
             $message->to($data['email'])->subject('Registered Successfully');
         });

@@ -98,8 +98,9 @@ class DashboardController extends Controller
         $points         = User::where('sponsor_id',Auth::user()->uuid)->get();
         $bonus          = Bonus::where('user_id',Auth::user()->id)->sum('amount');
         $currentLevel   = UserLevel::with(['levelName'])->where('user_id',Auth::user()->id)->first();
+        $totalEarnedIncome = Balances::where('user_id',Auth::user()->id)->sum('amount');
         // return $bonus;
-        return view('user_dashboard',compact('balances','points','bonus','currentLevel'));
+        return view('user_dashboard',compact('balances','points','bonus','currentLevel','totalEarnedIncome'));
     }
 
     public function BalanceList(Request $request)

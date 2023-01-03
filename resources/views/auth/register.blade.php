@@ -79,8 +79,10 @@
                     </div>
                     <div class="col-12 col-md-6 col-lg-4 col-xl-4">
                         <label for="yourEmail" class="form-label">Country</label>
-                        <select name="country_id" class="form-control @error('country_id') is-invalid @enderror" value="{{ old('country_id') }}" id="yourEmail" >
-                            <option value="167">Pakistan</option>
+                        <select name="country_id" class="select-country form-control @error('country_id') is-invalid @enderror" value="{{ old('country_id') }}" id="yourEmail" >
+                            @foreach ($countries as $country)
+                            <option value="{{ $country->id }}" data-id="{{ $country->id }}" class="text-captialize">{{ $country->name }}</option>
+                        @endforeach
                         </select>
                         @error('country_id')
                             <div class="invalid-feedback" role="alert">
@@ -91,9 +93,10 @@
                     <div class="col-12 col-md-6 col-lg-4 col-xl-4">
                         <label for="yourEmail" class="form-label">State/Province</label>
                         <select name="state" class="form-control @error('state') is-invalid @enderror" value="{{ old('state') }}" id="yourEmail" >
-                            <option value="1">Pakistan</option>
-                            <option value="0">China</option>
-                            <option value="0">Russia</option>
+                            <option value="Punjab">Punjab</option>
+                            <option value="Sindh">Sindh</option>
+                            <option value="Balochistan">Balochistan</option>
+                            <option value="Khyber Pakhtunkhwa">Khyber Pakhtunkhwa</option>
                         </select>
                         @error('state')
                             <div class="invalid-feedback" role="alert">
@@ -103,10 +106,8 @@
                     </div>
                     <div class="col-12 col-md-6 col-lg-4 col-xl-4">
                         <label for="yourEmail" class="form-label">City</label>
-                        <select name="city_id" class="form-control @error('city_id') is-invalid @enderror" value="{{ old('city_id') }}" id="yourEmail" >
-                            @foreach ($cities as $city)
-                                <option value="{{ $city->id }}" >{{ $city->name }}</option>
-                            @endforeach
+                        <select name="city_id" class="cities-select form-control @error('city_id') is-invalid @enderror" value="{{ old('city_id') }}" id="yourEmail" >
+                            <option value="">select city</option>
                         </select>
                         @error('city_id')
                             <div class="invalid-feedback" role="alert">
@@ -245,7 +246,23 @@
     <script src="https://www.gstatic.com/firebasejs/8.9.1/firebase-auth.js"></script>
     <script>
 
-
+    $(document).on('change','.select-country',function(){
+        // alert('hi')
+        $('.cities-select').html('<option>select city</option>')
+            $.ajax({
+                url:'{{ url("select-city") }}',
+                type:'post',
+                data:{
+                    _token  : "{{ csrf_token() }}",
+                    country_id : $('.select-country option:selected').attr('data-id'),
+                },
+                success:function(data){
+                    data.cities.forEach(element => {
+                        $('.cities-select').append('<option value="'+element.id+'" data-name="'+element.name+'">'+element.name+'</option>');
+                    });
+                }
+            });
+        });
         const config = {
             apiKey: "AIzaSyCR7bPcGKj68esbWkq5-LsT8WBBjOofLgc",
             authDomain: "matshadi-19bc4.firebaseapp.com",

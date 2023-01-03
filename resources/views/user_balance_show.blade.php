@@ -31,6 +31,7 @@
                     <div class="card-body">
                       <h5 class="card-title">Total Balance</h5>
                       <span class="amount-tag">{{ $balance !== null ? $balance->total : 0 }}$</span>
+                      <h5 class="mt-1">Send your earning to the company offical account. You will receive your payment in any bank account.</h5>
                       <!-- Recent Sales -->
                       <div class="alert alert-msg"></div>
                       <div class="col-12">
@@ -41,7 +42,7 @@
                                 <div class="row">
                                     @csrf
                                     <div class="col-xl-3 col-lg-3 col-sm-6 col-12">
-                                        <label for="user" class="form-label">User</label>
+                                        <label for="user" class="form-label">Select User Id</label>
                                         <select id="inputUserId" name="user_id" class="form-select">
                                             <option value="not-selected">select user id</option>
                                             @foreach ($users as $user)
@@ -80,14 +81,16 @@
                 <div class="modal-header">
                     <div class="row">
                         <div class="col-12 text-center">
-                            <a href="javascript:void(0);" class="logo d-flex align-items-center text-center" style="padding-left: 115px;">
+                            <a href="javascript:void(0);" class="logo d-flex align-items-center text-center" >
                                 <img src="{{ asset('img/logo.png') }}" alt="">
                                 <span class="d-lg-block">SmartUniqueInt</span>
                             </a>
                         </div>
+                        <span class="text-center">Money has been sent</span>
                     </div>
                 </div>
                 <div class="modal-body">
+                <div class="trans-date"></div><br/><br/><br/>
                 <strong class="amount-tag"></strong>$ transferred to <strong class="user-tag text-capitalize"></strong> succssfully.
                 </div>
                 <div class="modal-footer">
@@ -124,7 +127,7 @@
                 event.preventDefault();
                 // $('#exampleModalCenter').modal('show');
                 // return;
-                if(confirm('Are you sure you want to transfer this amount?')){
+                if(1){
                     let user_id     = $('#inputUserId').val();
                     var amount      = $('#inputAmount').val();
                     if(user_id === 'not-selected'){
@@ -142,12 +145,17 @@
                     success:function(data){
                         console.log(data,'ddd');
                         if(data.success == 'Balance transfered successfully'){
-                            $('.amount-tag').text(data.balance.total);
+                            $('.amount-tag').text(data.balance.amount);
+                            const monthNames = ["January", "February", "March", "April", "May", "June",
+                            "July", "August", "September", "October", "November", "December"];
+                            let date = new Date(data.balance.created_at);
+                            $('.trans-date').text(date.getDay()+' '+monthNames[date.getMonth()]+' '+date.getFullYear());
                             $("#show-add-blnce-form").hide();
                             $('#inputAmount').val('');
                             $('.alert-msg').addClass('alert-success');
                             $('.alert-msg').text('Balance trasfered successfully.');
-                            tableData.ajax.reload();
+                            $('#exampleModalCenter').modal('show');
+                            // location.reload();
                           }else{
                               $('.alert-msg').addClass('alert-danger');
                               $('.alert-msg').text('Insufficient balance, you can not transfer amount.');

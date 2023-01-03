@@ -32,8 +32,8 @@
                       <div class="row">
                         {{-- <div class="">
                             <div> --}}
-                                <div class="col-xl-6 col-lg-6 col-sm-12">
-                                    <img src="{{ asset('storage/'.$work->file) }}" width="300" height="200">
+                                <div class="col-xl-6 col-lg-6 col-sm-12 col-12">
+                                    <img src="{{ asset('storage/'.$work->file) }}" style="width: 100%" height="200">
                                 </div>
                                 <div class="col-xl-6 col-lg-6 col-sm-12">
                                     <label for="inputEmail3" class="col-form-label"><strong>Title:</strong></label>

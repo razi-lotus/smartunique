@@ -67,7 +67,7 @@
       <li class="nav-item">
         <a class="nav-link {{ request()->route()->getName() === 'admin.userTree' ? 'active' : 'collapsed' }} " href="{{ route('admin.userTree') }}">
           <i class="bi bi-person"></i>
-          <span>User Tree</span>
+          <span>Team</span>
         </a>
       </li>
       <li class="nav-item">
@@ -91,13 +91,13 @@
       <li class="nav-item">
         <a class="nav-link {{ request()->route()->getName() === 'admin.userBalanceTransfer' ? 'active' : 'collapsed' }} " href="{{ route('admin.userBalanceTransfer') }}">
           <i class="bi bi-person"></i>
-          <span>Balance Transfer</span>
+          <span>Withdraw</span>
         </a>
       </li>
       <li class="nav-item">
         <a class="nav-link {{ request()->route()->getName() === 'admin.userBalanceTransferHistory' ? 'active' : 'collapsed' }} " href="{{ route('admin.userBalanceTransferHistory') }}">
           <i class="bi bi-person"></i>
-          <span>Balance Transfer History</span>
+          <span>Withdraw History</span>
         </a>
       </li>
       {{-- <li class="nav-item">
@@ -106,12 +106,12 @@
           <span>Withdraw Amount</span>
         </a>
       </li> --}}
-      <li class="nav-item">
+      {{-- <li class="nav-item">
         <a class="nav-link {{ request()->route()->getName() === 'admin.user_transactions' ? 'active' : 'collapsed' }} " href="{{ route('admin.user_transactions') }}">
           <i class="bi bi-person"></i>
           <span>Transactions History</span>
         </a>
-      </li>
+      </li> --}}
       <li class="nav-item">
         <a class="nav-link {{ request()->route()->getName() === 'admin.user_profile' ? 'active' : 'collapsed' }} " href="{{ route('admin.user_profile') }}">
           <i class="bi bi-person"></i>

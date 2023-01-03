@@ -14,4 +14,8 @@ class UserBalTransfer extends Model
     public function received_user(){
         return $this->hasOne(User::class,'id','transfer_to');
     }
+
+    public function from_user(){
+        return $this->hasOne(User::class,'id','user_id');
+    }
 }

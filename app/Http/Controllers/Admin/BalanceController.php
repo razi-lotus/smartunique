@@ -21,6 +21,11 @@ class BalanceController extends Controller
         // return $request->all();
         $data       = Balances::create($request->prepaireRequest());
         $balance    = TotalBalances::where('user_id',$request->user_id)->first();
+        UserBalTransfer::create([
+            'user_id'       => Auth::user()->id,
+            'transfer_to'   => $request->user_id,
+            'amount'        => $request->amount
+        ]);
         if($balance){
             $balance->update(['total' => (float)$balance->total + $data->amount]);
         }else{
@@ -28,16 +33,6 @@ class BalanceController extends Controller
                 'user_id'   => $request->user_id,
                 'total'     => $data->amount
             ]);
-        }
-        if($request->acc_type == 'Upgrade Account'){
-            // $upgradeAccRequest  = Balances::where('user_id',$request->user_id)->where('income_type','Upgrade Account')->orderBy('id', 'DESC')->first();
-            // if($upgradeAccRequest){
-                // AdminBalance::create([
-                //     'user_id'   => $request->user_id,
-                //     'amount'    => ($request->amount / 100)
-                // ]);
-                // $data->update(['amount' => 0]);
-            // }
         }
 
         return response()->json($data);
@@ -63,7 +58,7 @@ class BalanceController extends Controller
             }
             Balances::create(['user_id' => $request->user_id,'amount' => $request->amount]);
             $totalBal->update(['total' => (float)$totalBal->total - $request->amount]);
-            return response()->json(['success' => 'Balance transfered successfully','balance' => $totalBal->refresh()]);
+            return response()->json(['success' => 'Balance transfered successfully','balance' => $data->refresh()]);
         }else{
             return response()->json(['error' => 'Not enougth balance']);
         }
@@ -102,11 +97,11 @@ class BalanceController extends Controller
                 $query->where('name','like','%'.$search.'%');
             })->with(['received_user' => function($q) use ($search){
                 $q->where('name','like','%'.$search.'%');
-            }])->where('user_id',Auth::user()->id)->orWhere('transfer_to',Auth::user()->id)->orWhere('amount', 'LIKE', "%{$search}%")
+            },'from_user'])->where('user_id',Auth::user()->id)->orWhere('transfer_to',Auth::user()->id)->orWhere('amount', 'LIKE', "%{$search}%")
             ->offset($pagination['page'])->limit($pagination['perpage'])->get();
             $totalFiltered = count($records);
         } else {
-            $records    = UserBalTransfer::where('user_id',Auth::user()->id)->orWhere('transfer_to',Auth::user()->id)->orderBy($order, $dir)->with(['received_user'])->offset($pagination['page'])->limit($pagination['perpage'])->get();
+            $records    = UserBalTransfer::where('user_id',Auth::user()->id)->orWhere('transfer_to',Auth::user()->id)->orderBy($order, $dir)->with(['received_user','from_user'])->offset($pagination['page'])->limit($pagination['perpage'])->get();
             $totalData  = $totalFiltered = UserBalTransfer::where('user_id',Auth::user()->id)->orWhere('transfer_to',Auth::user()->id)->count();
         }
 
@@ -114,8 +109,8 @@ class BalanceController extends Controller
         $data = array();
         if (!empty($records)) {
             foreach ($records as $key=> $item) {
-                    $itemData['id']     = $item->received_user ? $item->received_user->uuid : '';
-                    $itemData['name']   = $item->received_user ? ucfirst($item->received_user->name) : '';
+                    $itemData['id']     = $item->user_id == Auth::user()->id ? $item->received_user->uuid : $item->from_user->uuid;
+                    $itemData['name']   = $item->user_id == Auth::user()->id ? ucfirst($item->received_user->name) : ucfirst($item->from_user->name);
                     $itemData['amount'] = $item->amount;
                     $status = $item->user_id == Auth::user()->id ? 'Transferred' : 'Received';
                     $cls = $status == "Transferred" ? "bg-danger" : "bg-success";
