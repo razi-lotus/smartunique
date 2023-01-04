@@ -12,36 +12,19 @@
                 </div>
                 @endif
                 <div class="d-flex justify-content-center py-4">
-                <a href="javascript:void(0);" class="logo d-flex align-items-center w-auto">
-                    <img src="{{ asset('/img/logo.png') }}" alt="">
-                    <span class="d-none d-lg-block">Welcome to SmartUniqueInt</span>
-                </a>
+                    <img src="{{ asset('/img/welcomeEmail.webp') }}" width="250" height="250">
                 </div><!-- End Logo -->
 
                 <div class="mb-3">
 
                 <div class="card-body">
-
                     <div class="pt-4 pb-2">
-                    <h5 class="card-title text-center pb-0 fs-4">Hi <strong class="text-capitalize">{{ Auth::user()->name }}</strong></h5>
-                    <p class="text-center small">Please upgrade your account to go on dashboard</p>
-                    {{-- <p class="text-center small">Account Name is {{ Auth::user()->pet_name }}</p> --}}
-                    @if (Auth::user()->acc_request == 0)
-                    <form action="{{ route('admin.upgrade.account') }}" method="POST">
-                        @csrf
-                        <p class="text-center">
-                            <button type="submit" class="btn btn-sm btn-primary mx-auto" id="upgrade-acc">Upgrade</button>
-                        </p>
-                    </form>
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="">
-                        <p class="text-center">
-                            <button type="submit" class="btn btn-sm btn-outline-primary mx-auto" id="upgrade-acc">Go Back</button>
-                        </p>
-                        @csrf
-                    </form>
-                    @endif
+                    <p class="text-center small">Congrats your account has been Successfully registered.</p>
+                    <p>Your login detail has been at your email.</p>
                 </div>
-                    <div class=""></div>
+                    <div class="">
+                        <a href="{{ route('home') }}">Go to home</a>
+                    </div>
                 </div>
                 </div>
 

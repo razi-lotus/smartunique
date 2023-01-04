@@ -81,6 +81,7 @@ class IndexController extends Controller
                 if($referred_level->current_level_id == 1){
                     Balances::create([
                         'user_id'       => $referredPerson->id,
+                        'refered_id'       => Auth::user()->id,
                         'amount'        => 16,
                         'income_type'   => 'Sponsored'
                     ]);
@@ -88,6 +89,7 @@ class IndexController extends Controller
                 }elseif($referred_level->current_level_id == 2){
                     Balances::create([
                         'user_id'       => $referredPerson->id,
+                        'refered_id'       => Auth::user()->id,
                         'amount'        => 13,
                         'income_type'   => 'Sponsored'
                     ]);
@@ -95,6 +97,7 @@ class IndexController extends Controller
                 }elseif($referred_level->current_level_id == 3){
                     Balances::create([
                         'user_id'       => $referredPerson->id,
+                        'refered_id'       => Auth::user()->id,
                         'amount'        => 10,
                         'income_type'   => 'Sponsored'
                     ]);
@@ -102,6 +105,7 @@ class IndexController extends Controller
                 }elseif($referred_level->current_level_id == 4){
                     Balances::create([
                         'user_id'       => $referredPerson->id,
+                        'refered_id'       => Auth::user()->id,
                         'amount'        => 7,
                         'income_type'   => 'Sponsored'
                     ]);

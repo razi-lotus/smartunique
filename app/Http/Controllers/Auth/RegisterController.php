@@ -131,10 +131,10 @@ class RegisterController extends Controller
 
         event(new Registered($user = $this->create($request->all())));
 
-        $this->guard()->login($user);
+        // $this->guard()->login($user);
 
         if ($response = $this->registered($request, $user)) {
-            return redirect()->route('admin.dashboard');
+            return redirect()->route('admin.welcome.screen');
             // return view('welcome');
         }
 

@@ -71,6 +71,12 @@
         </a>
       </li>
       <li class="nav-item">
+        <a class="nav-link {{ request()->route()->getName() === 'admin.userRefIncome' ? 'active' : 'collapsed' }} " href="{{ route('admin.userRefIncome') }}">
+          <i class="bi bi-person"></i>
+          <span>R Earning</span>
+        </a>
+      </li>
+      <li class="nav-item">
         <a class="nav-link {{ request()->route()->getName() === 'admin.sendWorkRequest' ? 'active' : 'collapsed' }} " href="{{ route('admin.sendWorkRequest') }}">
           <i class="bi bi-person"></i>
           <span>My Asignments</span>

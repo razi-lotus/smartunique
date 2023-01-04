@@ -37,9 +37,9 @@ Route::get('about', function () {return view("about");});
 Route::get('contact', function () {return view("contact");});
 Route::get('team', function () {return view("team");});
 
+Route::get('/welcome', [HomeController::class, 'welcome'])->name('admin.welcome.screen');
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::group(['prefix' => 'admin','middleware' => ['auth']],function(){
-    Route::get('/welcome', [HomeController::class, 'welcome'])->name('admin.welcome.screen');
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');//->middleware('auth');
     Route::get('/userDashboard', [DashboardController::class, 'userDashboard'])->name('admin.userDashboard');//->middleware('auth');
@@ -59,12 +59,14 @@ Route::group(['prefix' => 'admin','middleware' => ['auth']],function(){
     Route::get('user-balance-listing', [BalanceController::class, 'userBalListing']);
     Route::post('/add/user/balance',[BalanceController::class,'addUserBal']);
     Route::get('show-user-balance-transfer-history', [BalanceController::class, 'showBalTansferHistory'])->name('admin.userBalanceTransferHistory');//->middleware('auth');
+    Route::get('user-refIncome-listing', [BalanceController::class, 'refIncomeListing']);
 
     // Route::get('addBalance', [DashboardController::class, 'addBalance'])->name('admin.addBalance');//->middleware('auth');
     Route::get('del-account-24hrs-later',[IndexController::class,'deleteAccountAfter24Hrs'])->name('admin.deleteAccountAfter24Hrs');
 
     Route::post('/add/balance',[BalanceController::class,'add'])->name('admin.add.balance');
     Route::get('balance-transfer',[BalanceController::class,'balance_show'])->name('admin.balanceTransfer');
+    Route::get('reference-income',[BalanceController::class,'showRefIncome'])->name('admin.userRefIncome');
     Route::get('balance-listing', [DashboardController::class, 'BalanceList']);
     Route::get('user', [UserController::class, 'index'])->name('admin.users');
 

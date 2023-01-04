@@ -64,7 +64,7 @@
                             </form>
                           {{-- </div>
                         </div> --}}
-                      </div><!-- End Recent Sales -->
+                      </div>
                     </div>
                   </div>
             </div><!-- End Customers Card -->
@@ -86,12 +86,19 @@
                                 <span class="d-lg-block">SmartUniqueInt</span>
                             </a>
                         </div>
+                        <span class="text-center" style="color: green;">Transaction successful</span>
                         <span class="text-center">Money has been sent</span>
                     </div>
                 </div>
                 <div class="modal-body">
-                <div class="trans-date"></div><br/><br/><br/>
-                <strong class="amount-tag"></strong>$ transferred to <strong class="user-tag text-capitalize"></strong> succssfully.
+                <div class="trans-date">28 Dec 2023 10:00 am</div><br/>
+                <strong>Sent to</strong>
+                <p class="sent-to text-capitalize">Ali</p>
+                <strong>Sent by</strong>
+                <p class="sent-from text-capitalize">Razi</p>
+                <strong>Amount</strong>
+                <p class="amount-tag"></p>
+                {{-- <strong class="amount-tag"></strong>$ transferred to <strong class="user-tag text-capitalize"></strong> succssfully. --}}
                 </div>
                 <div class="modal-footer">
                 <button type="button" class="btn btn-secondary closs-modal" data-dismiss="modal">Close</button>
@@ -145,11 +152,13 @@
                     success:function(data){
                         console.log(data,'ddd');
                         if(data.success == 'Balance transfered successfully'){
-                            $('.amount-tag').text(data.balance.amount);
+                            $('.amount-tag').text(data.balance.amount+'$');
+                            $('.sent-to').text(data.balance.received_user.name);
+                            $('.sent-from').text(data.balance.from_user.name);
                             const monthNames = ["January", "February", "March", "April", "May", "June",
                             "July", "August", "September", "October", "November", "December"];
                             let date = new Date(data.balance.created_at);
-                            $('.trans-date').text(date.getDay()+' '+monthNames[date.getMonth()]+' '+date.getFullYear());
+                            $('.trans-date').text(date.getDay()+' '+monthNames[date.getMonth()]+' '+date.getFullYear()+' '+date.getHours()+':'+date.getMinutes());
                             $("#show-add-blnce-form").hide();
                             $('#inputAmount').val('');
                             $('.alert-msg').addClass('alert-success');

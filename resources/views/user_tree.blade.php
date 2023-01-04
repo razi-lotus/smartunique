@@ -14,9 +14,9 @@
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="index.html">Home</a></li>
           @if (Auth::user() && Auth::user()->type == 'Admin')
-            <li class="breadcrumb-item active"><a href="{{ route('admin.userTreeAdmin') }}">User Tree</a></li>
+            <li class="breadcrumb-item active"><a href="{{ route('admin.userTreeAdmin') }}">Team</a></li>
           @else
-            <li class="breadcrumb-item active"><a href="{{ route('admin.userTree') }}">User Tree</a></li>
+            <li class="breadcrumb-item active"><a href="{{ route('admin.userTree') }}">Team</a></li>
           @endif
         </ol>
       </nav>
@@ -31,7 +31,7 @@
             <div class="col-xxl-4 col-xl-12">
                 <div class="card">
                     <div class="card-body">
-                      <h5 class="card-title">Users Tree
+                      <h5 class="card-title">Team
 
                           <div class="search-bar float-end">
                               <form class="search-form d-flex align-items-center" method="POST" action="">

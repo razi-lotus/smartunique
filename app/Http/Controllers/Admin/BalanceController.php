@@ -17,6 +17,53 @@ use Illuminate\Support\Facades\Auth;
 class BalanceController extends Controller
 {
 
+    public function showRefIncome(Request $request){
+        $totalRefIncome = Balances::where('user_id',Auth::user()->id)->where('income_type','Sponsored')->sum('amount');
+        return view('ref_income',compact('totalRefIncome'));
+    }
+
+    public function refIncomeListing(Request $request){
+        $columns    = array(0 => 'id', 1 => 'name',2 => 'amount',3 => 'status');
+        $order      = 'id'; $dir = 'DESC';
+
+        if ($request->input('order.0.column') != null) {
+            $order  = $columns[$request->input('order.0.column')];
+            $dir    = $request->input('order.0.dir');
+        }
+        $totalData  = $totalFiltered = 0;
+        $pagination = ['page'=>request()->start,'perpage'=>request()->length];
+
+        if (!empty($request->input('search.value'))) {
+            $search     = $request->input('search.value');
+            $records    = Balances::with(['user','ref_user'])->where('income_type','Sponsored')->where('user_id',Auth::user()->id)->offset($pagination['page'])->limit($pagination['perpage'])->get();
+            $totalFiltered = count($records);
+        } else {
+            $records    = Balances::with(['user','ref_user'])->where('income_type','Sponsored')->where('user_id',Auth::user()->id)->offset($pagination['page'])->limit($pagination['perpage'])->get();
+            $totalData  = $totalFiltered = Balances::where('user_id',Auth::user()->id)->where('income_type','Sponsored')->count();
+        }
+
+        // return $records;
+        $data = array();
+        if (!empty($records)) {
+            foreach ($records as $key=> $item) {
+                    $itemData['id']     = $item->ref_user ? $item->ref_user->uuid : '';
+                    $itemData['name']   = $item->ref_user ? ucfirst($item->ref_user->name) : '';
+                    $itemData['amount'] = $item->amount;
+                    // $itemData['action'] = "<div class='btn-group'><a href='". url('sdadsf', $item->id) ."/edit' class=''>Edit</a>&nbsp;&nbsp;
+                    // <a href='javascript:void(0);' data-item='" . $item->id . "' class='ml-2 sweetalertDelete'>Delete</a></div>";
+                    $data[] = $itemData;
+            }
+        }
+
+        $json_data = array(
+            "draw" => intval($request->input('draw')),
+            "recordsTotal" => intval($totalData),
+            "recordsFiltered" => intval($totalFiltered),
+            "data" => $data
+        );
+        echo json_encode($json_data);
+    }
+
     public function add(BalanceRequest $request){
         // return $request->all();
         $data       = Balances::create($request->prepaireRequest());
@@ -58,7 +105,7 @@ class BalanceController extends Controller
             }
             Balances::create(['user_id' => $request->user_id,'amount' => $request->amount]);
             $totalBal->update(['total' => (float)$totalBal->total - $request->amount]);
-            return response()->json(['success' => 'Balance transfered successfully','balance' => $data->refresh()]);
+            return response()->json(['success' => 'Balance transfered successfully','balance' => $data->load(['received_user','from_user'])]);
         }else{
             return response()->json(['error' => 'Not enougth balance']);
         }

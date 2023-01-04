@@ -95,7 +95,7 @@ class DashboardController extends Controller
     public function userDashboard()
     {
         $balances       = TotalBalances::where('user_id',Auth::user()->id)->first();
-        $points         = User::where('sponsor_id',Auth::user()->uuid)->get();
+        $points         = User::where('sponsor_id',Auth::user()->uuid)->where('acc_request',1)->get();
         $bonus          = Bonus::where('user_id',Auth::user()->id)->sum('amount');
         $currentLevel   = UserLevel::with(['levelName'])->where('user_id',Auth::user()->id)->first();
         $totalEarnedIncome = Balances::where('user_id',Auth::user()->id)->sum('amount');
