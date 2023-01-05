@@ -34,36 +34,90 @@ class IndexController extends Controller
                 $balances->update(['total' => (float)$balances->total - 50]);
                 $this->upgradeAccount($level);
             // }
-        }elseif($request->level == 'level-2' && $currentLevel && $currentLevel->levelName->id == 4){
+        }elseif($request->level == 'level-2'){
+            if($currentLevel && $currentLevel->current_level_id == 3){
+                return true;
+            }
+            if($currentLevel){
+
                 $currentLevel->update([
                     'old_level_id'          => $currentLevel->current_level_id,
                     'current_level_id'      => 3,
                     'old_level_date'        => $currentLevel->current_level_date,
                     'current_level_date'    => date('Y-m-d')
                 ]);
+            }else{
+                $currentLevel = $this->createIfNotHaveLevel(2);
+            }
                 $balances->update(['total' => (float)$balances->total - 25]);
                 $this->upgradeAccount($currentLevel->refresh());
-        }elseif($request->level == 'level-3' && $currentLevel && $currentLevel->levelName->id == 3){
-            $currentLevel->update([
-                'old_level_id'          => $currentLevel->current_level_id,
-                'current_level_id'      => 2,
-                'old_level_date'        => $currentLevel->current_level_date,
-                'current_level_date'    => date('Y-m-d')
-            ]);
-            $balances->update(['total' => (float)$balances->total - 25]);
+        }elseif($request->level == 'level-3'){
+            if($currentLevel && $currentLevel->current_level_id == 2){
+                return true;
+            }
+            $checkAmnt = !empty($this->checkAmount($currentLevel,$request)) ? $this->checkAmount($currentLevel,$request) : 100;
+            if($currentLevel){
+                $currentLevel->update([
+                    'old_level_id'          => $currentLevel->current_level_id,
+                    'current_level_id'      => 2,
+                    'old_level_date'        => $currentLevel->current_level_date,
+                    'current_level_date'    => date('Y-m-d')
+                ]);
+            }else{
+                $currentLevel = $this->createIfNotHaveLevel(2);
+            }
+            $balances->update(['total' => (float)$balances->total - $checkAmnt]);
             $this->upgradeAccount($currentLevel->refresh());
-        }elseif('level-4' && $currentLevel && $currentLevel->levelName->id == 2){
-            $currentLevel->update([
-                'old_level_id'          => $currentLevel->current_level_id,
-                'current_level_id'      => 1,
-                'old_level_date'        => $currentLevel->current_level_date,
-                'current_level_date'    => date('Y-m-d')
-            ]);
-            $balances->update(['total' => (float)$balances->total - 50]);
+        }elseif($request->level == 'level-4'){
+            if($currentLevel && $currentLevel->current_level_id == 1){
+                return true;
+            }
+            $checkAmnt = !empty($this->checkAmount($currentLevel,$request)) ? $this->checkAmount($currentLevel,$request) : 150;
+            if($currentLevel){
+                $currentLevel->update([
+                    'old_level_id'          => $currentLevel->current_level_id,
+                    'current_level_id'      => 1,
+                    'old_level_date'        => $currentLevel->current_level_date,
+                    'current_level_date'    => date('Y-m-d')
+                ]);
+            }else{
+                $currentLevel = $this->createIfNotHaveLevel(1);
+            }
+
+            $balances->update(['total' => (float)$balances->total - $checkAmnt]);
             $this->upgradeAccount($currentLevel->refresh());
         }
 
         return response()->json(['success' => 'Account upgraded successfully']);
+    }
+
+    public function createIfNotHaveLevel($level){
+        return UserLevel::create([
+            'user_id'               => Auth::user()->id,
+            'old_level_id'          => $level,
+            'current_level_id'      => $level,
+            'old_level_date'        => date('Y-m-d'),
+            'current_level_date'    => date('Y-m-d')
+        ]);
+    }
+    public function checkAmount($level,$request){
+        if($level && $level->current_level_id == 4){
+            if($request->level == 'level-3'){
+                return 50;
+            }elseif($request->level == 'level-4'){
+                return 100;
+            }else{
+                return 25;
+            }
+        }elseif($level && $level->current_level_id == 3){
+            if($request->level == 'level-4'){
+                return 75;
+            }else{
+                return 25;
+            }
+        }elseif($level && $level->current_level_id == 2){
+            return 50;
+        }
     }
 
     public function upgradeAccount($level){

@@ -11,21 +11,22 @@
                     {{ session('message') }}
                 </div>
                 @endif
+                <div class="card-body">
+                    <div class="pt-4">
+                    <strong class="text-center">Congrats your account has been Successfully registered.</strong>
+                    <br/>
+                </div>
+            </div>
+            <div class="col-12 container text-center">
+                <h6 style="color: red;">Your login detail has been sent at your email.</h6>
+                <a href="{{ route('home') }}">Go to home</a>
+            </div>
                 <div class="d-flex justify-content-center py-4">
                     <img src="{{ asset('/img/welcomeEmail.webp') }}" width="250" height="250">
                 </div><!-- End Logo -->
 
                 <div class="mb-3">
 
-                <div class="card-body">
-                    <div class="pt-4 pb-2">
-                    <p class="text-center small">Congrats your account has been Successfully registered.</p>
-                    <p>Your login detail has been at your email.</p>
-                </div>
-                    <div class="">
-                        <a href="{{ route('home') }}">Go to home</a>
-                    </div>
-                </div>
                 </div>
 
             </div>
