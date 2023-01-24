@@ -20,12 +20,12 @@
 </head>
 <body>
     <!-- Start preloader -->
-	<div id="preloader">
+	{{--<div id="preloader">
 		<div class="preloader-box">
 			<img src="{{ asset('home/images/stock-logo.png') }}" alt="Loader">
 			<p class="loading">Loading</p>
 		</div>
-	</div>
+	</div>--}}
 	<!-- End preloader -->
 
 
@@ -68,14 +68,16 @@
 										<li><a href="{{ url('about') }}">About Us</a></li>
 										<li><a href="{{ url('contact') }}">Contact us</a></li>
 									</ul>
-								<li class="d-md-none d-block"><a href="{{ url('contact') }}">Job Task</a></li>
+								<li class="d-md-none d-block"><a href="{{ url('job-task') }}">Job Task</a></li>
 								<li class="d-md-none d-block"><a href="{{ url('working-bonus') }}">Working Bonus</a></li>
 								<li class="d-md-none d-block"><a href="{{ url('rewards') }}">Rewards</a></li>
 								<li class="d-md-none d-block"><a href="{{ url('withdraw-method') }}">Withdraw Method</a></li>
 								<li class="d-md-none d-block"><a href="{{ url('career') }}">Career</a></li>
 								<li class="d-md-none d-block"><a href="{{ url('about') }}">About Us</a></li>
 								<li class="d-md-none d-block"><a href="{{ url('contact') }}">Contact us</a></li>
-								<li><a href="{{ url('team') }}">Team</a></li>
+								@if(Auth::user())
+									<li><a href="{{ url('team') }}">Team</a></li>
+								@endif
 								</li>
 							</ul>
 						</div>

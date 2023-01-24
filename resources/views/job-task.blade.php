@@ -40,7 +40,7 @@
                     <div class="col-lg-6 order-md-last order-first">
                         <div class="row ms-md-5">
                             <div class="col-12 feature-box wow fadeInUp">
-                                <img class="rounded-3 m-auto" height="350" src="{{ asset('home  /images/job-task.jpg') }}"
+                                <img class="rounded-3 m-auto" height="350" src="{{ asset('home/images/job-task.jpg') }}"
                                     class="relative z-index-1" alt="Works Image">
                             </div>
                         </div>
@@ -48,7 +48,7 @@
                 </div>
                 <div class="row relative z-index-1 mt-md-5">
                     <div class="col-lg-6 order-first">
-                        <img class="rounded-3" height="250" src="{{ asset('home /images/job-task2.jpg') }}" class="" alt="Works Image">
+                        <img class="rounded-3" height="250" src="{{ asset('home/images/job-task2.jpg') }}" class="" alt="Works Image">
                     </div>
                     <div class="col-lg-6 col-md-12 wow fadeInRight order-last">
                         <div class="mission-content">

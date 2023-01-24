@@ -33,7 +33,7 @@
                       <!-- Recent Sales -->
                       <div class="col-12">
                         <div class="recent-sales overflow-auto">
-
+                            <div class="alert alert-msg d-none"></div>
                           <h5 class="card-title">
                             <button type="button" class="btn btn-sm btn-primary float-end" id="show-add-blnce">Add Balance</button>
                           </h5>
@@ -41,18 +41,19 @@
                             {{-- {{ route('admin.add.balance') }} --}}
                             <form method="POST" action="" class="row">
                                 @csrf
-                                <div class="col-3">
-                                    <label for="user" class="form-label">User</label>
-                                    <select id="inputUserId" name="user_id" class="form-select">
+                                <div class="col-12">
+                                    <label for="user" class="form-label">Enter User Id</label>
+                                    <input id="inputUserId" name="user_id" class="form-control">
+                                    {{-- <select id="inputUserId" name="user_id" class="form-select">
                                         <option value="not-selected">select user</option>
                                         @foreach ($users as $user)
                                             <option value="{{ $user->id }}">{{ $user->uuid }}</option>
                                         @endforeach
-                                    </select>
+                                    </select> --}}
                                     <span class="id-error" style="color: red"></span>
                                 </div>
-                                <div class="col-3">
-                                    <label for="inputNanme4" class="form-label">Amount</label>
+                                <div class="col-12">
+                                    <label for="inputNanme4" class="form-label">Amount$</label>
                                     <input type="text" class="form-control" name="amount" id="inputAmount">
                                 </div>
                                 {{-- <div class="col-3">
@@ -82,7 +83,7 @@
                               <tr>
                                 <th scope="col">#</th>
                                 <th scope="col">User</th>
-                                <th scope="col">Amount</th>
+                                <th scope="col">Amount$</th>
                                 <th scope="col">Income Type</th>
                                 <th scope="col">Status</th>
                                 {{-- <th scope="col">Action</th> --}}
@@ -222,12 +223,23 @@
                     amount  : amount,
                 },
                 success:function(data){
-                    console.log(data,'ddd');
-                    $('.amount-tag').text(amount);
-                    $('.user-tag').text(userName);
-                    $('#exampleModalCenter').modal('show');
-                    $("#show-add-blnce-form").hide();
-                    $('#inputAmount').val('');
+                    console.log(data.error,'ddd');
+                    if(data.success){
+                        $('.alert-msg').removeClass('d-none');
+                        $('.alert-msg').removeClass('alert-danger');
+                        $('.alert-msg').addClass('alert-success');
+                        $('.alert-msg').text('Balance transfered successfully.');
+                    }else if(data.error){
+                        $('.alert-msg').removeClass('d-none');
+                        $('.alert-msg').removeClass('alert-success');
+                        $('.alert-msg').addClass('alert-danger');
+                        $('.alert-msg').text('Invalid user id.');
+                    }
+                    // $('.amount-tag').text(amount);
+                    // $('.user-tag').text(userName);
+                    // $('#exampleModalCenter').modal('show');
+                    // $("#show-add-blnce-form").hide();
+                    $('#inputUserId').val('');
                     $('#inputAmount').val('');
                     tableData.ajax.reload();
                 }

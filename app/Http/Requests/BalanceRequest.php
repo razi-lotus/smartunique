@@ -28,10 +28,10 @@ class BalanceRequest extends FormRequest
         ];
     }
 
-    public function prepaireRequest(){
+    public function prepaireRequest($user){
         $request = $this;
         return [
-            'user_id'       => $request->user_id,
+            'user_id'       => $user->id,
             'amount'        => $request->amount,
             'status'        => 'Transfered',
         ];

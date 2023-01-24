@@ -43,14 +43,15 @@
                                     @csrf
                                     <div class="col-xl-3 col-lg-3 col-sm-6 col-12">
                                         <label for="user" class="form-label">Select User Id</label>
-                                        <select id="inputUserId" name="user_id" class="form-select">
+                                        <input id="inputUserId" name="user_id" class="form-control">
+                                        {{-- <select id="inputUserId" name="user_id" class="form-select">
                                             <option value="not-selected">select user id</option>
                                             @foreach ($users as $user)
                                             @if ($user->id !== Auth::user()->id)
                                             <option value="{{ $user->id }}">{{ $user->uuid }}</option>
                                             @endif
                                             @endforeach
-                                        </select>
+                                        </select> --}}
                                         <span class="id-error" style="color: red"></span>
                                     </div>
                                     <div class="col-xl-3 col-lg-3 col-sm-6 col-12 mt-1">
@@ -80,10 +81,10 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <div class="row">
-                        <div class="col-12 text-center">
+                        <div class="col-12 text-center ml-2">
                             <a href="javascript:void(0);" class="logo d-flex align-items-center text-center" >
                                 <img src="{{ asset('img/logo.png') }}" alt="">
-                                <span class="d-lg-block">SmartUniqueInt</span>
+                                <span class="d-lg-block">Smart-U-Int</span>
                             </a>
                         </div>
                         <span class="text-center" style="color: green;">Transaction successful</span>
@@ -91,13 +92,17 @@
                     </div>
                 </div>
                 <div class="modal-body">
-                <div class="trans-date">28 Dec 2023 10:00 am</div><br/>
+                <div class="trans-date">28 Dec 2023 10:00 am</div>
+                <div class="id-hash"></div>
+                <br/>
                 <strong>Sent to</strong>
                 <p class="sent-to text-capitalize">Ali</p>
                 <strong>Sent by</strong>
                 <p class="sent-from text-capitalize">Razi</p>
-                <strong>Amount</strong>
-                <p class="amount-tag"></p>
+                <strong>Fee / Charges</strong>
+                <p>No Charge</p>
+                <strong style="color: green;">Total Amount</strong>
+                <p class="amount-tagg"></p>
                 {{-- <strong class="amount-tag"></strong>$ transferred to <strong class="user-tag text-capitalize"></strong> succssfully. --}}
                 </div>
                 <div class="modal-footer">
@@ -152,19 +157,24 @@
                     success:function(data){
                         console.log(data,'ddd');
                         if(data.success == 'Balance transfered successfully'){
-                            $('.amount-tag').text(data.balance.amount+'$');
+                            $('.amount-tagg').text(data.balance.amount+'$');
                             $('.sent-to').text(data.balance.received_user.name);
                             $('.sent-from').text(data.balance.from_user.name);
+                            $('.id-hash').text('ID#'+Math.floor(Math.random() * 1000000));
                             const monthNames = ["January", "February", "March", "April", "May", "June",
                             "July", "August", "September", "October", "November", "December"];
                             let date = new Date(data.balance.created_at);
-                            $('.trans-date').text(date.getDay()+' '+monthNames[date.getMonth()]+' '+date.getFullYear()+' '+date.getHours()+':'+date.getMinutes());
+                            $('.trans-date').text(date.getDate()+' '+monthNames[date.getMonth()]+' '+date.getFullYear()+' '+date.getHours()+':'+date.getMinutes());
                             $("#show-add-blnce-form").hide();
                             $('#inputAmount').val('');
+                            $('.alert-msg').removeClass('alert-danger');
                             $('.alert-msg').addClass('alert-success');
                             $('.alert-msg').text('Balance trasfered successfully.');
                             $('#exampleModalCenter').modal('show');
                             // location.reload();
+                          }else if(data.invalid){
+                              $('.alert-msg').addClass('alert-danger');
+                              $('.alert-msg').text('Invalid user id.');
                           }else{
                               $('.alert-msg').addClass('alert-danger');
                               $('.alert-msg').text('Insufficient balance, you can not transfer amount.');

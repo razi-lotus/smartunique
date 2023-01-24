@@ -68,7 +68,7 @@
 						<div class="row ms-md-5">
 							<div class="col-12 feature-box wow fadeInUp">
 								<img class="rounded-3 res-how" height="350"
-									src="{{ asset('front/images/online-service-platform-business-people_277904-12212.jpg') }}"
+									src="{{ asset('home/images/online-service-platform-business-people_277904-12212.jpg') }}"
 									class="relative z-index-1" alt="Works Image">
 							</div>
 						</div>
@@ -83,7 +83,7 @@
 						<div class="row me-md-5">
 							<div class="col-12 feature-box wow fadeInUp">
 								<img class="rounded-3 res-how" height="350"
-									src="{{ asset('front/images/Transparent_Smartphone_Screen_Mockup.jpg') }}" class="relative z-index-1"
+									src="{{ asset('home/images/Transparent_Smartphone_Screen_Mockup.jpg') }}" class="relative z-index-1"
 									alt="Works Image">
 							</div>
 						</div>
@@ -165,7 +165,7 @@
 						<div class="row ms-md-5">
 							<div class="col-12 feature-box wow fadeInUp">
 								<img class="rounded-3 res-how" height="350"
-									src="{{ asset('front/images/businessman-holding-analysis-graph-growth-digital-marketing-concept_117255-2109.jpg') }}"
+									src="{{ asset('home/images/businessman-holding-analysis-graph-growth-digital-marketing-concept_117255-2109.jpg') }}"
 									class="relative z-index-1" alt="Works Image">
 							</div>
 						</div>
@@ -180,7 +180,7 @@
 						<div class="row me-md-5">
 							<div class="col-12 feature-box wow fadeInUp">
 								<img class="rounded-3 res-how" height="350"
-									src="{{ asset('front/images/medium-shot-woman-holding-tablet.jpg') }}" class="relative z-index-1"
+									src="{{ asset('home/images/medium-shot-woman-holding-tablet.jpg') }}" class="relative z-index-1"
 									alt="Works Image">
 							</div>
 						</div>

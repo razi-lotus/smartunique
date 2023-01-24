@@ -90,60 +90,62 @@
             </div>
             <div class="card info-card sales-card">
               <div class="alert-msg alert alert-danger mt-2 d-none"></div>
+              <div class="alert-msg-upgde alert alert-success mt-2 d-none">Account upgraded successfully</div>
               <div class="row pt-3">
               <div class="col-xxl-6 col-md-6 col-sm-12 mt-2 mb-4">
                 <select name="account-updrade" class="form-control level-select">
-                  <option>Select account to upgrade</option>
+                  <option>Select Account to Upgrade</option>
                     @if (!$currentLevel && $balances && $balances->total >= 50)
-                      <option value="level-1">Member Distributor Account 50$ level 1</option>
+                      <option value="level-1">Member Distributor Account <b>50$ level 1</b></option>
                     @elseif ($currentLevel)
-                      <option>Member Distributor Account 50$ level 1</option>
+                      <option>Member Distributor Account <b>50$ level 1</b></option>
                     @elseif (!$currentLevel && $balances && $balances->total < 50)
-                      <option disabled>Member Distributor Account 50$ level 1</option>
+                      <option disabled>Member Distributor Account <b>50$ level 1</b></option>
                     @else
-                      <option disabled>Member Distributor Account 50$ level 1</option>
+                      <option disabled>Member Distributor Account <b>50$ level 1</b></option>
                     @endif
 
                     @if ($currentLevel && $currentLevel->levelName->name == 'Member' && $balances && $balances->total >= 25)
-                        <option value="level-2">Supervisor Distributor Account 75$ level 2</option>
+                        <option value="level-2">Supervisor Distributor Account <b>75$ level 2</b></option>
                       @elseif ($currentLevel && $currentLevel->levelName->id <= 3)
-                        <option>Supervisor Distributor Account 75$ level 2</option>
+                        <option>Supervisor Distributor Account <b>75$ level 2</b></option>
                       @elseif ($currentLevel && $currentLevel->levelName->id > 3)
-                        <option disabled>Supervisor Distributor Account 75$ level 2</option>
+                        <option disabled>Supervisor Distributor Account <b>75$ level 2</b></option>
                       @elseif (!$currentLevel && $balances && $balances->total >= 75)
-                        <option value="level-2">Supervisor Distributor Account 75$ level 2</option>
+                        <option value="level-2">Supervisor Distributor Account <b>75$ level 2</b></option>
                       @elseif ($currentLevel && $balances && $balances->total >= 75)
-                        <option value="level-2">Supervisor Distributor Account 75$ level 2</option>
+                        <option value="level-2">Supervisor Distributor Account <b>75$ level 2</b></option>
                     @else
-                      <option disabled>Supervisor Distributor Account 75$ level 2</option>
+                      <option disabled>Supervisor Distributor Account <b>75$ level 2</b></option>
                     @endif
 
                     @if ($currentLevel && $currentLevel->levelName->name == 'Supervisor' && $balances && $balances->total >= 25)
-                        <option value="level-3">Manager Distributor Account 100$ level 3</option>
+                        <option value="level-3">Manager Distributor Account <b>100$ level 3</b></option>
                       @elseif ($currentLevel && $currentLevel->levelName->id <= 2)
-                        <option>Manager Distributor Account 100$ level 3</option>
+                        <option>Manager Distributor Account <b>100$ level 3</b></option>
                       {{-- @elseif ($currentLevel && $currentLevel->levelName->id > 2)
-                        <option disabled>Manager Distributor Account 100$ level 3</option> --}}
+                        <option disabled>Manager Distributor Account <b>100$ level 3</b></option> --}}
                       @elseif (!$currentLevel && $balances && $balances->total >= 100)
-                        <option value="level-3">Manager Distributor Account 100$ level 3</option>
-                      @elseif ($currentLevel && $balances && $balances->total >= 100)
-                        <option value="level-3">Manager Distributor Account 100$ level 3</option>
+                        <option value="level-3">Manager Distributor Account <b>100$ level 3</b></option>
+                      @elseif ($currentLevel && $balances && $balances->total >= 50)
+                        <option value="level-3">Manager Distributor Account <b>100$ level 3</b></option>
                     @else
-                        <option disabled>Manager Distributor Account 100$ level 3</option>
+                        <option disabled>Manager Distributor Account <b>100$ level 3</b></option>
                     @endif
 
                     @if ($currentLevel && $currentLevel->levelName->name == 'Manager' && $balances && $balances->total >= 50)
-                        <option value="level-4">Director Distributor Account 150$ level 4</option>
+                        <option value="level-4">Director Distributor Accou\\
+                          nt <b>150$ level 4</b></option>
                       @elseif ($currentLevel && $currentLevel->levelName->id <= 1)
-                        <option>Director Distributor Account 150$ level 4</option>
+                        <option>Director Distributor Account <b>150$ level 4</b></option>
                       {{-- @elseif ($currentLevel && $currentLevel->levelName->id > 1)
-                        <option disabled>Director Distributor Account 150$ level 4</option> --}}
+                        <option disabled>Director Distributor Account <b>150$ level 4</b></option> --}}
                       @elseif (!$currentLevel && $balances && $balances->total >= 150)
-                        <option value="level-4">Director Distributor Account 150$ level 4</option>
-                      @elseif ($currentLevel && $balances && $balances->total >= 150)
-                        <option value="level-4">Director Distributor Account 150$ level 4</option>
+                        <option value="level-4">Director Distributor Account <b>150$ level 4</b></option>
+                      @elseif ($currentLevel && $balances && $balances->total >= 100)
+                        <option value="level-4">Director Distributor Account <b>150$ level 4</b></option>
                     @else
-                      <option disabled>Director Distributor Account 150$ level 4</option>
+                      <option disabled>Director Distributor Account <b>150$ level 4</b></option>
                     @endif
                 </select>
              </div>
@@ -153,17 +155,21 @@
                 @if ($currentLevel && $currentLevel->levelName->id !== 1)
                     <div class="col-xxl-6 col-md-6 col-sm-12 col-12">
                         @if (!$currentLevel && $balances && $balances->total >= 50)
-                            <button class="btn btn-sm btn-primary" id="user-upgrade-account">Upgrade Account</button>
-                        @elseif ($currentLevel && $balances && $balances->total > 25)
-                            <button class="btn btn-sm btn-primary" id="user-upgrade-account">Upgrade Account</button>
+                            <button class="btn btn-sm btn-success" id="user-upgrade-account">Upgrade Account</button>
+                        @elseif ($currentLevel && $balances && $balances->total >= 25)
+                            <button class="btn btn-sm btn-success" id="user-upgrade-account">Upgrade Account</button>
+                        @elseif($currentLevel && $balances && $balances->total < 25)
+                            <button class="btn btn-sm btn-danger" id="user-upgrade-account" disabled>Upgrade Account</button>
                         @endif
                     </div>
                     @elseif (!$currentLevel)
                     <div class="col-xxl-6 col-md-6 col-sm-12 col-12">
                         @if (!$currentLevel && $balances && $balances->total >= 50)
-                            <button class="btn btn-sm btn-primary" id="user-upgrade-account">Upgrade Account</button>
+                            <button class="btn btn-sm btn-success" id="user-upgrade-account">Upgrade Account</button>
                         @elseif ($currentLevel && $balances && $balances->total > 25)
-                            <button class="btn btn-sm btn-primary" id="user-upgrade-account">Upgrade Account</button>
+                            <button class="btn btn-sm btn-success" id="user-upgrade-account">Upgrade Account</button>
+                        @else
+                            <button class="btn btn-sm btn-danger" id="user-upgrade-account" disabled>Upgrade Account</button>
                         @endif
                     </div>
                 @endif
@@ -207,6 +213,7 @@
                   },
                   success:function(data){
                     console.log(data,'data')
+                    $('.alert-msg-upgde').removeClass('d-none');
                     if(data.error == 'Not eligible'){
                       $('.alert-msg').removeClass('d-none');
                       $('.alert-msg').text('You are not eligible to upgrade account.');

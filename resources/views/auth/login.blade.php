@@ -25,7 +25,7 @@
                     <form class="row g-3 needs-validation" method="POST" action="{{ route('login') }}">
                         @csrf
                     <div class="col-12">
-                        <label for="yourEmail" class="form-label">Your Email</label>
+                        <label for="yourEmail" class="form-label">User Id</label>
                         <input type="text" name="uuid" class="form-control" id="yourEmail" required>
                         @if(Session::has('status'))
                             <div class="text-danger">{{ Session::get('status') }}</div>

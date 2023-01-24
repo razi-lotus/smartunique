@@ -112,7 +112,8 @@
                     <div class="col-lg-3 col-md-4 label">City</div>
                     <div class="col-lg-9 col-md-8">
                         @php
-                            echo DB::table('cities')->where('id',Auth::user()->city_id)->first()->name;
+                            $city = DB::table('cities')->where('id',Auth::user()->city_id)->first();
+                            echo $city?$city->name:'';
                         @endphp
                     </div>
                   </div>
@@ -120,7 +121,8 @@
                     <div class="col-lg-3 col-md-4 label">Country</div>
                     <div class="col-lg-9 col-md-8">
                         @php
-                            echo DB::table('countries')->where('id',Auth::user()->country_id)->first()->name;
+                            $country = DB::table('countries')->where('id',Auth::user()->country_id)->first();
+                            echo $country?$country->name:'';
                         @endphp
                     </div>
                   </div>

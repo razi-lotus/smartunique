@@ -15,31 +15,24 @@ class IndexController extends Controller
 {
     public function userUpgradeAccount(Request $request)
     {
-        // return $request->all();
         $balances       = TotalBalances::where('user_id',Auth::user()->id)->first();
         $currentLevel   = UserLevel::with(['levelName'])->where('user_id',Auth::user()->id)->first();
-
-        // if($balances && $balances->total < 50){
-        //     return response()->json(['error' => 'Not eligible']);
-        // }
         if($request->level == 'level-1' && !$currentLevel){
-            // if($currentLevel && $currentLevel->levelName->name !== 'Director'){
-                $level = UserLevel::create([
-                    'user_id'               => Auth::user()->id,
-                    'old_level_id'          => 4,
-                    'current_level_id'      => 4,
-                    'old_level_date'        => date('Y-m-d'),
-                    'current_level_date'    => date('Y-m-d')
-                ]);
-                $balances->update(['total' => (float)$balances->total - 50]);
-                $this->upgradeAccount($level);
-            // }
+            $level = UserLevel::create([
+                'user_id'               => Auth::user()->id,
+                'old_level_id'          => 4,
+                'current_level_id'      => 4,
+                'old_level_date'        => date('Y-m-d'),
+                'current_level_date'    => date('Y-m-d')
+            ]);
+            $balances->update(['total' => (float)$balances->total - 50]);
+            $this->upgradeAccount($level);
         }elseif($request->level == 'level-2'){
+            $checkAmnt = !empty($this->checkAmount($currentLevel,$request)) ? $this->checkAmount($currentLevel,$request) : 75;
             if($currentLevel && $currentLevel->current_level_id == 3){
                 return true;
             }
             if($currentLevel){
-
                 $currentLevel->update([
                     'old_level_id'          => $currentLevel->current_level_id,
                     'current_level_id'      => 3,
@@ -47,10 +40,10 @@ class IndexController extends Controller
                     'current_level_date'    => date('Y-m-d')
                 ]);
             }else{
-                $currentLevel = $this->createIfNotHaveLevel(2);
+                $currentLevel = $this->createIfNotHaveLevel(3);
             }
-                $balances->update(['total' => (float)$balances->total - 25]);
-                $this->upgradeAccount($currentLevel->refresh());
+            $balances->update(['total' => (float)$balances->total - $checkAmnt]);
+            $this->upgradeAccount($currentLevel->refresh());
         }elseif($request->level == 'level-3'){
             if($currentLevel && $currentLevel->current_level_id == 2){
                 return true;
@@ -87,7 +80,6 @@ class IndexController extends Controller
             $balances->update(['total' => (float)$balances->total - $checkAmnt]);
             $this->upgradeAccount($currentLevel->refresh());
         }
-
         return response()->json(['success' => 'Account upgraded successfully']);
     }
 
@@ -104,6 +96,8 @@ class IndexController extends Controller
         if($level && $level->current_level_id == 4){
             if($request->level == 'level-3'){
                 return 50;
+            }elseif($request->level == 'level-2'){
+                return 25;
             }elseif($request->level == 'level-4'){
                 return 100;
             }else{
@@ -121,112 +115,126 @@ class IndexController extends Controller
     }
 
     public function upgradeAccount($level){
-
-         $user  = User::with(['account','account.levelName'])->where('id',Auth::user()->id)->first();
-
-        //  return $user;
-         if($user && $user->acc_request !== 1){
-             $user->update(['acc_request' => 1]);
-             $referredPerson = User::with(['account.levelName'])->where('uuid',$user->sponsor_id)->first();
+         $newUser  = User::with(['account','account.levelName'])->where('id',Auth::user()->id)->first();
+         if($newUser && $newUser->acc_request !== 1){
+             $newUser->update(['acc_request' => 1]);
+             $referredPerson = User::with(['account.levelName'])->where('uuid',$newUser->sponsor_id)->first();
              $referred_level = UserLevel::where('user_id',$referredPerson->id)->first();
              $commission = 0;
-             if($level->current_level_id == 1 || $level->current_level_id == 2)
+             if($referred_level->current_level_id == 1 || $referred_level->current_level_id == 2)
              {
-                if($referred_level->current_level_id == 1){
+                if((int)$level->current_level_id == 1){
+                    $comAmnt    = $this->checkCommission($newUser->account,$level);
+                    $commission = !empty($comAmnt) ? ($comAmnt + 7) : 16;
+                    Balances::create([
+                        'user_id'       => $referredPerson->id,
+                        'refered_id'    => Auth::user()->id,
+                        'amount'        => $commission,
+                        'income_type'   => 'Sponsored'
+                    ]);
+                }elseif((int)$level->current_level_id == 2){
+                    $comAmnt    = $this->checkCommission($newUser->account,$level);
+                    $commission = !empty($comAmnt) ? ($comAmnt + 7) : 13;
                     Balances::create([
                         'user_id'       => $referredPerson->id,
                         'refered_id'       => Auth::user()->id,
-                        'amount'        => 16,
+                        'amount'        => $commission,
                         'income_type'   => 'Sponsored'
                     ]);
-                    $commission = 16;
-                }elseif($referred_level->current_level_id == 2){
+                }elseif((int)$level->current_level_id == 3){
+                    $comAmnt    = $this->checkCommission($newUser->account,$level);
+                    $commission = !empty($comAmnt) ? ($comAmnt + 7) : 10;
                     Balances::create([
                         'user_id'       => $referredPerson->id,
                         'refered_id'       => Auth::user()->id,
-                        'amount'        => 13,
+                        'amount'        => $commission,
                         'income_type'   => 'Sponsored'
                     ]);
-                    $commission = 13;
-                }elseif($referred_level->current_level_id == 3){
-                    Balances::create([
-                        'user_id'       => $referredPerson->id,
-                        'refered_id'       => Auth::user()->id,
-                        'amount'        => 10,
-                        'income_type'   => 'Sponsored'
-                    ]);
-                    $commission = 10;
-                }elseif($referred_level->current_level_id == 4){
-                    Balances::create([
-                        'user_id'       => $referredPerson->id,
-                        'refered_id'       => Auth::user()->id,
-                        'amount'        => 7,
-                        'income_type'   => 'Sponsored'
-                    ]);
+                }elseif((int)$level->current_level_id == 4){
                     $commission = 7;
+                    Balances::create([
+                        'user_id'       => $referredPerson->id,
+                        'refered_id'       => Auth::user()->id,
+                        'amount'        => $commission,
+                        'income_type'   => 'Sponsored'
+                    ]);
                 }
              }
-             elseif($level->current_level_id == 3)
+             elseif($referred_level->current_level_id == 3)
              {
-                if($referred_level->current_level_id == 1){
+                if((int)$level->current_level_id == 1){
+                    $comAmnt    = $this->checkCommission($newUser->account,$level);
+                    $commission = !empty($comAmnt) ? ($comAmnt + 5) : 14;
                     Balances::create([
                         'user_id'       => $referredPerson->id,
-                        'amount'        => 14,
+                        'refered_id'       => Auth::user()->id,
+                        'amount'        => $commission,
                         'income_type'   => 'Sponsored'
                     ]);
-                    $commission = 14;
-                }elseif($referred_level->current_level_id == 2){
+                }elseif((int)$level->current_level_id == 2){
+                    $comAmnt    = $this->checkCommission($newUser->account,$level);
+                    $commission = !empty($comAmnt) ? ($comAmnt + 5) : 11;
                     Balances::create([
                         'user_id'       => $referredPerson->id,
-                        'amount'        => 11,
+                        'refered_id'       => Auth::user()->id,
+                        'amount'        => $commission,
                         'income_type'   => 'Sponsored'
                     ]);
-                    $commission = 11;
-                }elseif($referred_level->current_level_id == 3){
+                }elseif((int)$level->current_level_id == 3){
+                    $comAmnt    = $this->checkCommission($newUser->account,$level);
+                    $commission = !empty($comAmnt) ? ($comAmnt + 5) : 8;
                     Balances::create([
                         'user_id'       => $referredPerson->id,
-                        'amount'        => 8,
+                        'refered_id'       => Auth::user()->id,
+                        'amount'        => $commission,
                         'income_type'   => 'Sponsored'
                     ]);
-                    $commission = 8;
-                }elseif($referred_level->current_level_id == 4){
-                    Balances::create([
-                        'user_id'       => $referredPerson->id,
-                        'amount'        => 5,
-                        'income_type'   => 'Sponsored'
-                    ]);
+                }elseif((int)$level->current_level_id == 4){
                     $commission = 5;
+                    Balances::create([
+                        'user_id'       => $referredPerson->id,
+                        'refered_id'       => Auth::user()->id,
+                        'amount'        => $commission,
+                        'income_type'   => 'Sponsored'
+                    ]);
                 }
-             }elseif($level->current_level_id == 4)
+             }elseif($referred_level->current_level_id == 4)
              {
-                if($referred_level->current_level_id == 1){
+                if((int)$level->current_level_id == 1){
+                    $comAmnt    = $this->checkCommission($newUser->account,$level);
+                    $commission = !empty($comAmnt) ? ($comAmnt + 3) : 12;
                     Balances::create([
                         'user_id'       => $referredPerson->id,
-                        'amount'        => 12,
+                        'refered_id'       => Auth::user()->id,
+                        'amount'        => $commission,
                         'income_type'   => 'Sponsored'
                     ]);
-                    $commission = 12;
-                }elseif($referred_level->current_level_id == 2){
+                }elseif((int)$level->current_level_id == 2){
+                    $comAmnt    = $this->checkCommission($newUser->account,$level);
+                    $commission = !empty($comAmnt) ? ($comAmnt + 3) : 9;
                     Balances::create([
                         'user_id'       => $referredPerson->id,
-                        'amount'        => 9,
+                        'refered_id'    => Auth::user()->id,
+                        'amount'        => $commission,
                         'income_type'   => 'Sponsored'
                     ]);
-                    $commission = 9;
-                }elseif($referred_level->current_level_id == 3){
+                }elseif((int)$level->current_level_id == 3){
+                    $comAmnt    = $this->checkCommission($newUser->account,$level);
+                    $commission = !empty($comAmnt) ? ($comAmnt + 3) : 6;
                     Balances::create([
                         'user_id'       => $referredPerson->id,
-                        'amount'        => 6,
+                        'refered_id'       => Auth::user()->id,
+                        'amount'        => $commission,
                         'income_type'   => 'Sponsored'
                     ]);
-                    $commission = 6;
-                }elseif($referred_level->current_level_id == 4){
-                    Balances::create([
-                        'user_id'       => $referredPerson->id,
-                        'amount'        => 3,
-                        'income_type'   => 'Sponsored'
-                    ]);
+                }elseif((int)$level->current_level_id == 4){
                     $commission = 3;
+                    Balances::create([
+                        'user_id'       => $referredPerson->id,
+                        'refered_id'       => Auth::user()->id,
+                        'amount'        => $commission,
+                        'income_type'   => 'Sponsored'
+                    ]);
                 }
              }
             $commissionTransfer = TotalBalances::where('user_id',User::where('uuid',Auth::user()->sponsor_id)->first()->id)->first();
@@ -241,6 +249,19 @@ class IndexController extends Controller
             }
              return redirect()->route('admin.userDashboard');
          }
+    }
+    
+    public function checkCommission($existingLevel,$newlevel)
+    {
+        if((int)$existingLevel->current_level_id == 4){
+            if((int)$newlevel->current_level_id == 3){
+                return 3;
+            }elseif((int)$newlevel->current_level_id == 2){
+                return 6;
+            }elseif((int)$newlevel->current_level_id == 1){
+                return 9;
+            }
+        }
     }
 
      public function userUpgradeAccount2()

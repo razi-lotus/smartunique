@@ -16,7 +16,7 @@
 										<p class="wow fadeInLeft">We will receive not what we idly wish for but what we
 											justly earn.our rewards will
 											always be in exact proportion to our service.</p>
-										<a href="login.html" class="button wow fadeInLeft">Sign Up <i
+										<a href="{{ route('login') }}" class="button wow fadeInLeft">Sign Up <i
 												class="fa fa-angle-right" aria-hidden="true"></i></a>
 									</div>
 								</div>
@@ -39,7 +39,7 @@
 										<p class="">Life will not make allowance for you but it will pay
 											you what you earn.
 										</p>
-										<a href="login.html" class="button ">Sign Up <i class="fa fa-angle-right"
+										<a href="{{ route('login') }}" class="button ">Sign Up <i class="fa fa-angle-right"
 												aria-hidden="true"></i></a>
 									</div>
 								</div>
@@ -60,7 +60,7 @@
 										<!-- <h1 class="banner-title ">Invest In <span>Smart Unique Int</span> Way To Trade</h1> -->
 										<p class="">Time is money and money is everything.
 										</p>
-										<a href="login.html" class="button ">Sign Up <i class="fa fa-angle-right"
+										<a href="{{ route('login') }}" class="button ">Sign Up <i class="fa fa-angle-right"
 												aria-hidden="true"></i></a>
 									</div>
 								</div>

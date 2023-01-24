@@ -32,7 +32,7 @@
                       <div class="col-12">
                         @if (session('message'))
                             <div class="alert alert-danger" role="alert">
-                                {{ __('Limit exceeded! You can post 5 ads per day.') }}
+                                {{ session('message') }}
                             </div>
                         @endif
                         @if (session('link'))

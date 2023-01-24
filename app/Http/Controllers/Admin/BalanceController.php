@@ -17,6 +17,9 @@ use Illuminate\Support\Facades\Auth;
 class BalanceController extends Controller
 {
 
+    public function __construct(){
+        date_default_timezone_set("Asia/Karachi");
+    }
     public function showRefIncome(Request $request){
         $totalRefIncome = Balances::where('user_id',Auth::user()->id)->where('income_type','Sponsored')->sum('amount');
         return view('ref_income',compact('totalRefIncome'));
@@ -65,49 +68,58 @@ class BalanceController extends Controller
     }
 
     public function add(BalanceRequest $request){
-        // return $request->all();
-        $data       = Balances::create($request->prepaireRequest());
-        $balance    = TotalBalances::where('user_id',$request->user_id)->first();
-        UserBalTransfer::create([
-            'user_id'       => Auth::user()->id,
-            'transfer_to'   => $request->user_id,
-            'amount'        => $request->amount
-        ]);
-        if($balance){
-            $balance->update(['total' => (float)$balance->total + $data->amount]);
-        }else{
-            TotalBalances::create([
-                'user_id'   => $request->user_id,
-                'total'     => $data->amount
+        $user = User::where('uuid',$request->user_id)->first();
+        if($user){
+            $data       = Balances::create($request->prepaireRequest($user));
+            $balance    = TotalBalances::where('user_id',$user->id)->first();
+            UserBalTransfer::create([
+                'user_id'       => Auth::user()->id,
+                'transfer_to'   => $user->id,
+                'amount'        => $request->amount
             ]);
-        }
+            if($balance){
+                $balance->update(['total' => (float)$balance->total + $data->amount]);
+            }else{
+                TotalBalances::create([
+                    'user_id'   => $user->id,
+                    'total'     => $data->amount
+                ]);
+            }
 
-        return response()->json($data);
+            return response()->json(['success' => 'Balance transfered successfully']);
+        }else{
+            return response()->json(['error' => 'invalid user id']);
+        }
     }
 
     public function addUserBal(Request $request){
         // return $request->all();
-        $totalBal = TotalBalances::where('user_id',Auth::user()->id)->first();
-        if($request->amount < $totalBal->total){
-            $data = UserBalTransfer::create([
-                'user_id'       => Auth::user()->id,
-                'transfer_to'   => $request->user_id,
-                'amount'        => $request->amount
-            ]);
-            $transferToBal = TotalBalances::where('user_id',$request->user_id)->first();
-            if($transferToBal){
-                $transferToBal->update(['total' => (float)$transferToBal->total += $request->amount]);
-            }else{
-                TotalBalances::create([
-                    'user_id'   => $request->user_id,
-                    'total'     => $request->amount
+        $user = User::where('uuid',$request->user_id)->first();
+        if($user){
+            $totalBal = TotalBalances::where('user_id',Auth::user()->id)->first();
+            if($request->amount < $totalBal->total){
+                $data = UserBalTransfer::create([
+                    'user_id'       => Auth::user()->id,
+                    'transfer_to'   => $user->id,
+                    'amount'        => $request->amount
                 ]);
+                $transferToBal = TotalBalances::where('user_id',$user->id)->first();
+                if($transferToBal){
+                    $transferToBal->update(['total' => (float)$transferToBal->total += $request->amount]);
+                }else{
+                    TotalBalances::create([
+                        'user_id'   => $user->id,
+                        'total'     => $request->amount
+                    ]);
+                }
+                Balances::create(['user_id' => $user->id,'amount' => $request->amount]);
+                $totalBal->update(['total' => (float)$totalBal->total - $request->amount]);
+                return response()->json(['success' => 'Balance transfered successfully','balance' => $data->load(['received_user','from_user'])]);
+            }else{
+                return response()->json(['error' => 'Not enougth balance']);
             }
-            Balances::create(['user_id' => $request->user_id,'amount' => $request->amount]);
-            $totalBal->update(['total' => (float)$totalBal->total - $request->amount]);
-            return response()->json(['success' => 'Balance transfered successfully','balance' => $data->load(['received_user','from_user'])]);
         }else{
-            return response()->json(['error' => 'Not enougth balance']);
+            return response()->json(['invalid' => 'Invalid user id']);
         }
     }
 

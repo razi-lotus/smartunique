@@ -65,12 +65,6 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link {{ request()->route()->getName() === 'admin.userTree' ? 'active' : 'collapsed' }} " href="{{ route('admin.userTree') }}">
-          <i class="bi bi-person"></i>
-          <span>Team</span>
-        </a>
-      </li>
-      <li class="nav-item">
         <a class="nav-link {{ request()->route()->getName() === 'admin.userRefIncome' ? 'active' : 'collapsed' }} " href="{{ route('admin.userRefIncome') }}">
           <i class="bi bi-person"></i>
           <span>R Earning</span>
@@ -118,6 +112,12 @@
           <span>Transactions History</span>
         </a>
       </li> --}}
+      <li class="nav-item">
+        <a class="nav-link {{ request()->route()->getName() === 'admin.userTree' ? 'active' : 'collapsed' }} " href="{{ route('admin.userTree') }}">
+          <i class="bi bi-person"></i>
+          <span>Team</span>
+        </a>
+      </li>
       <li class="nav-item">
         <a class="nav-link {{ request()->route()->getName() === 'admin.user_profile' ? 'active' : 'collapsed' }} " href="{{ route('admin.user_profile') }}">
           <i class="bi bi-person"></i>

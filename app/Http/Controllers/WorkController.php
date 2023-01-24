@@ -30,11 +30,19 @@ class WorkController extends Controller
     }
 
     public function saveWork(Request $request){
-        // return $request->all();
-            $work_requests = WorkRequest::where('user_id',Auth::user()->id)->whereDate('date',date('Y-m-d'))->get();
-            // return (count($work_requests));
-            if(count($work_requests) == 5){
-                return redirect()->route('admin.sendWorkRequest')->with('message','Only 5 ads can be posted per day.');
+        $currentLevel   = UserLevel::with(['levelName'])->where('user_id',Auth::user()->id)->first();
+            $work_requests  = WorkRequest::where('user_id',Auth::user()->id)->whereDate('date',date('Y-m-d'))->get();
+            $limit = 1;
+            if($currentLevel->current_level_id == 3){
+                $limit = 2;
+            }elseif($currentLevel->current_level_id == 2){
+                $limit = 3;
+            }elseif($currentLevel->current_level_id == 1){
+                $limit = 4;
+            }
+            if(count($work_requests) == $limit){
+                return redirect()->route('admin.sendWorkRequest')
+                ->with('message',ucfirst($currentLevel->levelName->name).' can post only '.$limit.' ads per day.');
             }
             $work = WorkRequest::create([
                 'user_id'       => Auth::user()->id,
@@ -47,16 +55,15 @@ class WorkController extends Controller
             ]);
             // balance transfer
 
-        $currentLevel   = UserLevel::with(['levelName'])->where('user_id',Auth::user()->id)->first();
         $amount = 0;
         if($currentLevel->levelName->name == 'Member'){
-            $amount = round(5 / 30,2);
+            $amount = round((5 / 30)/$limit,2);
         }elseif($currentLevel->levelName->name == 'Supervisor'){
-            $amount = round(7 / 30,2);
+            $amount = round((7 / 30)/$limit,2);
         }elseif($currentLevel->levelName->name == 'Manager'){
-            $amount = round(10 / 30,2);
+            $amount = round((10 / 30)/$limit,2);
         }elseif($currentLevel->levelName->name == 'Director'){
-            $amount = round(15 / 30,2);
+            $amount = round((15 / 30)/$limit,2);
         }
         $balance = DB::table('balances')->insert([
             'user_id'       => Auth::user()->id,
@@ -70,6 +77,7 @@ class WorkController extends Controller
         }
 
         return redirect()->route('admin.sendWorkRequest')->with('link',url('/admin/editwork',$work->id).'/edit');
+            
     }
 
     public function UserWorkListing(Request $request) {
