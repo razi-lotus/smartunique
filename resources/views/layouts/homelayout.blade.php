@@ -97,6 +97,11 @@
 			<script type="text/javascript"
 				src="//rf.revolvermaps.com/0/0/8.js?i=51nrmfkj4iw&amp;m=0&amp;c=ff0000&amp;cr1=ffffff&amp;f=arial&amp;l=33"
 				async="async"></script>
+				
+			{{--<div style="background-color: black;box-shadow: 3px 3px 10px 0 #eee inset;height: 50px;padding: 12px 4px;margin: -52px auto;"
+			class="sub-title text-uppercase fw-bolder fs-4">CONTACT
+			</div>
+			<img src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Rotating_earth_%28large%29_transparent.gif">--}}
 			<div class="row">
 				<div class="col-xl-12 col-lg-12 col-md-12">
 					<div class="section-heading text-center">

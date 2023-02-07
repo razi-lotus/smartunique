@@ -55,13 +55,19 @@
                                                 @if ($user->file !== '')
                                                     <img src="{{ asset('storage/'.$user->file) }}" alt="Avatar" style="width:200px;height:200px;">
                                                 @else
-                                                    <img src="{{ asset('storage/userAvatar.jpg') }}" alt="Avatar" style="width:200px;height:200px;">
+                                                    <img src="{{ asset('img/stock-logo.png') }}" alt="Avatar" style="width:200px;height:200px;">
                                                 @endif
+                                                <div style="height: 50px;margin: -90px auto;">
+                                                  <p class="text-white">{{ $user->name }}({{ $user->level }})</p>
+                                                  <p class="text-white">{{ $user->address }}</p>
+                                                </div>
                                         </div>
                                         <div class="flip-card-back">
-                                            <h1 class="text-capitalize">{{ $user->name }}</h1>
-                                            <p>{{ $user->address }}</p>
-                                            <p>Level {{ $user->level }}</p>
+                                          @if ($user->file !== '')
+                                              <img src="{{ asset('storage/'.$user->file) }}" alt="Avatar" style="width:200px;height:200px;">
+                                          @else
+                                              <img src="{{ asset('img/stock-logo.png') }}" alt="Avatar" style="width:200px;height:200px;">
+                                          @endif
                                         </div>
                                     </div>
                                 </div>

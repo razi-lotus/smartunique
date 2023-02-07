@@ -10,6 +10,7 @@ use App\Models\AdminWorkRequest;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use App\Models\User;
 
 class WorkController extends Controller
 {
@@ -19,10 +20,17 @@ class WorkController extends Controller
         // $this->middleware('redirectWel');
     }
 
-    public function index(){
-
-        $currentLevel   = UserLevel::with(['levelName'])->where('user_id',Auth::user()->id)->first();
-        return view('work_requests.index',compact('currentLevel'));
+    public function index()
+    {
+        $referredUsersCount = User::where('sponsor_id',Auth::user()->uuid)->count();
+        $someDate           = new \DateTime(Auth::user()->created_at);
+        $now                = new \DateTime();
+        $checkDays          = false;
+        if($someDate->diff($now)->days > 30) {
+            $checkDays  = true;
+        }
+        $currentLevel       = UserLevel::with(['levelName'])->where('user_id',Auth::user()->id)->first();
+        return view('work_requests.index',compact('currentLevel','referredUsersCount','checkDays'));
     }
 
     public function history(){
@@ -30,7 +38,8 @@ class WorkController extends Controller
     }
 
     public function saveWork(Request $request){
-        $currentLevel   = UserLevel::with(['levelName'])->where('user_id',Auth::user()->id)->first();
+        
+            $currentLevel   = UserLevel::with(['levelName'])->where('user_id',Auth::user()->id)->first();
             $work_requests  = WorkRequest::where('user_id',Auth::user()->id)->whereDate('date',date('Y-m-d'))->get();
             $limit = 1;
             if($currentLevel->current_level_id == 3){
@@ -77,7 +86,6 @@ class WorkController extends Controller
         }
 
         return redirect()->route('admin.sendWorkRequest')->with('link',url('/admin/editwork',$work->id).'/edit');
-            
     }
 
     public function UserWorkListing(Request $request) {

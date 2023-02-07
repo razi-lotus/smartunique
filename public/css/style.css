@@ -36,7 +36,9 @@ h5,
 h6 {
   font-family: "Nunito", sans-serif;
 }
-
+.font-weight-bolder{
+  font-weight: bolder;
+}
 /*--------------------------------------------------------------
 # Main
 --------------------------------------------------------------*/
@@ -234,9 +236,9 @@ h6 {
 
 /* Card */
 .card {
-  margin-bottom: 30px;
+  margin: 10px -26px 20px 0px;
   border: none;
-  border-radius: 5px;
+  border-radius: 14px;
   box-shadow: 0px 0 30px rgba(1, 41, 112, 0.1);
 }
 
@@ -249,7 +251,7 @@ h6 {
 }
 
 .card-title {
-  padding: 20px 0 15px 0;
+  padding: 0px;
   font-size: 18px;
   font-weight: 500;
   color: #012970;
@@ -263,7 +265,7 @@ h6 {
 }
 
 .card-body {
-  padding: 0 20px 20px 20px;
+  padding: 12px;
 }
 
 .card-img-overlay {
@@ -381,7 +383,7 @@ h6 {
 }
 
 .logo img {
-  max-height: 26px;
+  max-height: 40px;
   margin-right: 6px;
 }
 
@@ -494,7 +496,8 @@ h6 {
 }
 
 .header-nav .nav-profile img {
-  max-height: 36px;
+  height: 40px;
+  width: 40px;
 }
 
 .header-nav .nav-profile span {
@@ -814,7 +817,7 @@ h6 {
 
 /* Info Cards */
 .dashboard .info-card {
-  padding-bottom: 10px;
+  padding-bottom: 0px;
 }
 
 .dashboard .info-card h6 {
@@ -828,8 +831,8 @@ h6 {
 .dashboard .card-icon {
   font-size: 32px;
   line-height: 0;
-  width: 64px;
-  height: 64px;
+  width: 75px;
+  height: 75px;
   flex-shrink: 0;
   flex-grow: 0;
 }

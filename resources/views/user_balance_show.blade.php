@@ -29,9 +29,9 @@
             <div class="col-xxl-4 col-xl-12">
                 <div class="card">
                     <div class="card-body">
-                      <h5 class="card-title">Total Balance</h5>
-                      <span class="amount-tag">{{ $balance !== null ? $balance->total : 0 }}$</span>
-                      <h5 class="mt-1">Send your earning to the company offical account. You will receive your payment in any bank account.</h5>
+                      <h5 class="card-title text-start">Total Earning</h5>
+                      <div class="text-success large pt-2 ps-1 mb-2">{{ $balance !== null ? $balance->total : 0 }}$</div>
+                      <h5 class="mt-1 text-start">Send your earning to the company offical account. You will receive your payment in any bank account.</h5>
                       <!-- Recent Sales -->
                       <div class="alert alert-msg"></div>
                       <div class="col-12">
@@ -39,10 +39,10 @@
                           <div class="row" id="show-add-blnce-form"> --}}
                             {{-- {{ route('admin.add.balance') }} --}}
                             <form method="POST" action="">
-                                <div class="row">
+                                <div class="row text-start">
                                     @csrf
                                     <div class="col-xl-3 col-lg-3 col-sm-6 col-12">
-                                        <label for="user" class="form-label">Select User Id</label>
+                                        <label for="user" class="form-label">Withdraow Id</label>
                                         <input id="inputUserId" name="user_id" class="form-control">
                                         {{-- <select id="inputUserId" name="user_id" class="form-select">
                                             <option value="not-selected">select user id</option>
@@ -74,35 +74,47 @@
         </div><!-- End Left side columns -->
 
 
-
         <!-- Modal -->
         <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+          <img height="200px" width="200px" style="position: absolute ; top: 40%; z-index: 1; right: 10%;" width="100px" src="{{ asset('img/stamp.png') }}" alt="">
             <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header" style="display:inline;">
                     <div class="row">
-                        <div class="col-12 text-center ml-2">
-                            <a href="javascript:void(0);" class="logo d-flex align-items-center text-center" >
-                                <img src="{{ asset('img/logo.png') }}" alt="">
-                                <span class="d-lg-block">Smart-U-Int</span>
-                            </a>
+                        <div class="col-4 text-center text-lg-center">
+                          <img style="position: absolute;top: 0%;z-index: 1;right: 68%;height: 16%;width: 30%;" src="{{ asset('img/stock-logo.png') }}" alt="">
                         </div>
-                        <span class="text-center" style="color: green;">Transaction successful</span>
-                        <span class="text-center">Money has been sent</span>
+                        <div class="col-8 text-center text-lg-center">
+                            <a href="javascript:void(0);" class="logo d-flex align-items-center justify-content-center text-center" >
+                                {{-- <img src="{{ asset('img/stock-logo.png') }}" alt=""> --}}
+                                <div class="mb-2">
+                                  <span class="d-lg-block">Smart-Official</span>
+                                </div>
+                            </a>
+                            <span class="text-center" style="color: green;">Withdraw Successful</span><br>
+                            <span class="text-center">Money has been sent</span>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-body">
-                <div class="trans-date">28 Dec 2023 10:00 am</div>
-                <div class="id-hash"></div>
+                <small class="trans-date">28 Dec 2023 10:00 am</small>
+                <small class="id-hash d-block"></small>
                 <br/>
-                <strong>Sent to</strong>
-                <p class="sent-to text-capitalize">Ali</p>
-                <strong>Sent by</strong>
-                <p class="sent-from text-capitalize">Razi</p>
+                <strong>Sent to User ID</strong>
+                <h6 class="sent-to-uuid text-capitalize">Ali</h6>
+                <strong>Sent to Name</strong>
+                <h6 class="sent-to text-capitalize">Ali</h6>
+                <strong>Sent by User ID</strong>
+                <h6 class="sent-from-uuid text-capitalize">Razi</h6>
+                <strong>Sent by Name</strong>
+                <h6 class="sent-from text-capitalize">Razi</h6>
                 <strong>Fee / Charges</strong>
-                <p>No Charge</p>
+                <strong>Sent by</strong>
+                <h6 class="sent-from text-capitalize">Razi</h6>
+                <strong>Fee / Charges</strong>
+                <h6>No Charge</h6>
                 <strong style="color: green;">Total Amount</strong>
-                <p class="amount-tagg"></p>
+                <h6 class="amount-tagg"></h6>
                 {{-- <strong class="amount-tag"></strong>$ transferred to <strong class="user-tag text-capitalize"></strong> succssfully. --}}
                 </div>
                 <div class="modal-footer">
@@ -159,7 +171,9 @@
                         if(data.success == 'Balance transfered successfully'){
                             $('.amount-tagg').text(data.balance.amount+'$');
                             $('.sent-to').text(data.balance.received_user.name);
+                            $('.sent-to-uuid').text(data.balance.received_user.uuid);
                             $('.sent-from').text(data.balance.from_user.name);
+                            $('.sent-from-uuid').text(data.balance.from_user.uuid);
                             $('.id-hash').text('ID#'+Math.floor(Math.random() * 1000000));
                             const monthNames = ["January", "February", "March", "April", "May", "June",
                             "July", "August", "September", "October", "November", "December"];

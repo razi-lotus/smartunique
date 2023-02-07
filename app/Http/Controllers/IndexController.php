@@ -116,16 +116,14 @@ class IndexController extends Controller
 
     public function upgradeAccount($level){
          $newUser  = User::with(['account','account.levelName'])->where('id',Auth::user()->id)->first();
-         if($newUser && $newUser->acc_request !== 1){
-             $newUser->update(['acc_request' => 1]);
+         if($newUser){
              $referredPerson = User::with(['account.levelName'])->where('uuid',$newUser->sponsor_id)->first();
              $referred_level = UserLevel::where('user_id',$referredPerson->id)->first();
              $commission = 0;
              if($referred_level->current_level_id == 1 || $referred_level->current_level_id == 2)
              {
                 if((int)$level->current_level_id == 1){
-                    $comAmnt    = $this->checkCommission($newUser->account,$level);
-                    $commission = !empty($comAmnt) ? ($comAmnt + 7) : 16;
+                    $commission = $newUser->acc_request!=0 ? 3 : 16;
                     Balances::create([
                         'user_id'       => $referredPerson->id,
                         'refered_id'    => Auth::user()->id,
@@ -133,8 +131,7 @@ class IndexController extends Controller
                         'income_type'   => 'Sponsored'
                     ]);
                 }elseif((int)$level->current_level_id == 2){
-                    $comAmnt    = $this->checkCommission($newUser->account,$level);
-                    $commission = !empty($comAmnt) ? ($comAmnt + 7) : 13;
+                    $commission = $newUser->acc_request!=0 ? 3 : 13;
                     Balances::create([
                         'user_id'       => $referredPerson->id,
                         'refered_id'       => Auth::user()->id,
@@ -142,8 +139,7 @@ class IndexController extends Controller
                         'income_type'   => 'Sponsored'
                     ]);
                 }elseif((int)$level->current_level_id == 3){
-                    $comAmnt    = $this->checkCommission($newUser->account,$level);
-                    $commission = !empty($comAmnt) ? ($comAmnt + 7) : 10;
+                    $commission = $newUser->acc_request!=0 ? 3 : 10;
                     Balances::create([
                         'user_id'       => $referredPerson->id,
                         'refered_id'       => Auth::user()->id,
@@ -151,7 +147,7 @@ class IndexController extends Controller
                         'income_type'   => 'Sponsored'
                     ]);
                 }elseif((int)$level->current_level_id == 4){
-                    $commission = 7;
+                    $commission = $newUser->acc_request!=0 ? 3 : 7;
                     Balances::create([
                         'user_id'       => $referredPerson->id,
                         'refered_id'       => Auth::user()->id,
@@ -163,8 +159,7 @@ class IndexController extends Controller
              elseif($referred_level->current_level_id == 3)
              {
                 if((int)$level->current_level_id == 1){
-                    $comAmnt    = $this->checkCommission($newUser->account,$level);
-                    $commission = !empty($comAmnt) ? ($comAmnt + 5) : 14;
+                    $commission = $newUser->acc_request!=0 ? 3 : 14;
                     Balances::create([
                         'user_id'       => $referredPerson->id,
                         'refered_id'       => Auth::user()->id,
@@ -172,8 +167,7 @@ class IndexController extends Controller
                         'income_type'   => 'Sponsored'
                     ]);
                 }elseif((int)$level->current_level_id == 2){
-                    $comAmnt    = $this->checkCommission($newUser->account,$level);
-                    $commission = !empty($comAmnt) ? ($comAmnt + 5) : 11;
+                    $commission = $newUser->acc_request!=0 ? 3 : 11;
                     Balances::create([
                         'user_id'       => $referredPerson->id,
                         'refered_id'       => Auth::user()->id,
@@ -181,8 +175,7 @@ class IndexController extends Controller
                         'income_type'   => 'Sponsored'
                     ]);
                 }elseif((int)$level->current_level_id == 3){
-                    $comAmnt    = $this->checkCommission($newUser->account,$level);
-                    $commission = !empty($comAmnt) ? ($comAmnt + 5) : 8;
+                    $commission = $newUser->acc_request!=0 ? 3 : 8;
                     Balances::create([
                         'user_id'       => $referredPerson->id,
                         'refered_id'       => Auth::user()->id,
@@ -190,7 +183,7 @@ class IndexController extends Controller
                         'income_type'   => 'Sponsored'
                     ]);
                 }elseif((int)$level->current_level_id == 4){
-                    $commission = 5;
+                    $commission = $newUser->acc_request!=0 ? 3 : 5;
                     Balances::create([
                         'user_id'       => $referredPerson->id,
                         'refered_id'       => Auth::user()->id,
@@ -201,8 +194,7 @@ class IndexController extends Controller
              }elseif($referred_level->current_level_id == 4)
              {
                 if((int)$level->current_level_id == 1){
-                    $comAmnt    = $this->checkCommission($newUser->account,$level);
-                    $commission = !empty($comAmnt) ? ($comAmnt + 3) : 12;
+                    $commission = $newUser->acc_request!=0 ? 3 : 12;
                     Balances::create([
                         'user_id'       => $referredPerson->id,
                         'refered_id'       => Auth::user()->id,
@@ -210,8 +202,7 @@ class IndexController extends Controller
                         'income_type'   => 'Sponsored'
                     ]);
                 }elseif((int)$level->current_level_id == 2){
-                    $comAmnt    = $this->checkCommission($newUser->account,$level);
-                    $commission = !empty($comAmnt) ? ($comAmnt + 3) : 9;
+                    $commission = $newUser->acc_request!=0 ? 3 : 9;
                     Balances::create([
                         'user_id'       => $referredPerson->id,
                         'refered_id'    => Auth::user()->id,
@@ -219,8 +210,7 @@ class IndexController extends Controller
                         'income_type'   => 'Sponsored'
                     ]);
                 }elseif((int)$level->current_level_id == 3){
-                    $comAmnt    = $this->checkCommission($newUser->account,$level);
-                    $commission = !empty($comAmnt) ? ($comAmnt + 3) : 6;
+                    $commission = $newUser->acc_request!=0 ? 3 : 6;
                     Balances::create([
                         'user_id'       => $referredPerson->id,
                         'refered_id'       => Auth::user()->id,
@@ -228,7 +218,7 @@ class IndexController extends Controller
                         'income_type'   => 'Sponsored'
                     ]);
                 }elseif((int)$level->current_level_id == 4){
-                    $commission = 3;
+                    $commission = $newUser->acc_request!=0 ? 3 : 3;
                     Balances::create([
                         'user_id'       => $referredPerson->id,
                         'refered_id'       => Auth::user()->id,
@@ -247,7 +237,8 @@ class IndexController extends Controller
                     'total' => $commission
                 ]);
             }
-             return redirect()->route('admin.userDashboard');
+            $newUser->update(['acc_request' => 1]);
+            return redirect()->route('admin.userDashboard');
          }
     }
     

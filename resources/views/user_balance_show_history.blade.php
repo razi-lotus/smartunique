@@ -65,7 +65,7 @@
                     <div class="row">
                         <div class="col-12 text-center">
                             <a href="javascript:void(0);" class="logo d-flex align-items-center text-center" style="padding-left: 115px;">
-                                <img src="{{ asset('img/logo.png') }}" alt="">
+                                <img src="{{ asset('img/stock-logo.png') }}" alt="">
                                 <span class="d-lg-block">SmartUniqueInt</span>
                             </a>
                         </div>
@@ -138,7 +138,7 @@
                 // return;
                 if(confirm('Are you sure you want to transfer this amount?')){
                     let user_id     = $('#inputUserId').val();
-                    var amount      = $('#inputAmount').val();
+                    var amount      = $('#inputAmount').val()+$;
                     if(user_id === 'not-selected'){
                         $('.id-error').text('Select user name');
                         return;

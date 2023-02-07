@@ -9,24 +9,24 @@
 
                 <div class="d-flex justify-content-center py-4">
                 <a href="index.html" class="logo d-flex align-items-center w-auto">
-                    <img src="assets/img/logo.png" alt="">
+                    <img src="assets/img/stock-logo.png" alt="">
                     <span class="d-none d-lg-block">SmartUniqueInt</span>
                 </a>
                 </div><!-- End Logo -->
 
                 <div class="card mb-3">
 
-                <div class="card-body">
+                <div style="background-image: url(/img/abstract-security-technology-background_52530-21.png); background-size: cover; background-position: center; background-repeat: no-repeat;border:2px solid white;" class="card-body">
 
                     <div class="pt-4 pb-2">
-                    <h5 class="card-title text-center pb-0 fs-4">Create an Account</h5>
-                    <p class="text-center small">Enter your personal details to create account</p>
+                    <h5 class="card-title text-center pb-0 fs-4 text-dark font-weight-bolder">Create an Account</h5>
+                    <p class="text-center small text-dark font-weight-bolder">Enter your personal details to create account</p>
                     </div>
 
                     <form class="row g-3 needs-validation" action="{{ route('register') }}" method="POST">
                         @csrf
                     <div class="col-12 col-md-6 col-lg-4 col-xl-4">
-                        <label for="yourName" class="form-label">Your Name</label>
+                        <label for="yourName" class="form-label text-dark font-weight-bolder">Your Name</label>
                         <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" id="yourName" value="{{ old('name') }}">
                         @error('name')
                             <div class="invalid-feedback" role="alert">
@@ -35,7 +35,7 @@
                         @enderror
                     </div>
                     <div class="col-12 col-md-6 col-lg-4 col-xl-4">
-                        <label for="yourPassword" class="form-label">Father Name</label>
+                        <label for="yourPassword" class="form-label text-dark font-weight-bolder">Father Name</label>
                         <input type="text" name="father_name" class="form-control @error('father_name') is-invalid @enderror" value="{{ old('father_name') }}" id="yourPassword" >
                         @error('father_name')
                             <div class="invalid-feedback" role="alert">
@@ -45,7 +45,7 @@
                     </div>
 
                     <div class="col-12 col-md-6 col-lg-4 col-xl-4">
-                        <label for="yourUsername" class="form-label">Username</label>
+                        <label for="yourUsername" class="form-label text-dark font-weight-bolder">Username</label>
                         <div class="input-group has-validation">
                             <span class="input-group-text" id="inputGroupPrepend">@</span>
                             <input type="text" name="username" class="form-control @error('username') is-invalid @enderror" value="{{ old('username') }}" id="yourUsername" >
@@ -57,7 +57,7 @@
                         </div>
                     </div>
                     <div class="col-12 col-md-6 col-lg-4 col-xl-4">
-                        <label for="yourEmail" class="form-label">Date of Birth</label>
+                        <label for="yourEmail" class="form-label text-dark font-weight-bolder">Date of Birth</label>
                         <input type="date" name="dob" class="form-control @error('dob') is-invalid @enderror" value="{{ old('dob') }}" id="yourEmail" >
                         @error('dob')
                             <div class="invalid-feedback" role="alert">
@@ -66,7 +66,7 @@
                         @enderror
                     </div>
                     <div class="col-12 col-md-6 col-lg-4 col-xl-4">
-                        <label for="yourEmail" class="form-label">Gender</label>
+                        <label for="yourEmail" class="form-label text-dark font-weight-bolder">Gender</label>
                         <select name="gender" class="form-control @error('gender') is-invalid @enderror" value="{{ old('gender') }}" id="yourEmail" >
                             <option value="1">Male</option>
                             <option value="0">Female</option>
@@ -78,7 +78,7 @@
                         @enderror
                     </div>
                     <div class="col-12 col-md-6 col-lg-4 col-xl-4">
-                        <label for="yourEmail" class="form-label">Country</label>
+                        <label for="yourEmail" class="form-label text-dark font-weight-bolder">Country</label>
                         <select name="country_id" class="select-country form-control @error('country_id') is-invalid @enderror" value="{{ old('country_id') }}" id="yourEmail" >
                             @foreach ($countries as $country)
                             <option value="{{ $country->id }}" data-id="{{ $country->id }}" class="text-captialize">{{ $country->name }}</option>
@@ -91,7 +91,7 @@
                         @enderror
                     </div>
                     <div class="col-12 col-md-6 col-lg-4 col-xl-4">
-                        <label for="yourEmail" class="form-label">State/Province</label>
+                        <label for="yourEmail" class="form-label text-dark font-weight-bolder">State/Province</label>
                         <select name="state" class="form-control @error('state') is-invalid @enderror" value="{{ old('state') }}" id="yourEmail" >
                             <option value="Punjab">Punjab</option>
                             <option value="Sindh">Sindh</option>
@@ -105,7 +105,7 @@
                         @enderror
                     </div>
                     <div class="col-12 col-md-6 col-lg-4 col-xl-4">
-                        <label for="yourEmail" class="form-label">City</label>
+                        <label for="yourEmail" class="form-label text-dark font-weight-bolder">City</label>
                         <select name="city_id" class="cities-select form-control @error('city_id') is-invalid @enderror" value="{{ old('city_id') }}" id="yourEmail" >
                             <option value="">select city</option>
                         </select>
@@ -117,7 +117,7 @@
                     </div>
 
                     <div class="col-12 col-md-6 col-lg-4 col-xl-4">
-                        <label for="yourEmail" class="form-label">Zip Code</label>
+                        <label for="yourEmail" class="form-label text-dark font-weight-bolder">Zip Code</label>
                         <input type="text" name="zipcode" class="form-control @error('zipcode') is-invalid @enderror" value="{{ old('zipcode') }}" id="yourzipcode" >
                         @error('zipcode')
                             <div class="invalid-feedback" role="alert">
@@ -126,7 +126,7 @@
                         @enderror
                     </div>
                     <div class="col-12 col-md-6 col-lg-4 col-xl-4">
-                        <label for="yourEmail" class="form-label">Address</label>
+                        <label for="yourEmail" class="form-label text-dark font-weight-bolder">Address</label>
                         <input type="text" name="address" class="form-control @error('address') is-invalid @enderror" value="{{ old('address') }}" id="youraddress" >
                         @error('address')
                             <div class="invalid-feedback" role="alert">
@@ -135,7 +135,7 @@
                         @enderror
                     </div>
                     <div class="col-12 col-md-6 col-lg-4 col-xl-4">
-                        <label for="yourEmail" class="form-label">Street Address</label>
+                        <label for="yourEmail" class="form-label text-dark font-weight-bolder">Street Address</label>
                         <input type="text" name="street_address" class="form-control @error('street_address') is-invalid @enderror" value="{{ old('street_address') }}" id="yourstreet_address" >
                         @error('street_address')
                             <div class="invalid-feedback" role="alert">
@@ -144,7 +144,7 @@
                         @enderror
                     </div>
                     <div class="col-12 col-md-6 col-lg-4 col-xl-4">
-                        <label for="yourEmail" class="form-label">Phone Number</label>
+                        <label for="yourEmail" class="form-label text-dark font-weight-bolder">Phone Number</label>
                         <input type="text" name="phone" class="form-control @error('phone') is-invalid @enderror" value="{{ old('phone') }}" id="phone-number" >
                         <div id="recaptcha-container"></div>
                         @error('phone')
@@ -154,7 +154,7 @@
                         @enderror
                     </div>
                     <div class="col-12 col-md-6 col-lg-4 col-xl-4">
-                        <label for="yourEmail" class="form-label">CNIC</label>
+                        <label for="yourEmail" class="form-label text-dark font-weight-bolder">CNIC</label>
                         <input type="text" name="cnic" class="form-control @error('cnic') is-invalid @enderror" value="{{ old('cnic') }}" id="yourcnic" >
                         @error('cnic')
                             <div class="invalid-feedback" role="alert">
@@ -163,7 +163,7 @@
                         @enderror
                     </div>
                     <div class="col-12 col-md-6 col-lg-4 col-xl-4">
-                        <label for="yourEmail" class="form-label">Payment Method</label>
+                        <label for="yourEmail" class="form-label text-dark font-weight-bolder">Payment Method</label>
                         <input type="text" name="payment_method" class="form-control @error('payment_method') is-invalid @enderror" value="{{ old('payment_method') }}" id="yourpayment_method" >
                         @error('payment_method')
                             <div class="invalid-feedback" role="alert">
@@ -172,7 +172,7 @@
                         @enderror
                     </div>
                     <div class="col-12 col-md-6 col-lg-4 col-xl-4">
-                        <label for="yourEmail" class="form-label">Sponsor Id</label>
+                        <label for="yourEmail" class="form-label text-dark font-weight-bolder">Sponsor Id</label>
                         <input type="text" name="sponsor_id" class="form-control @error('sponsor_id') is-invalid @enderror" value="{{ old('sponsor_id') }}" id="" >
                         @error('sponsor_id')
                             <div class="invalid-feedback" role="alert">
@@ -181,7 +181,7 @@
                         @enderror
                     </div>
                     <div class="col-12 col-md-6 col-lg-4 col-xl-4">
-                        <label for="yourEmail" class="form-label">What is your mother name?</label>
+                        <label for="yourEmail" class="form-label text-dark font-weight-bolder">What is your mother name?</label>
                         <input type="text" name="mother_name" class="form-control @error('mother_name') is-invalid @enderror" value="{{ old('mother_name') }}" id="yourmother_name" >
                         @error('mother_name')
                             <div class="invalid-feedback" role="alert">
@@ -190,7 +190,7 @@
                         @enderror
                     </div>
                     <div class="col-12 col-md-6 col-lg-4 col-xl-4">
-                        <label for="yourEmail" class="form-label">What is name of your favorite pet?</label>
+                        <label for="yourEmail" class="form-label text-dark font-weight-bolder">What is name of your favorite pet?</label>
                         <input type="text" name="pet_name" class="form-control @error('pet_name') is-invalid @enderror" value="{{ old('pet_name') }}" id="yourpet_name" >
                         @error('pet_name')
                             <div class="invalid-feedback" role="alert">
@@ -199,7 +199,7 @@
                         @enderror
                     </div>
                     <div class="col-12 col-md-6 col-lg-4 col-xl-4">
-                        <label for="yourEmail" class="form-label">Your Email</label>
+                        <label for="yourEmail" class="form-label text-dark font-weight-bolder">Your Email</label>
                         <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" value="{{ old('email') }}" id="yourEmail" >
                         @error('email')
                             <div class="invalid-feedback" role="alert">
@@ -209,7 +209,7 @@
                     </div>
 
                     <div class="col-12 col-md-6 col-lg-4 col-xl-4">
-                        <label for="yourPassword" class="form-label">Password</label>
+                        <label for="yourPassword" class="form-label text-dark font-weight-bolder">Password</label>
                         <input type="password" name="password" class="form-control @error('password') is-invalid @enderror" id="yourPassword" >
                         @error('password')
                             <div class="invalid-feedback" role="alert">
@@ -218,7 +218,7 @@
                         @enderror
                     </div>
                     <div class="col-12 col-md-6 col-lg-4 col-xl-4">
-                        <label for="yourPassword" class="form-label">Confirm Password</label>
+                        <label for="yourPassword" class="form-label text-dark font-weight-bolder">Confirm Password</label>
                         <input type="password" name="password_confirmation" class="form-control @error('password') is-invalid @enderror" id=""  autocomplete="new-password">
                         <div class="invalid-feedback"><strong>The confirm password field is required</strong></div>
                     </div>
@@ -227,7 +227,7 @@
                         <button class="btn btn-primary w-100" type="submit" onclick="otpSend()">Create Account</button>
                     </div>
                     <div class="col-12">
-                        <p class="small mb-0">Already have an account? <a href="{{ route('login') }}">Log in</a></p>
+                        <p class="small mb-0 text-dark font-weight-bolder">Already have an account? <a href="{{ route('login') }}" class="text-white">Log in</a></p>
                     </div>
                     </form>
 
