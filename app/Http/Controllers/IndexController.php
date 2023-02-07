@@ -27,9 +27,6 @@ class IndexController extends Controller
                  'user_id'   => $user->id,
                  'amount'    => $balanceConfirm->amount
              ]);
-            //  $balanceConfirm->update(['amount' => 0]);
-
-             // referered person's commission
              $referredPerson = User::with(['account.levelName'])->where('uuid',$user->sponsor_id)->first();
              $referred_level = UserLevel::where('user_id',$referredPerson->id)->first();
              $commission = 0;
