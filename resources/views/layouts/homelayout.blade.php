@@ -20,12 +20,12 @@
 </head>
 <body>
     <!-- Start preloader -->
-	<div id="preloader">
+	{{--<div id="preloader">
 		<div class="preloader-box">
 			<img src="{{ asset('home/images/stock-logo.png') }}" alt="Loader">
 			<p class="loading">Loading</p>
 		</div>
-	</div>
+	</div>--}}
 	<!-- End preloader -->
 
 
@@ -68,14 +68,16 @@
 										<li><a href="{{ url('about') }}">About Us</a></li>
 										<li><a href="{{ url('contact') }}">Contact us</a></li>
 									</ul>
-								<li class="d-md-none d-block"><a href="{{ url('contact') }}">Job Task</a></li>
+								<li class="d-md-none d-block"><a href="{{ url('job-task') }}">Job Task</a></li>
 								<li class="d-md-none d-block"><a href="{{ url('working-bonus') }}">Working Bonus</a></li>
 								<li class="d-md-none d-block"><a href="{{ url('rewards') }}">Rewards</a></li>
 								<li class="d-md-none d-block"><a href="{{ url('withdraw-method') }}">Withdraw Method</a></li>
 								<li class="d-md-none d-block"><a href="{{ url('career') }}">Career</a></li>
 								<li class="d-md-none d-block"><a href="{{ url('about') }}">About Us</a></li>
 								<li class="d-md-none d-block"><a href="{{ url('contact') }}">Contact us</a></li>
-								<li><a href="{{ url('team') }}">Team</a></li>
+								@if(Auth::user())
+									<li><a href="{{ url('team') }}">Team</a></li>
+								@endif
 								</li>
 							</ul>
 						</div>
@@ -95,6 +97,11 @@
 			<script type="text/javascript"
 				src="//rf.revolvermaps.com/0/0/8.js?i=51nrmfkj4iw&amp;m=0&amp;c=ff0000&amp;cr1=ffffff&amp;f=arial&amp;l=33"
 				async="async"></script>
+				
+			{{--<div style="background-color: black;box-shadow: 3px 3px 10px 0 #eee inset;height: 50px;padding: 12px 4px;margin: -52px auto;"
+			class="sub-title text-uppercase fw-bolder fs-4">CONTACT
+			</div>
+			<img src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Rotating_earth_%28large%29_transparent.gif">--}}
 			<div class="row">
 				<div class="col-xl-12 col-lg-12 col-md-12">
 					<div class="section-heading text-center">

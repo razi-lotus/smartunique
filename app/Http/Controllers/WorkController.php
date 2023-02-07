@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\UserLevel;
 use App\Models\WorkRequest;
 use Illuminate\Http\Request;
 use App\Models\TotalBalances;
@@ -9,61 +10,82 @@ use App\Models\AdminWorkRequest;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use App\Models\User;
 
 class WorkController extends Controller
 {
     public function __construct()
     {
         // $this->middleware('auth');
-        $this->middleware('redirectWel');
+        // $this->middleware('redirectWel');
     }
 
-    public function index(){
-        return view('work_requests.index');
+    public function index()
+    {
+        $referredUsersCount = User::where('sponsor_id',Auth::user()->uuid)->count();
+        $someDate           = new \DateTime(Auth::user()->created_at);
+        $now                = new \DateTime();
+        $checkDays          = false;
+        if($someDate->diff($now)->days > 30) {
+            $checkDays  = true;
+        }
+        $currentLevel       = UserLevel::with(['levelName'])->where('user_id',Auth::user()->id)->first();
+        return view('work_requests.index',compact('currentLevel','referredUsersCount','checkDays'));
+    }
+
+    public function history(){
+        return view('work_requests.history');
     }
 
     public function saveWork(Request $request){
-        // return $request->all();
-            $work_requests = WorkRequest::where('user_id',Auth::user()->id)->whereDate('date',date('Y-m-d'))->get();
-            // return (count($work_requests));
-            if(count($work_requests) == 5){
-                return redirect()->route('admin.sendWorkRequest')->with('message','Only 5 ads can be posted per day.');
+        
+            $currentLevel   = UserLevel::with(['levelName'])->where('user_id',Auth::user()->id)->first();
+            $work_requests  = WorkRequest::where('user_id',Auth::user()->id)->whereDate('date',date('Y-m-d'))->get();
+            $limit = 1;
+            if($currentLevel->current_level_id == 3){
+                $limit = 2;
+            }elseif($currentLevel->current_level_id == 2){
+                $limit = 3;
+            }elseif($currentLevel->current_level_id == 1){
+                $limit = 4;
+            }
+            if(count($work_requests) == $limit){
+                return redirect()->route('admin.sendWorkRequest')
+                ->with('message',ucfirst($currentLevel->levelName->name).' can post only '.$limit.' ads per day.');
             }
             $work = WorkRequest::create([
                 'user_id'       => Auth::user()->id,
                 'file'          => $request->has('file') ? Storage::disk('public')->put('work_request',$request->file('file')) : null,
-                'link'          => $request->get('link'),
+                // 'link'          => $request->get('link'),
                 'title'         => $request->get('title'),
                 'description'   => $request->get('description'),
                 'status'        => 'Active',
                 'date'          => date('Y-m-d')
             ]);
             // balance transfer
-            $balance = DB::table('balances')->insert([
-                'user_id'       => Auth::user()->id,
-                'amount'        => '0.33',
-                'income_type'   => 'Ad Posting',
-            ]);
-            $baldeduction = TotalBalances::where('user_id',Auth::user()->id)->first();
-            if($baldeduction){
-                $amnt = ($baldeduction->total + (0.33));
-                $baldeduction->update(['total' => $amnt]);
-            }else{
-                TotalBalances::create([
-                    'user_id'   => Auth::user()->id,
-                    'total'     => (0.33)
-                ]);
-            }
 
-            // }
+        $amount = 0;
+        if($currentLevel->levelName->name == 'Member'){
+            $amount = round((5 / 30)/$limit,2);
+        }elseif($currentLevel->levelName->name == 'Supervisor'){
+            $amount = round((7 / 30)/$limit,2);
+        }elseif($currentLevel->levelName->name == 'Manager'){
+            $amount = round((10 / 30)/$limit,2);
+        }elseif($currentLevel->levelName->name == 'Director'){
+            $amount = round((15 / 30)/$limit,2);
+        }
+        $balance = DB::table('balances')->insert([
+            'user_id'       => Auth::user()->id,
+            'amount'        => $amount,
+            'income_type'   => 'Ad Posting',
+        ]);
+        $baldeduction = TotalBalances::where('user_id',Auth::user()->id)->first();
+        if($baldeduction){
+            $amnt = ($baldeduction->total + $amount);
+            $baldeduction->update(['total' => $amnt]);
+        }
 
-            // AdminWorkRequest::create([
-            //     'user_id'   => Auth::user()->id,
-            //     'link_ids'  => implode(',',$work_ids),
-            //     'status'    => 'Pending'
-            // ]);
-
-        return redirect()->route('admin.sendWorkRequest');
+        return redirect()->route('admin.sendWorkRequest')->with('link',url('/admin/editwork',$work->id).'/edit');
     }
 
     public function UserWorkListing(Request $request) {
@@ -90,11 +112,10 @@ class WorkController extends Controller
         if (!empty($records)) {
             foreach ($records as $key=> $item) {
                     $itemData['image']      = '<img src="'.asset("storage/$item->file").'" width="50" height="50" alt="">';
-                    $itemData['link']       = substr($item->link,0,30).'...';
                     $itemData['title']       = $item->title;
-                    $itemData['description']       = $item->description;
+                    $itemData['description']       = substr($item->description,0,10).'...';
                     $itemData['status']     = '<span class="badge '.($item->status=="Active" ? "bg-success" : "bg-danger").'">'.$item->status.'</span>';
-                    $itemData['action']     = '<div><a class="" href="'. url("admin/editwork", $item->id) .'/edit">Edit</a>&nbsp;<a class="del-link" href="javascript:void(0);" data-id="'.$item->id.'">Delete</a></div>';
+                    $itemData['action']     = '<div><a class="" href="'. url("admin/editwork", $item->id) .'/edit">View</a>&nbsp;<a class="del-link" href="javascript:void(0);" data-id="'.$item->id.'">Delete</a></div>';
                     $data[] = $itemData;
             }
         }

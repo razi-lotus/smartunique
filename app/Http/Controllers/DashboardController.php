@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\AdminBalance;
 use App\Models\Balances;
+use App\Models\Bonus;
 use App\Models\TotalBalances;
 use App\Models\User;
+use App\Models\UserLevel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -19,7 +21,7 @@ class DashboardController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('redirectWel');
+        // $this->middleware('redirectWel');
     }
 
     /**
@@ -92,12 +94,17 @@ class DashboardController extends Controller
 
     public function userDashboard()
     {
-        $balances   = TotalBalances::where('user_id',Auth::user()->id)->first();
-        $points     = User::where('sponsor_id',Auth::user()->uuid)->get();
-        return view('user_dashboard',compact('balances','points'));
+        $balances       = TotalBalances::where('user_id',Auth::user()->id)->first();
+        $points         = User::where('sponsor_id',Auth::user()->uuid)->where('acc_request',1)->get();
+        $bonus          = Bonus::where('user_id',Auth::user()->id)->sum('amount');
+        $currentLevel   = UserLevel::with(['levelName'])->where('user_id',Auth::user()->id)->first();
+        $totalEarnedIncome = Balances::where('user_id',Auth::user()->id)->sum('amount');
+        // return $bonus;
+        return view('user_dashboard',compact('balances','points','bonus','currentLevel','totalEarnedIncome'));
     }
 
-    public function BalanceList(Request $request) {
+    public function BalanceList(Request $request)
+    {
         $columns    = array(0 => 'id', 1 => 'name',2 => 'amount',3 => 'status');
         $order      = 'id'; $dir = 'DESC';
 
@@ -143,9 +150,27 @@ class DashboardController extends Controller
     }
 
     public function userTree(Request $request){
+        // return $request->all();
         $users = User::all();
-        if(Auth::user() && Auth::user()->type !== 'Admin'){
-            $users = User::where('sponsor_id',Auth::user()->uuid)->get();
+        if($request->search_query){
+            if(Auth::user() && Auth::user()->type !== 'Admin'){
+                $users = User::where('sponsor_id',Auth::user()->uuid)->where('name','like','%'.$request->search_query.'%')->orWhere('uuid',$request->search_query)->get();
+            }
+        }else{
+            if(Auth::user() && Auth::user()->type !== 'Admin'){
+                $users = User::where('sponsor_id',Auth::user()->uuid)->get();
+            }
+        }
+        return view('user_tree',compact('users'));
+    }
+
+    public function userTreeAdmin(Request $request){
+        // return $request->all();
+        $users = User::all();
+        if($request->search_query){
+            if(Auth::user()){
+                $users = User::where('name','like','%'.$request->search_query.'%')->orWhere('uuid',$request->search_query)->get();
+            }
         }
         return view('user_tree',compact('users'));
     }

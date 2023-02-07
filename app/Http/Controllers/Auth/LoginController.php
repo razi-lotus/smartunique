@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\User;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
-use Illuminate\Support\Facades\Hash;
 
 class LoginController extends Controller
 {
@@ -43,9 +44,11 @@ class LoginController extends Controller
 
     public function login(Request $request)
     {
-        // return $request->all();
-        $this->validateLogin($request);
-        $user = User::where('email',$request->email)->first();
+        $request->validate([
+            'uuid' => 'required',
+            'password' => 'required'
+        ]);
+        $user = User::where('uuid',$request->uuid)->first();
         if($user && $user->status == 'Active'){
             if(Hash::check($request->password,$user->password)){
                 auth()->login($user);

@@ -32,7 +32,7 @@
                   <h5 class="card-title">Users</h5>
 
                   <div class="d-flex align-items-center">
-                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                    <div class="card-icon d-flex align-items-center justify-content-center">
                       <i class="bi bi-person"></i>
                     </div>
                     <div class="ps-3">
@@ -53,7 +53,7 @@
                   <h5 class="card-title">Users</h5>
 
                   <div class="d-flex align-items-center">
-                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                    <div class="card-icon d-flex align-items-center justify-content-center">
                       <i class="bi bi-person"></i>
                     </div>
                     <div class="ps-3">
@@ -72,7 +72,7 @@
                   <h5 class="card-title">Users</h5>
 
                   <div class="d-flex align-items-center">
-                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                    <div class="card-icon d-flex align-items-center justify-content-center">
                       <i class="bi bi-person"></i>
                     </div>
                     <div class="ps-3">
@@ -93,7 +93,7 @@
                   <h5 class="card-title">Director Accounts</h5>
 
                   <div class="d-flex align-items-center">
-                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                    <div class="card-icon d-flex align-items-center justify-content-center">
                       <i class="bi bi-person"></i>
                     </div>
                     <div class="ps-3">
@@ -114,7 +114,7 @@
                   <h5 class="card-title">Manager Accounts</h5>
 
                   <div class="d-flex align-items-center">
-                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                    <div class="card-icon d-flex align-items-center justify-content-center">
                       <i class="bi bi-person"></i>
                     </div>
                     <div class="ps-3">
@@ -135,7 +135,7 @@
                   <h5 class="card-title">Supervisor Accounts</h5>
 
                   <div class="d-flex align-items-center">
-                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                    <div class="card-icon d-flex align-items-center justify-content-center">
                       <i class="bi bi-person"></i>
                     </div>
                     <div class="ps-3">
@@ -156,7 +156,7 @@
                   <h5 class="card-title">Member Accounts</h5>
 
                   <div class="d-flex align-items-center">
-                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                    <div class="card-icon d-flex align-items-center justify-content-center">
                       <i class="bi bi-person"></i>
                     </div>
                     <div class="ps-3">
@@ -177,7 +177,7 @@
                   <h5 class="card-title">Users</h5>
 
                   <div class="d-flex align-items-center">
-                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                    <div class="card-icon d-flex align-items-center justify-content-center">
                       <i class="bi bi-person"></i>
                     </div>
                     <div class="ps-3">
@@ -198,7 +198,7 @@
                   <h5 class="card-title">Accounts</h5>
 
                   <div class="d-flex align-items-center">
-                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                    <div class="card-icon d-flex align-items-center justify-content-center">
                       <i class="bi bi-person"></i>
                     </div>
                     <div class="ps-3">
@@ -242,7 +242,7 @@
                     <div class="row">
                         <div class="col-12 text-center">
                             <a href="javascript:void(0);" class="logo d-flex align-items-center text-center" style="padding-left: 115px;">
-                                <img src="{{ asset('img/logo.png') }}" alt="">
+                                <img src="{{ asset('img/stock-logo.png') }}" alt="">
                                 <span class="d-lg-block">SmartUniqueInt</span>
                             </a>
                         </div>

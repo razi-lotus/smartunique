@@ -18,4 +18,7 @@ class Balances extends Model
     public function user(){
         return $this->belongsTo(User::class);
     }
+    public function ref_user(){
+        return $this->hasOne(User::class,'id','refered_id');
+    }
 }

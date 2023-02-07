@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Auth\Events\Registered;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Validator;
@@ -59,6 +60,7 @@ class RegisterController extends Controller
         return Validator::make($data, [
             'name'      => ['required', 'string', 'max:255'],
             'username'  => ['required'],
+            'sponsor_id'  => 'required|exists:users,uuid',
             'email'     => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password'  => ['required', 'string', 'min:6', 'confirmed'],
         ]);
@@ -82,7 +84,7 @@ class RegisterController extends Controller
             "gender"            => $data['gender'],
             "country_id"        => $data['country_id'],
             "state"             => $data['state'],
-            "city_id"           => $data['city_id'],
+            "city_id"           => ($data['city_id'])?$data['city_id']:85572,
             "zipcode"           => $data['zipcode'],
             "address"           => $data['address'],
             "street_address"    => $data['street_address'],
@@ -96,15 +98,11 @@ class RegisterController extends Controller
 
         ]);
 
-        $user->uuid = 'SU-000'.$user->id;
-        // DB::table('user_level')->insert([
-        //     'user_id' => $user->id,
-        //     'level_from' => 1,
-        //     'level_to' => 1,
-        //     'date_from' => date('Y-m-d'),
-        //     'date_to' => date('Y-m-d')
-        // ]);
-        // balance...
+        $user->uuid     = 'SU-000'.$user->id;
+        $data['uuid']   = $user->uuid;
+        Mail::send('email.register', $data, function($message) use ($data){
+            $message->to($data['email'])->subject('Registered Successfully');
+        });
         $user->save();
         return $user;
     }
@@ -134,7 +132,7 @@ class RegisterController extends Controller
 
         event(new Registered($user = $this->create($request->all())));
 
-        $this->guard()->login($user);
+        // $this->guard()->login($user);
 
         if ($response = $this->registered($request, $user)) {
             return redirect()->route('admin.welcome.screen');

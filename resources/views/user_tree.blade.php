@@ -13,7 +13,11 @@
       <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-          <li class="breadcrumb-item active">Users</li>
+          @if (Auth::user() && Auth::user()->type == 'Admin')
+            <li class="breadcrumb-item active"><a href="{{ route('admin.userTreeAdmin') }}">Team</a></li>
+          @else
+            <li class="breadcrumb-item active"><a href="{{ route('admin.userTree') }}">Team</a></li>
+          @endif
         </ol>
       </nav>
     </div><!-- End Page Title -->
@@ -27,7 +31,16 @@
             <div class="col-xxl-4 col-xl-12">
                 <div class="card">
                     <div class="card-body">
-                      <h5 class="card-title">Users Tree</h5>
+                      <h5 class="card-title">Team
+
+                          <div class="search-bar float-end">
+                              <form class="search-form d-flex align-items-center" method="POST" action="">
+                                  @csrf
+                                  <input type="text" name="search_query" placeholder="Search by name and id" title="Enter search keyword">
+                                  <button type="submit" title="Search"><i class="bi bi-search"></i></button>
+                                </form>
+                              </div>
+                            </h5>
                       <!-- Recent Sales -->
                       <div class="col-12">
                         <div class="row">
@@ -35,16 +48,26 @@
                                 <p>Not registered any user with your reference.</p>
                             @endif
                             @foreach ($users as $user)
-                                <div class="col-3 mt-3">
+                                <div class="col-xl-3 col-lg-3 col-sm-6 col-12 mt-3">
                                     <div class="flip-card" data-id="{{ $user->uuid }}" data-name="{{ $user->name }}">
                                         <div class="flip-card-inner">
                                             <div class="flip-card-front">
-                                            <img src="{{ asset('storage/userAvatar.jpg') }}" alt="Avatar" style="width:200px;height:200px;">
+                                                @if ($user->file !== '')
+                                                    <img src="{{ asset('storage/'.$user->file) }}" alt="Avatar" style="width:200px;height:200px;">
+                                                @else
+                                                    <img src="{{ asset('img/stock-logo.png') }}" alt="Avatar" style="width:200px;height:200px;">
+                                                @endif
+                                                <div style="height: 50px;margin: -90px auto;">
+                                                  <p class="text-white">{{ $user->name }}({{ $user->level }})</p>
+                                                  <p class="text-white">{{ $user->address }}</p>
+                                                </div>
                                         </div>
                                         <div class="flip-card-back">
-                                            <h1 class="text-capitalize">{{ $user->name }}</h1>
-                                            <p>{{ $user->address }}</p>
-                                            <p>Level {{ $user->level }}</p>
+                                          @if ($user->file !== '')
+                                              <img src="{{ asset('storage/'.$user->file) }}" alt="Avatar" style="width:200px;height:200px;">
+                                          @else
+                                              <img src="{{ asset('img/stock-logo.png') }}" alt="Avatar" style="width:200px;height:200px;">
+                                          @endif
                                         </div>
                                     </div>
                                 </div>
@@ -117,10 +140,11 @@
                         $('#exampleModal').modal('show');
                         if(data.users.length !== 0){
                             data.users.forEach(element => {
+                                var pic = element.file !== '' ? element.file : 'userSmall.png';
                                 $('.map-users').append(`
                                 <div class="col-3">
                                     <div class="chip text-capitalize">
-                                        <img src="{{ asset('storage/userSmall.png') }}" alt="Person" width="96" height="96">
+                                        <img src="{{ asset('storage/') }}/${pic}" alt="Person" width="96" height="96">
                                         ${element.name}
                                         </div>
                                         </div>`
