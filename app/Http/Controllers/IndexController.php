@@ -20,7 +20,6 @@ class IndexController extends Controller
          }
          $user = User::with(['account','account.levelName'])->where('id',Auth::user()->id)->first();
          $user_level = UserLevel::where('user_id',$user->id)->first();
-        //  return $user;
          if($user && $user->acc_request !== 1){
              $user->update(['acc_request' => 1]);
              AdminBalance::create([
