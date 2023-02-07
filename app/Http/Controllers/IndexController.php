@@ -14,7 +14,6 @@ use Illuminate\Support\Facades\Auth;
 class IndexController extends Controller
 {
     public function upgradeAccount(){
-        //comment removing
         $balanceConfirm = Balances::where('user_id',Auth::user()->id)->where('income_type','Account Purchase')->first();
          if(!$balanceConfirm){
              return redirect()->route('admin.welcome.screen')->with('message','Balance not transferred yet, please contact to the company');
